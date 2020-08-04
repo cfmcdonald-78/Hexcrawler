@@ -22,9 +22,11 @@ class ControlRenderer(component.Window):
         pad = 16
         top_pad = 16
 #        self.rect = position_rect
-        handlers = [handler.previous_group, handler.next_group, handler.previous_site, handler.next_site, handler.center_view, handler.end_turn, handler.tools]
-        image_labels = [images.l_arrow, images.r_arrow, images.prev_site, images.next_site, images.center_view, images.end_turn, images.tools]
-        tool_tips = ["prev. group (p)", "next group(n)", "prev. site (a)", "next site(s)","center (c)", "end turn (e)", "tools"]
+        handlers = [handler.previous_group, handler.next_group, handler.previous_site, handler.next_site, 
+                    handler.center_view, handler.end_turn, handler.minimap, handler.tools]
+        image_labels = [images.l_arrow, images.r_arrow, images.prev_site, images.next_site, images.center_view, 
+                        images.end_turn, images.minimap, images.tools]
+        tool_tips = ["prev. group (p)", "next group(n)", "prev. site (a)", "next site(s)","center (c)", "end turn (e)", "mini-map (m)", "tools"]
         x, y = self.rect.x + pad, self.rect.y + top_pad
         width, height = image.CONTROL_BUTTON_WIDTH, image.CONTROL_BUTTON_HEIGHT
         for i in range(len(handlers)):

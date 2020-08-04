@@ -26,7 +26,7 @@ NO_ACTIVITY = 0
 PREPARING = 1
 READY = 2
 
-map_size_table  = [(36, 36),(54, 54), (72, 72)]
+map_size_table  = [(36, 36),(45, 45), (54, 54)]
 DEFAULT_MAP_SIZE = 1
 DEFAULT_PLAYER_NAME = "Party"
 
@@ -78,7 +78,7 @@ class MainMenu(component.Window):
         button_height = 40
         
         x = big_pad * 2
-        self.add_child(Label(Rect(x, y, label_width, button_height), "Faction:", font=text.lg_font))
+        self.add_child(Label(Rect(x, y, label_width, button_height), "Name:", font=text.lg_font))
         x += label_width + small_pad
         
         def player_name_callback(name_text):

@@ -212,6 +212,9 @@ class Group(DoublyLinkedObject):
     
     def get_owner(self):
         return self.owner
+        
+    def get_site(self):
+        return None
     
     def has_unit(self, check_unit):
         return check_unit in self.units
@@ -232,7 +235,7 @@ class Group(DoublyLinkedObject):
         # need exception code to handle possible race condition with live_unit_count when unit is removed by another thread
         try:
             for i in range(self.live_unit_count):
-                if self.units[i].health == unit.HEALTHY:
+                if self.units[i].is_healthy():
                     healthy_count += 1
                 if healthy_count > self.live_unit_count / 2:
                     return False
@@ -245,7 +248,7 @@ class Group(DoublyLinkedObject):
         # need exception code to handle possible race condition with live_unit_count when unit is removed by another thread
         try:
             for i in range(self.live_unit_count):
-                if self.units[i].health != unit.HEALTHY:
+                if not self.units[i].is_healthy():
                     return False
             return True
         except IndexError:
@@ -312,6 +315,9 @@ class Group(DoublyLinkedObject):
         self.owner.get_mask().seer_removed(self.get_hex(), self.get_sight_range())
         self.curr_hex.remove_group(self)
         self.owner.remove_group(self)
+        if self.get_site():
+            self.get_site().delink_spawn(self)
+            
     
     # this group is eliminated if no unit is left alive, remove it from hex and player
     def check_elimination(self, turn_start=False):
@@ -549,8 +555,6 @@ class HireGroup(Group):
     def add_unit(self, unit_to_add, index=None):
         self.do_add(unit_to_add, index)
  
-HORDE_RANGE = 3
-HORDE_AGGRESSION = 1
 WANDERING_RANGE = 3
 WANDERING_AGGRESSION = 3
 
@@ -564,6 +568,11 @@ class ActiveAIGroup(Group):
      
     def initialize(self, start_hex):
         self.start_hex = start_hex
+        
+        # give group needed attributes
+        move_trait = start_hex.hex_type.required_trait
+        if move_trait != None:
+            self.set_trait(move_trait, True)
         
         assert(start_hex.get_active_group() == None)
     
@@ -605,15 +614,17 @@ class ZonePatrol(ActiveAIGroup):
         
     def get_site(self):
         return self.site
+    
+    def get_zone(self):
+        return self.site.get_hex().get_zone()
         
     def get_level(self):
         return self.site.get_level()
-   
-horde_types_by_name = {}
 
 class Wanderer(ActiveAIGroup):
     
-    def __init__(self, owner, range=WANDERING_RANGE, aggression = WANDERING_AGGRESSION):
+    def __init__(self, site, range=WANDERING_RANGE, aggression = WANDERING_AGGRESSION):
+        owner = site.get_owner()
         super(Wanderer, self).__init__(owner, range, aggression, owner.get_goal_funcs())
     
     def get_center_hex(self):
@@ -642,67 +653,4 @@ class Assassin(ActiveAIGroup):
         
         return None
 
-class HordeType(object):
-    
-    def __init__(self, name, leader_name, level, unit_name_list, site_name_list, goal_site_name):
-        self.name = name
-        self.leader_name = leader_name
-        self.level = level
-        self.unit_type_names = unit_name_list
-        self.site_names = site_name_list
-        self.goal_type_name = goal_site_name
 
-    def get_goal_site_name(self):
-        return self.goal_name
-
-# certains site types have chance to throw off a horde   
-class Horde(ActiveAIGroup):
-    
-    def __init__(self, horde_type, owner, goal_site):
-        super(Horde, self).__init__(owner, HORDE_RANGE, HORDE_AGGRESSION, owner.get_goal_funcs())
-        self.type = horde_type
-        self.goal = goal_site
-#        self.range = HORDE_RANGE
-        self.leader = unit.Unit(unit.unit_types_by_name[self.type.leader_name])
-        self.leader.set_trait(trait.MOUNTAINEER, True)
-        
-        self.add_unit(self.leader)
-        self.add_unit_packet()
-        self.reputation_value = self.get_level() * 2
-#        self.set_hex(site.hex_loc)
-#        site.hex_loc.add_group(self)
-      
-    def add_unit_packet(self):
-        prev_leader_index = self.num_units() - 1
-        for unit_type_name in self.type.unit_type_names:
-            if not self.is_full():
-                new_unit = unit.Unit(unit.unit_types_by_name[unit_type_name])
-                new_unit.set_trait(trait.MOUNTAINEER, True)
-                self.add_unit(new_unit)
-            
-        new_leader_index = self.num_units() - 1
-        
-        # keep leader at end of line
-        self.move_unit(prev_leader_index, new_leader_index)
-    
-    def get_center_hex(self):
-        return self.curr_hex   
-    
-    def has_goal(self):
-        return True
-    
-    def get_goal(self):
-        return self.goal
-    
-    def get_level(self):
-        return self.type.level
-    
-   
-    def start_turn(self, turn_number, hex_map):
-        super(Horde, self).start_turn(turn_number, hex_map)
-        
-        self.clear_dead_units()
-        # as long as leader is alive, new units flock to the horde each turn
-        if self.leader.is_alive():
-            self.add_unit_packet()
-   

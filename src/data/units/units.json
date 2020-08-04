@@ -7,8 +7,9 @@
 	"armor"		: 6,
 	"move"		: 12,
 	"looting"	: 1,
+	"health"	: 3,
 	"traits"	: {"Hero": true},
-	"sites"		: [ ]
+	"descriptors"		: [ ]
 },
 { 
 	"name" 		: "Swift Hero",
@@ -18,8 +19,9 @@
 	"armor"		: 4,
 	"move"		: 14,
 	"looting"	: 3,
+	"health"	: 3,
 	"traits"	: {"Hero": true, "Ranged": 2},
-	"sites"		: [ ]
+	"descriptors"		: [ ]
 },
 { 
 	"name" 		: "Stout Hero",
@@ -29,8 +31,9 @@
 	"armor"		: 7,
 	"move"		: 12,
 	"looting"	: 0,
-	"traits"	: {"Hero": true, "Stalwart": true},
-	"sites"		: [ ]
+	"health"	: 3,
+	"traits"	: {"Hero": true, "Guardian": true},
+	"descriptors"		: [ ]
 },
 { 
 	"name" 		: "Wise Hero",
@@ -40,8 +43,9 @@
 	"armor"		: 4,
 	"move"		: 12,
 	"looting"	: 1,
+	"health"	: 3,
 	"traits"	: {"Hero": true, "Heal": 2},
-	"sites"		: [ ]
+	"descriptors"		: [ ]
 },
 { 
 	"name" 		: "Wild Hero",
@@ -51,8 +55,9 @@
 	"armor"		: 4,
 	"move"		: 12,
 	"looting"	: 1,
+	"health"	: 3,
 	"traits"	: {"Hero": true, "Rage": 2, "Pathfinder": 1},
-	"sites"		: [ ]
+	"descriptors"		: [ ]
 },
 { 
 	"name" 		: "Dashing Hero",
@@ -62,8 +67,9 @@
 	"armor"		: 4,
 	"move"		: 14,
 	"looting"	: 1,
+	"health"	: 3,
 	"traits"	: {"Hero": true, "Reputation": 2, "Haggler": 2},
-	"sites"		: [ ]
+	"descriptors"		: [ ]
 },
 { 
 	"name" 		: "Supply Wagon",
@@ -73,8 +79,9 @@
 	"armor"		: 0,
 	"move"		: 12,
 	"looting"	: 1,
+	"health"	: 2,
 	"traits"	: {"Supply": 3},
-	"sites"		: [ ]
+	"descriptors"		: [ ]
 },
 { 
 	"name" 		: "Bowman",
@@ -85,7 +92,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Ranged": 5},
-	"sites"		: ["Keep", "Rogue's Den", "Town"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
 	"name" 		: "Ferryman",
@@ -97,7 +104,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Naval": 3},
-	"sites"		: ["Rogue's Den"]
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Hedge Mage",
@@ -107,8 +114,9 @@
 	"armor"		: 1,
 	"move"		: 12,
 	"looting"	: 1,
-	"traits"	: {"Heal": 3},
-	"sites"		: ["Keep", "Rogue's Den"]
+	"health"	: 2,
+	"traits"	: {"Heal": 4},
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Mason",
@@ -119,8 +127,9 @@
 	"armor"		: 1,
 	"move"		: 8,
 	"looting"	: 1,
+	"health"	: 1,
 	"traits"	: {"Build": "Keep"},
-	"sites"		: ["Keep", "Rogue's Den", "Town"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
 	"name" 		: "Squire",
@@ -131,7 +140,7 @@
 	"move"		: 16,
 	"looting"	: 1,
 	"traits"	: { "Reputation": 1},
-	"sites"		: ["Keep", "Rogue's Den", "Town"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
 	"name" 		: "Burglar",
@@ -142,29 +151,29 @@
 	"move"		: 12,
 	"looting"	: 3,
 	"traits"	: { "Evade": 2, "Elusive": true, "Reputation": -1},
-	"sites"		: ["Rogue's Den"]
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Thug",
   	"is_army"	: false,
   	"level"		: 1,
-  	"strength"	: 3,
+  	"strength"	: 2,
 	"armor"		: 2,
 	"move"		: 12,
 	"looting"	: 2,
 	"traits"	: { },
-	"sites"		: ["Keep", "Rogue's Den", "Town"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
 	"name" 		: "Warrior",
   	"is_army"	: false,
   	"level"		: 1,
-  	"strength"	: 3,
+  	"strength"	: 2,
 	"armor"		: 5,
 	"move"		: 12,
 	"looting"	: 1,
-	"traits"	: { "Stalwart": true},
-	"sites"		: ["Keep", "Rogue's Den"]
+	"traits"	: { "Guardian": true},
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Witch",
@@ -175,7 +184,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: { "Ranged": 6, "Army attack": true, "Reputation": -1},
-	"sites"		: ["Rogue's Den"]
+	"descriptors"		: ["notorious"]
 },
 { 
 	"name" 		: "Envoy",
@@ -186,8 +195,9 @@
 	"armor"		: 0,
 	"move"		: 12,
 	"looting"	: 1,
+	"health"	: 1,
 	"traits"	: {"Diplomat": 2, "Haggler": 1},
-	"sites"		: ["Rogue's Den", "Keep"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
 	"name" 		: "Sea Captain",
@@ -199,7 +209,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Naval": 1},
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
 	"name" 		: "Mage",
@@ -210,7 +220,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: { "Ranged": 7, "Army attack": true},
-	"sites"		: ["Keep", "Town", "City-state"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Mercenary",
@@ -221,18 +231,19 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {},
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
-	"name" 		: "Goblin Sachem",
+	"name" 		: "Goblin Captain",
   	"is_army"	: false,
   	"level"		: 2,
   	"strength"	: 3,
 	"armor"		: 3,
 	"move"		: 14,
 	"looting"	: 2,
-	"traits"	: {"Ranged" : 4, "Naval": 2},
-	"sites"		: []
+	"health"	: 2,
+	"traits"	: {"Army attack": true, "Inspire": 1, "Naval": 2},
+	"descriptors"		: []
 },
 { 
 	"name" 		: "Wild Man",
@@ -243,7 +254,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Rage": 2, "Pierce": 3},
-	"sites"		: ["Rogue's Den", "Keep"]
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Outlaw",
@@ -254,7 +265,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Stealth": true, "Elusive": true, "Haggler": 1, "Reputation": -1},
-	"sites"		: ["Rogue's Den"]
+	"descriptors"		: ["notorious"]
 },
 { 
 	"name" 		: "Cultist",
@@ -265,7 +276,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Ranged": 4, "Bloodthirst": 1, "Reputation": -2},
-	"sites"		: ["Rogue's Den"]
+	"descriptors"		: ["notorious"]
 },
 { 
 	"name" 		: "Stonewright",
@@ -276,8 +287,9 @@
 	"armor"		: 1,
 	"move"		: 8,
 	"looting"	: 1,
+	"health"	: 1,
 	"traits"	: {"Build": "Keep"},
-	"sites"		: ["Keep", "Town"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
 	"name" 		: "Woodsman",
@@ -288,7 +300,7 @@
 	"move"		: 14,
 	"looting"	: 1,
 	"traits"	: {"Ranged": 6, "Long range": true, "Scout": 1, "Pathfinder": 2},
-	"sites"		: ["Rogue's Den", "Keep"]
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Acrobat",
@@ -299,7 +311,7 @@
 	"move"		: 13,
 	"looting"	: 2,
 	"traits"	: {"Evade": 5, "Elusive": true},
-	"sites"		: ["Rogue's Den", "Keep"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
 	"name" 		: "Engineer",
@@ -310,8 +322,9 @@
 	"armor"		: 2,
 	"move"		: 8,
 	"looting"	: 1,
+	"health"	: 1,
 	"traits"	: {"Build": "Keep"},
-	"sites"		: ["Keep", "Town", "City-state"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Assassin",
@@ -322,7 +335,7 @@
 	"move"		: 13,
 	"looting"	: 2,
 	"traits"	: {"Reputation": -3, "Assassin": true, "Blend": true, "Ranged": 8, "Pierce": 2, "Elusive": true},
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"descriptors"		: ["civilized", "notorious"]
 },
 { 
 	"name" 		: "Lancer",
@@ -333,7 +346,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Ranged": 6, "Pierce": 2},
-	"sites"		: ["Keep", "Town"]
+	"descriptors"		: ["civilized"]
 },
 
 { 
@@ -346,7 +359,7 @@
 	"move"		: 12,
 	"looting"	: 3,
 	"traits"	: {"Mountaineer": true, "Pathfinder": 3},
-	"sites"		: ["Rogue's Den", "Keep"]
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Captain",
@@ -357,7 +370,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Inspire": 1, "Honor": 12},
-	"sites"		: ["Keep", "Town", "City-state"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Knight",
@@ -367,8 +380,8 @@
 	"armor"		: 7,
 	"move"		: 16,
 	"looting"	: 1,
-	"traits"	: {"Stalwart": true, "Honor": 15, "Reputation": 3},
-	"sites"		: ["Keep", "Town", "City-state"]
+	"traits"	: {"Guardian": true, "Honor": 15, "Reputation": 3},
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Caravan",
@@ -379,19 +392,21 @@
 	"armor"		: 0,
 	"move"		: 14,
 	"looting"	: 1,
+	"health"	: 1,
 	"traits"	: {"Supply": 5},
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
-	"name" 		: "Orc Chief",
+	"name" 		: "Orc Captain",
   	"is_army"	: false,
   	"level"		: 3,
   	"strength"	: 5,
 	"armor"		: 5,
 	"move"		: 12,
 	"looting"	: 2,
-	"traits"	: {"Stalwart" : true, "Inspire": 1, "Naval": 2},
-	"sites"		: []
+	"health"	: 3,
+	"traits"	: {"Army attack": true, "Inspire": 1, "Naval": 2},
+	"descriptors"		: []
 },
 { 
 	"name" 		: "Thief",
@@ -402,7 +417,7 @@
 	"move"		: 14,
 	"looting"	: 5,
 	"traits"	: { "Evade": 3, "Reputation": -2, "Elusive": true},
-	"sites"		: ["Rogue's Den", "Keep"]
+	"descriptors"		: ["frontier", "notorious"]
 },
 { 
 	"name" 		: "Priest",
@@ -413,7 +428,7 @@
 	"move"		: 12,
 	"looting"	: 0,
 	"traits"	: { "Heal": 5, "Grant strength": 1, "Honor": 8},
-	"sites"		: ["Keep", "Town"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Berserker",
@@ -424,7 +439,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Rage": 4, "Pierce": 3},
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Cult Leader",
@@ -434,8 +449,8 @@
 	"armor"		: 4,
 	"move"		: 12,
 	"looting"	: 1,
-	"traits"	: {"Ranged": 7, "Bloodthirst": 2, "Reputation": -4},
-	"sites"		: ["Rogue's Den"]
+	"traits"	: {"Ranged": 7, "Bloodthirst": 2, "Black mana": true, "Reputation": -4},
+	"descriptors"		: ["notorious"]
 },
 { 
 	"name" 		: "Man at Arms",
@@ -445,8 +460,8 @@
 	"armor"		: 8,
 	"move"		: 12,
 	"looting"	: 1,
-	"traits"	: {"Stalwart": true},
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"traits"	: {"Guardian": true},
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Agent of Chaos",
@@ -456,8 +471,8 @@
 	"armor"		: 6,
 	"move"		: 13,
 	"looting"	: 2,
-	"traits"	: {"Assassin": true, "Ranged": 10, "Pierce": 2, "Evade": 4, "Elusive": true, "Blend": true},
-	"sites"		: []
+	"traits"	: {"Assassin": true, "Deadly blow": 1, "Ranged": 10, "Pierce": 2, "Evade": 4, "Elusive": true, "Blend": true},
+	"descriptors"		: []
 },
 { 
 	"name" 		: "Ambassador",
@@ -468,8 +483,9 @@
 	"armor"		: 1,
 	"move"		: 12,
 	"looting"	: 1,
+	"health"	: 1,
 	"traits"	: {"Diplomat": 4, "Haggler": 2},
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"descriptors"		: [ "civilized"]
 },
 { 
 	"name" 		: "Swashbuckler",
@@ -480,7 +496,7 @@
 	"move"		: 14,
 	"looting"	: 2,
 	"traits"	: {"Evade": 4},
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Ranger",
@@ -491,7 +507,7 @@
 	"move"		: 14,
 	"looting"	: 2,
 	"traits"	: {"Ranged": 10, "Scout": 2, "Mountaineer": true, "Stealth": true},
-	"sites"		: ["Rogue's Den", "Keep"]
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Wizard",
@@ -502,7 +518,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: { "Ranged": 8, "Army attack": true, "Splash": true},
-	"sites"		: ["Town", "City-state"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Dread Pirate",
@@ -514,7 +530,7 @@
 	"move"		: 14,
 	"looting"	: 4,
 	"traits"	: {"Naval": 0.5, "Rage": 2, "Evade": 4, "Avarice": 300, "Reputation": -5},
-	"sites"		: ["Rogue's Den", "Town"]
+	"descriptors"		: ["frontier", "civilized", "notorious"]
 },
 { 
 	"name" 		: "Cavalier",
@@ -525,7 +541,7 @@
 	"move"		: 16,
 	"looting"	: 0,
 	"traits"	: {"Honor": 30, "Stubborn": true, "Unchainable": true, "Reputation": 5},
-	"sites"		: ["Keep", "Town", "City-state"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Lord",
@@ -536,7 +552,7 @@
 	"move"		: 16,
 	"looting"	: 1,
 	"traits"	: {"Summon": "Knight", "Honor": 30, "Inspire": 1, "Supply": 1},
-	"sites"		: ["Keep", "Town", "City-state"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Master Thief",
@@ -547,7 +563,7 @@
 	"move"		: 12,
 	"looting"	: 6,
 	"traits"	: { "Evade": 5, "Reputation": -3, "Haggler": 3, "Elusive": true},
-	"sites"		: ["Rogue's Den", "Keep", "Town", "City-state"]
+	"descriptors"		: ["frontier", "civilized", "notorious"]
 },
 { 
 	"name" 		: "Bishop",
@@ -558,7 +574,7 @@
 	"move"		: 12,
 	"looting"	: 0,
 	"traits"	: { "Heal": 7, "Revive": 2, "Grant strength": 2, "Honor": 25},
-	"sites"		: ["Town", "City-state"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Dwarf Gemcutter",
@@ -569,7 +585,7 @@
 	"move"		: 10,
 	"looting"	: 4,
 	"traits"	: {"Haggler": 5, "Mountaineer": true, "Avarice": 500},
-	"sites"		: ["Fortress", "Rogue's Den"]
+	"descriptors"		: ["dwarf"]
 },
 { 
 	"name" 		: "Dwarf Lord",
@@ -579,8 +595,9 @@
 	"armor"		: 10,
 	"move"		: 10,
 	"looting"	: 3,
-	"traits"	: {"Stalwart": true, "Mountaineer": true, "Inspire": 1, "Avarice": 500, "Build": "Fortress", "Stubborn": true},
-	"sites"		: ["Fortress", "Rogue's Den"]
+	"health"	: 3,
+	"traits"	: {"Guardian": true, "Mountaineer": true, "Inspire": 1, "Avarice": 500, "Build": "Fortress", "Stubborn": true},
+	"descriptors"		: ["dwarf"]
 },
 { 
 	"name" 		: "Elf Lord",
@@ -590,8 +607,9 @@
 	"armor"		: 7,
 	"move"		: 14,
 	"looting"	: 1,
+	"health"	: 3,
 	"traits"	: {"Inspire": 1, "Ranged": 15, "Long range": true, "Wild": 3},
-	"sites"		: ["Glade", "Rogue's Den"]
+	"descriptors"		: ["elf"]
 },
 { 
 	"name" 		: "Elf Legate",
@@ -603,7 +621,19 @@
 	"move"		: 14,
 	"looting"	: 2,
 	"traits"	: {"Ranged": 13, "Wild": 5, "Diplomat": 6},
-	"sites"		: ["Glade", "Rogue's Den"]
+	"descriptors"		: ["elf"]
+},
+{ 
+	"name" 		: "Druid",
+  	"is_army"	: false,
+	"combatant" : true,
+  	"level"		: 5,
+  	"strength"	: 5,
+	"armor"		: 4,
+	"move"		: 14,
+	"looting"	: 1,
+	"traits"	: {"Ranged": 15, "Restrain": 3, "Green mana": true},
+	"descriptors"		: ["elf"]
 },
 { 
 	"name" 		: "Fairy",
@@ -614,7 +644,7 @@
 	"move"		: 14,
 	"looting"	: 3,
 	"traits"	: {"Ranged": 10, "Restrain": 3, "Evade": 3, "Flight": true, "Wild": 4, "Sylvan": true, "Stealth": true, "Elusive": true},
-	"sites"		: ["Glade", "Rogue's Den"]
+	"descriptors"		: ["elf", "wilderness"]
 },
 { 
 	"name" 		: "General",
@@ -625,7 +655,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Inspire": 2, "Supply": 2},
-	"sites"		: ["Town", "City-state"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Pistolier",
@@ -636,7 +666,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Ranged": 14, "Pierce": 4},
-	"sites"		: ["Town", "City-state"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Tyrant",
@@ -647,7 +677,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Inspire": 2, "Supply": 3},
-	"sites"		: ["City-state"]
+	"descriptors"		: ["civilized", "notorious"]
 },
 
 { 
@@ -655,11 +685,12 @@
   	"is_army"	: false,
   	"level"		: 1,
   	"strength"	: 1,
-	"armor"		: 1,
+	"armor"		: 2,
 	"move"		: 14,
 	"looting"	: 2,
 	"traits"	: {},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Deep Dungeon", "Lair"]
+	"health"	: 1,
+	"descriptors"		: ["monster", "goblinoid"]
 },
 { 
 	"name" 		: "Goblin Bow",
@@ -669,8 +700,9 @@
 	"armor"		: 0,
 	"move"		: 14,
 	"looting"	: 2,
+	"health"	: 1,
 	"traits"	: {"Ranged" : 3},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "goblinoid"]
 },
 { 
 	"name" 		: "Skeleton",
@@ -681,7 +713,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Regenerate" : true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair", "Tomb", "Necropolis"]
+	"descriptors"		: ["monster", "undead"]
 },
 { 
 	"name" 		: "Spider",
@@ -691,8 +723,9 @@
 	"armor"		: 0,
 	"move"		: 14,
 	"looting"	: 1,
+	"health"	: 1,
 	"traits"	: {"Restrain" : 1},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["animal", "monster"]
 },
 { 
 	"name" 		: "Orc Thug",
@@ -703,7 +736,7 @@
 	"move"		: 10,
 	"looting"	: 3,
 	"traits"	: {"Pierce": 3},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "goblinoid"]
 },
 { 
 	"name" 		: "Orc Brute",
@@ -713,8 +746,8 @@
 	"armor"		: 5,
 	"move"		: 10,
 	"looting"	: 2,
-	"traits"	: {"Stalwart": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"traits"	: {"Guardian": true},
+	"descriptors"		: ["monster", "goblinoid"]
 },
 { 
 	"name" 		: "Kobold Netter",
@@ -724,8 +757,33 @@
 	"armor"		: 5,
 	"move"		: 14,
 	"looting"	: 3,
+	"health"	: 1,
 	"traits"	: {"Ranged": 7, "Restrain": 2},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "goblinoid", "draconic"]
+},
+{ 
+	"name" 		: "Kobold Sneak",
+  	"is_army"	: false,
+  	"level"		: 2,
+  	"strength"	: 1,
+	"armor"		: 5,
+	"move"		: 14,
+	"looting"	: 3,
+	"health"	: 1,
+	"traits"	: {"Ranged": 7, "Assassin": true, "Elusive": true},
+	"descriptors"		: ["monster", "goblinoid", "draconic"]
+},
+{ 
+	"name" 		: "Kobold Bomber",
+  	"is_army"	: false,
+  	"level"		: 2,
+  	"strength"	: 1,
+	"armor"		: 5,
+	"move"		: 14,
+	"looting"	: 3,
+	"health"	: 1,
+	"traits"	: {"Ranged": 5, "Splash": true},
+	"descriptors"		: ["monster", "goblinoid", "draconic"]
 },
 { 
 	"name" 		: "Beast",
@@ -736,7 +794,7 @@
 	"move"		: 14,
 	"looting"	: 1,
 	"traits"	: {"Rage": 2},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "animal"]
 },
 { 
 	"name" 		: "Questing Beast",
@@ -747,7 +805,7 @@
 	"move"		: 14,
 	"looting"	: 1,
 	"traits"	: {"Rage": 2, "Sylvan": true, "Quest": true},
-	"sites"		: []
+	"descriptors"		: []
 },
 { 
 	"name" 		: "Wyvern",
@@ -758,7 +816,7 @@
 	"move"		: 12,
 	"looting"	: 2,
 	"traits"	: {"Ranged": 7, "Flight": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster",  "draconic"]
 },
 { 
 	"name" 		: "Troll",
@@ -769,7 +827,7 @@
 	"move"		: 12,
 	"looting"	: 2,
 	"traits"	: {"Regenerate": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster"]
 },
 
 { 
@@ -781,7 +839,7 @@
 	"move"		: 12,
 	"looting"	: 2,
 	"traits"	: {"Regenerate": true, "Revive": 3},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster"]
 },
 { 
 	"name" 		: "Sea Serpent",
@@ -792,7 +850,7 @@
 	"move"		: 16,
 	"looting"	: 1,
 	"traits"	: {"Aquatic": true},
-	"sites"		: []
+	"descriptors"		: []
 },
 {	
 	"name" 		: "Necromancer",
@@ -803,18 +861,18 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: { "Summon": "Skeleton", "Ranged": 7, "Army attack": true, "Reputation": -2},
-	"sites"		: [ "Rogue's Den", "Dungeon", "Deep Dungeon", "Lair", "Tomb", "Necropolis"]
+	"descriptors"		: [ "frontier", "monster", "undead"]
 },
 { 
 	"name" 		: "Hive Soldier",
   	"is_army"	: false,
   	"level"		: 4,
   	"strength"	: 7,
-	"armor"		: 10,
-	"move"		: 12,
+	"armor"		: 7,
+	"move"		: 14,
 	"looting"	: 2,
-	"traits"	: {"Relentless": true, "Swarm": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"traits"	: {"Heavy armor": true},
+	"descriptors"		: ["monster"]
 },
 { 
 	"name" 		: "Hive Queen",
@@ -822,10 +880,10 @@
   	"level"		: 5,
   	"strength"	: 7,
 	"armor"		: 10,
-	"move"		: 12,
+	"move"		: 14,
 	"looting"	: 1,
-	"traits"	: {"Inspire": 2, "Heal": 4, "Naval": 1},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"traits"	: {"Inspire": 2, "Army attack": true, "Heal": 4, "Naval": 1},
+	"descriptors"		: []
 },
 { 
 	"name" 		: "Werebeast",
@@ -836,7 +894,19 @@
 	"move"		: 14,
 	"looting"	: 1,
 	"traits"	: {"Rage": 4, "Infect": "Werebeast"},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "animal"]
+},
+{ 
+	"name" 		: "Ogre",
+  	"is_army"	: false,
+  	"level"		: 4,
+  	"strength"	: 8,
+	"armor"		: 2,
+	"move"		: 14,
+	"looting"	: 1,
+	"health"	: 3,
+	"traits"	: {},
+	"descriptors"		: ["monster", "giant"]
 },
 { 
 	"name" 		: "Master Necromancer",
@@ -847,7 +917,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: { "Summon": "Skeleton Company", "Ranged": 10, "Army attack": true, "Reputation": -5},
-	"sites"		: ["Rogue's Den", "Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["frontier", "monster", "undead"]
 },
 { 
 	"name" 		: "Barbarian Thane",
@@ -858,7 +928,7 @@
 	"move"		: 12,
 	"looting"	: 3,
 	"traits"	: {"Inspire": 1, "Rage" : 3},
-	"sites"		: ["Rogue's Den"]
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Wraith",
@@ -869,7 +939,7 @@
 	"move"		: 14,
 	"looting"	: 1,
 	"traits"	: {"Restrain": 2, "Evade": 3},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair", "Tomb", "Necropolis"]
+	"descriptors"		: ["monster", "undead"]
 },
 { 
 	"name" 		: "Kraken",
@@ -879,8 +949,9 @@
 	"armor"		: 8,
 	"move"		: 12,
 	"looting"	: 1,
+	"health"	: 3,
 	"traits"	: {"Aquatic": true, "Restrain": 3},
-	"sites"		: []
+	"descriptors"		: []
 },
 { 
 	"name" 		: "Vampire",
@@ -891,7 +962,7 @@
 	"move"		: 14,
 	"looting"	: 1,
 	"traits"	: {"Vampiric": true},
-	"sites"		: ["Lair", "Dungeon", "Deep Dungeon", "Tomb", "Necropolis"]
+	"descriptors"		: ["monster", "undead"]
 },
 {
 	"name" 		: "Lich",
@@ -902,19 +973,19 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Inspire": 1, "Death aura": 3, "Revive": 6},
-	"sites"		: [ "Tomb", "Necropolis"]
+	"descriptors"		: [ "undead"]
 },
 
 { 
-	"name" 		: "Troll Witch Doctor",
+	"name" 		: "Troll Captain",
   	"is_army"	: false,
   	"level"		: 4,
   	"strength"	: 6,
-	"armor"		: 6,
+	"armor"		: 4,
 	"move"		: 12,
 	"looting"	: 2,
-	"traits"	: {"Regenerate" : true, "Ranged": 8, "Army attack": true, "Restrain": 3, "Naval": 2},
-	"sites"		: []
+	"traits"	: {"Regenerate" : true, "Ranged": 8, "Army attack": true, "Restrain": 3, "Inspire": 1, "Naval": 2},
+	"descriptors"		: []
 },
 { 
 	"name" 		: "Demon",
@@ -925,7 +996,7 @@
 	"move"		: 14,
 	"looting"	: 2,
 	"traits"	: {"Evade": 3, "Bloodthirst": 2, "Regenerate": true, "Army attack": true},
-	"sites"		: ["Megadungeon", "Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "demonic"]
 },
 { 
 	"name" 		: "Flame Dragon",
@@ -935,8 +1006,10 @@
 	"armor"		: 10,
 	"move"		: 18,
 	"looting"	: 2,
-	"traits"	: {"Ranged": 10, "Flight": true, "Army attack": true, "Splash": true, "Burn": 3, "Flameproof": true},
-	"sites"		: ["Megadungeon", "Dungeon", "Deep Dungeon", "Lair"]
+	"health"	: 3,
+	"traits"	: {"Ranged": 10, "Flight": true, "Army attack": true, 
+				  "Splash": true, "Burn": 3, "Flameproof": true},
+	"descriptors"		: ["monster", "draconic"]
 },
 { 
 	"name" 		: "Ice Dragon",
@@ -946,8 +1019,10 @@
 	"armor"		: 12,
 	"move"		: 18,
 	"looting"	: 2,
-	"traits"	: {"Ranged": 12, "Flight": true, "Army attack": true, "Restrain": 4, "Unchainable": true},
-	"sites"		: ["Megadungeon", "Dungeon", "Deep Dungeon", "Lair"]
+	"health"	: 3,
+	"traits"	: {"Ranged": 12, "Flight": true, "Army attack": true, 
+	"Restrain": 4, "Unchainable": true},
+	"descriptors"		: ["monster", "draconic"]
 },
 { 
 	"name" 		: "Dread Lord",
@@ -957,8 +1032,8 @@
 	"armor"		: 5,
 	"move"		: 14,
 	"looting"	: 2,
-	"traits"	: {"Summon": "Lich", "Inspire": 1, "Revive": 4, "Ranged": 10},
-	"sites"		: []
+	"traits"	: {"Army attack": true, "Inspire": 1, "Revive": 4, "Ranged": 10},
+	"descriptors"		: []
 },
 { 
 	"name" 		: "Dragon Queen",
@@ -968,8 +1043,10 @@
 	"armor"		: 12,
 	"move"		: 18,
 	"looting"	: 2,
-	"traits"	: {"Ranged": 15, "Rage": 3, "Flight": true, "Army attack": true, "Splash": true},
-	"sites"		: []
+	"health"	: 4,
+	"traits"	: {"Ranged": 15, "Rage": 3, "Flight": true, 
+			"Army attack": true, "Inspire": 1, "Splash": true},
+	"descriptors"		: ["draconic"]
 },
 { 
 	"name" 		: "Demon Lord",
@@ -979,53 +1056,57 @@
 	"armor"		: 8,
 	"move"		: 16,
 	"looting"	: 1,
+	"health"	: 3,
 	"traits"	: {"Summon": "Demon", "Evade": 7, "Bloodthirst": 3, "Regenerate": true, "Army attack": true},
-	"sites"		: ["Megadungeon", "Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "demonic"]
 },
 { 
 	"name" 		: "Titan",
   	"is_army"	: false,
   	"level"		: 7,
-  	"strength"	: 15,
+  	"strength"	: 14,
 	"armor"		: 12,
 	"move"		: 10,
 	"looting"	: 1,
-	"traits"	: {"Pierce": 7, "Crushing blow": 2, "Army attack": true, "Stubborn": true},
-	"sites"		: ["Megadungeon", "Dungeon", "Deep Dungeon", "Lair"]
+	"health"	: 4,
+	"traits"	: {"Pierce": 7, "Crushing blow": 2, "Army attack": true, 
+					"Stubborn": true},
+	"descriptors"		: ["Megadungeon", "Dungeon", "Deep Dungeon", "monster"]
 },
 { 
-	"name" 		: "Lord of the Underworld",
+	"name" 		: "Abyssal Overlord",
   	"is_army"	: false,
   	"level"		: 8,
   	"strength"	: 17,
 	"armor"		: 14,
 	"move"		: 12,
 	"looting"	: 1,
-	"traits"	: {"Naval": 1, "Regenerate": true, "Ranged": 18, "Summon": "Demon Lord", "Death aura": 6, "Army attack": true},
-	"sites"		: []
+	"health" 	: 5,
+	"traits"	: {"Naval": 1, "Regenerate": true, "Ranged": 18, "Summon": "Demon Lord", 
+				"Death aura": 6, "Army attack": true, "Inspire": 2, "Deadly blow": 1},
+	"descriptors"		: ["monster", "undead"]
 },
-
 { 
 	"name" 		: "Militia",
   	"is_army"	: true,
   	"level"		: 1,
-  	"strength"	: 3,
-	"armor"		: 2,
+  	"strength"	: 2,
+	"armor"		: 3,
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {},
-	"sites"		: ["Rogue's Den", "Keep"]
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Scouts",
   	"is_army"	: true,
   	"level"		: 1,
-  	"strength"	: 2,
+  	"strength"	: 1,
 	"armor"		: 1,
 	"move"		: 16,
 	"looting"	: 2,
-	"traits"	: {"Scout" : 1, "Light unit": true},
-	"sites"		: ["Rogue's Den", "Keep"]
+	"traits"	: {"Scout" : 1, "Light army": true},
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Archers",
@@ -1036,7 +1117,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Ranged" : 5 },
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 {
 	"name" 		: "Spearmen",
@@ -1046,8 +1127,8 @@
 	"armor"		: 6,
 	"move"		: 12,
 	"looting"	: 1,
-	"traits"	: {"Stalwart": true},
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"traits"	: {"Guardian": true},
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
 	"name" 		: "Brigands",
@@ -1057,8 +1138,8 @@
 	"armor"		: 2,
 	"move"		: 12,
 	"looting"	: 3,
-	"traits"	: {"Light unit": true, "Reputation": -1},
-	"sites"		: ["Rogue's Den"]
+	"traits"	: {"Light army": true, "Reputation": -1},
+	"descriptors"		: ["notorious"]
 },
 {
 	"name" 		: "Longbows",
@@ -1069,7 +1150,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Ranged": 7, "Long range": true},
-	"sites"		: ["Rogue's Den", "Keep", "Town"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 {
 	"name" 		: "Pikemen",
@@ -1079,8 +1160,8 @@
 	"armor"		: 8,
 	"move"		: 12,
 	"looting"	: 1,
-	"traits"	: {"Stalwart": true},
-	"sites"		: ["Keep", "Town"]
+	"traits"	: {"Guardian": true},
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Barbarian Clan",
@@ -1090,8 +1171,8 @@
 	"armor"		: 3,
 	"move"		: 16,
 	"looting"	: 2,
-	"traits"	: {"Pillager": true, "Ranged": 6, "Elusive": true, "Light unit": true, "Reputation": -3},
-	"sites"		: ["Rogue's Den"]
+	"traits"	: {"Pillager": true, "Ranged": 6, "Light army": true, "Reputation": -3},
+	"descriptors"		: ["frontier"]
 },
 { 
 	"name" 		: "Crossbows",
@@ -1102,7 +1183,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Ranged" : 8, "Pierce": 2},
-	"sites"		: ["Keep", "Town"]
+	"descriptors"		: [ "civilized"]
 },
 { 
 	"name" 		: "Light Cavalry",
@@ -1112,8 +1193,8 @@
 	"armor"		: 4,
 	"move"		: 16,
 	"looting"	: 1,
-	"traits"	: {"Light unit": true, "Scout": 1},
-	"sites"		: ["Keep", "Town", "City-state"]
+	"traits"	: {"Light army": true, "Scout": 1},
+	"descriptors"		: ["frontier", "civilized"]
 },
 {
 	"name" 		: "Axemen",
@@ -1124,7 +1205,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Pierce": 2},
-	"sites"		: ["Keep", "Town", "City-state"]
+	"descriptors"		: ["frontier", "civilized"]
 },
 { 
 	"name" 		: "Heavy Cavalry",
@@ -1135,7 +1216,7 @@
 	"move"		: 14,
 	"looting"	: 1,
 	"traits"	: {},
-	"sites"		: ["Keep", "Town", "City-state"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Arbalests",
@@ -1146,7 +1227,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Ranged" : 10, "Long range": true, "Pierce": 3},
-	"sites"		: ["Town", "City-state", "Fortress", "Glade"]
+	"descriptors"		: ["civilized", "dwarf", "elf"]
 },
 {
 	"name" 		: "Halberds",
@@ -1156,8 +1237,8 @@
 	"armor"		: 8,
 	"move"		: 12,
 	"looting"	: 1,
-	"traits"	: {"Stalwart": true },
-	"sites"		: ["Fortress", "Glade", "Town"]
+	"traits"	: {"Guardian": true },
+	"descriptors"		: ["civilized", "dwarf", "elf"]
 },
 { 
 	"name" 		: "High Guard",
@@ -1168,7 +1249,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Honor": 30},
-	"sites"		: ["Town"]
+	"descriptors"		: ["civilized"]
 },
 { 
 	"name" 		: "Legion",
@@ -1178,8 +1259,8 @@
 	"armor"		: 12,
 	"move"		: 12,
 	"looting"	: 1,
-	"traits"	: {"Stalwart": true, "Honor": 50},
-	"sites"		: ["City-state"]
+	"traits"	: {"Guardian": true, "Honor": 50},
+	"descriptors"		: ["civilized"]
 },
 
 { 
@@ -1187,11 +1268,12 @@
   	"is_army"	: true,
   	"level"		: 1,
   	"strength"	: 1,
-	"armor"		: 1,
+	"armor"		: 2,
 	"move"		: 14,
 	"looting"	: 2,
+	"health"	: 1,
 	"traits"	: {"Pillager": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "goblinoid"]
 },
 {
 	"name" 		: "Goblin Archers",
@@ -1201,8 +1283,9 @@
 	"armor"		: 0,
 	"move"		: 14,
 	"looting"	: 2,
+	"health"	: 1,
 	"traits"	: {"Ranged": 3, "Pillager": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "goblinoid"]
 },
 { 
 	"name" 		: "Skeleton Company",
@@ -1213,7 +1296,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Pillager": true, "Regenerate" : true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair", "Tomb", "Necropolis"]
+	"descriptors"		: [ "monster", "undead"]
 },
 { 
 	"name" 		: "Orc Tribe",
@@ -1224,7 +1307,7 @@
 	"move"		: 10,
 	"looting"	: 2,
 	"traits"	: {"Pillager": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "goblinoid"]
 },
 { 
 	"name" 		: "Orc Shredders",
@@ -1235,18 +1318,18 @@
 	"move"		: 12,
 	"looting"	: 2,
 	"traits"	: {"Pillager": true, "Pierce": 3},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "goblinoid"]
 },
 { 
 	"name" 		: "Hive Soldiers",
   	"is_army"	: true,
   	"level"		: 4,
   	"strength"	: 7,
-	"armor"		: 10,
-	"move"		: 12,
+	"armor"		: 7,
+	"move"		: 14,
 	"looting"	: 2,
-	"traits"	: {"Pillager": true, "Relentless": true, "Swarm": true, "Spot": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"traits"	: {"Pillager": true, "Heavy armor": true, "Spot": true},
+	"descriptors"		: ["monster"]
 },
 
 { 
@@ -1258,7 +1341,7 @@
 	"move"		: 12,
 	"looting"	: 1,
 	"traits"	: {"Pillager": true, "Regenerate" : true, "Ranged": 8},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair", "Tomb", "Necropolis"]
+	"descriptors"		: ["monster", "undead"]
 },
 { 
 	"name" 		: "Dead Army",
@@ -1268,8 +1351,8 @@
 	"armor"		: 8,
 	"move"		: 10,
 	"looting"	: 1,
-	"traits"	: {"Pillager": true},
-	"sites"		: ["Tomb", "Necropolis"]
+	"traits"	: {"Pillager": true, "Relentless": true},
+	"descriptors"		: ["undead"]
 },
 { 
 	"name" 		: "Zombie Horde",
@@ -1280,7 +1363,7 @@
 	"move"		: 10,
 	"looting"	: 1,
 	"traits"	: {"Pillager": true, "Infect": "Zombie Horde"},
-	"sites"		: ["Tomb", "Necropolis"]
+	"descriptors"		: ["undead"]
 },
 { 
 	"name" 		: "Blood Drinkers",
@@ -1291,7 +1374,7 @@
 	"move"		: 12,
 	"looting"	: 2,
 	"traits"	: {"Pillager": true, "Vampiric": true},
-	"sites"		: ["Tomb", "Necropolis"]
+	"descriptors"		: ["undead"]
 },
 
 { 
@@ -1303,18 +1386,20 @@
 	"move"		: 12,
 	"looting"	: 2,
 	"traits"	: {"Pillager": true, "Regenerate": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster"]
 },
 { 
 	"name" 		: "Earth Giants",
   	"is_army"	: true,
   	"level"		: 5,
-  	"strength"	: 10,
+  	"strength"	: 9,
 	"armor"		: 8,
 	"move"		: 12,
 	"looting"	: 2,
-	"traits"	: {"Pillager": true, "Pierce": 3, "Crushing blow": 1, "Unchainable": true, "Stubborn": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"health"	: 3,
+	"traits"	: {"Pillager": true, "Crushing blow": 1, 
+					"Unchainable": true, "Stubborn": true},
+	"descriptors"		: ["monster", "giant"]
 },
 { 
 	"name" 		: "Frost Giants",
@@ -1324,8 +1409,10 @@
 	"armor"		: 9,
 	"move"		: 12,
 	"looting"	: 2,
-	"traits"	: {"Pillager": true, "Pierce": 3, "Restrain": 2, "Stubborn": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"health"	: 3,
+	"traits"	: {"Pillager": true,  "Restrain": 2, 
+					"Stubborn": true},
+	"descriptors"		: ["monster", "giant"]
 },
 { 
 	"name" 		: "Dragon Men",
@@ -1336,7 +1423,7 @@
 	"move"		: 12,
 	"looting"	: 2,
 	"traits"	: {"Pillager": true, "Ranged": 10, "Splash": true, "Flight": true},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair"]
+	"descriptors"		: ["monster", "draconic"]
 },
 
 { 
@@ -1347,8 +1434,9 @@
 	"armor"		: 7,
 	"move"		: 12,
 	"looting"	: 2,
+	"health"	: 3,
 	"traits"	: {"Pillager": true, "Regenerate": true, "Death aura": 1, "Infect": "Abyssal Horde"},
-	"sites"		: ["Dungeon", "Deep Dungeon", "Lair", "Overlord's Lair"]
+	"descriptors"		: ["monster", "abyssal"]
 },
 { 
 	"name" 		: "Abyssal Raiders",
@@ -1358,8 +1446,9 @@
 	"armor"		: 5,
 	"move"		: 14,
 	"looting"	: 2,
+	"health"	: 3,
 	"traits"	: {"Pillager": true, "Regenerate": true, "Stealth": true, "Death aura": 1, "Pierce": 4},
-	"sites"		: ["Gate", "Overlord's Lair"]
+	"descriptors"		: ["monster", "abyssal"]
 }
 ]
 

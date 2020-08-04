@@ -15,6 +15,7 @@ SOUTHWEST = 5
 
 #neighbors = [(-1, -1), (0, -1), (1, 0), (1, 1), (0, 1), (-1, 0)]
 neighbor_deltas = [(-1, 0), (-1, -1), (0, -1), (1, 0), (0, 1), (-1, 1) ]
+midpt_deltas = [(-1, 0), (-0.5, -0.866), (0.5, -0.866), (1, 0), (0.5, 0.866), (-0.5, 0.866)]
 odd_row_neighbors = [(-1, 0), (-1, -1), (0, -1), (1, 0), (0, 1), (-1, 1) ]
 even_row_neighbors = [(-1, 0), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1)  ]
 #                      0, 0    +1, 0    +1, 0    0, 0    +1, 0,  +1, 0: if even row and not E or W, add 1 to deltas
@@ -74,6 +75,10 @@ def get_abs_angle(dir1, dir2):
 # get angle between 0 (same direction) and 5 (dir 2 is almost all the way around the clock from dir 1)
 def get_clock_angle(dir1, dir2):
     return (dir2 - dir1) % 6
+
+def side_midpt(center, hex_size, direction):
+    x_delta, y_delta = midpt_deltas[direction]
+    return center[0] + x_delta * hex_size, center[1] + y_delta * hex_size
 
 # find the direction needed to get from loc1 to loc2
 def get_direction(loc1, loc2):

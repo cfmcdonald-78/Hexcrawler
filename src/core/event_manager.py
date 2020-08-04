@@ -80,6 +80,7 @@ ITEM_SHIFTED = EventType("ItemShifted", ['unit'])
 PLAYER_LOST = EventType("PlayerLost", ['player', 'description'])
 HERO_GRANTED = EventType("HeroGranted", ['player', 'site_name'])
 PLAYER_WON = EventType("PlayerWon", ['player', 'description'])
+SITE_LOST = EventType("SiteLost", ['player', 'site_name'])
 PLAYER_STATUS_CHANGE = EventType("PlayerStatusChange", ['player', 'status', 'new_value'])
 #GAME_OVER = EventType("GameOver", ['winner'])
 

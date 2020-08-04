@@ -1,45 +1,62 @@
 [
 { 
 	"name" 		: "Keep",
+	"descriptors":	 ["civilized", "frontier"],
 	"fortified"	: 1,
 	"terrain"	: ["Plain", "Hill", "Forest"],
 	"garrison"	: {"is_army": true, "min": 2, "max": 4, "leader_chance": 0.3},
 	"loot"		: {"status": "Active", "gold": 2, "reputation": -1, "item": "none", "prisoner": "villain"},
 	"owner"		: "Men",
 	"spawn"		: {"type": "zone_patrol", "chance_per_day": 0.3, "range": 3, "aggression": {"type": "per_level", "amount": 0.5}},
-	"misc"		: {"settlement_effect": 2, "income" : {"type": "per_settled_hex", "amount": 4}, "reactivate_chance": 0.05}
+	"misc"		: {"settlement_effect": 2, "income" : {"type": "per_settled_hex", "amount": 3}, "reactivate_chance": 0.05}
 },
 { 
 	"name" 		: "Lair",
+	"descriptors"		: ["monster"],
 	"fortified"	: 1,
 	"terrain"	: ["Plain", "Forest", "Hill", "Mountain", "Desert", "Volcano", "Grim Forest"],
 	"garrison"	: {"is_army": true, "min": 2, "max": 4, "leader_chance": 0.3},
 	"loot"		: {"status": "Sacked", "gold": 6, "reputation": 2, "item": "none", "prisoner": "normal"},
 	"owner"		: "Chaos",
 	"spawn"		: {"type": "zone_patrol", "chance_per_day": 0.3, "range": 3, "aggression": {"type": "per_level", "amount": 0.5}},
-	"misc"		: {"settlement_effect": -1, "income" : {"type": "flat", "amount": 0}, "reactivate_chance": 0.02}
+	"misc"		: {"settlement_effect": -1, "income" : {"type": "flat", "amount": 0}, "reactivate_chance": 0.01}
+},
+{ 
+	"name" 		: "Captain's Lair",
+	"descriptors"		: ["monster"],
+	"fortified"	: 1,
+	"terrain"	: ["Plain", "Forest", "Hill", "Mountain", "Desert", "Volcano", "Grim Forest"],
+	"garrison"	: {"is_army": true, "min": 4, "max": 5, "leader_chance": 1},
+	"loot"		: {"status": "Sacked", "gold": 6, "reputation": 2, "item": "none", "prisoner": "normal"},
+	"owner"		: "Chaos",
+	"spawn"		: {"type": "horde", "chance_per_day": 0.4, "range": 3, "aggression": {"type": "flat", "amount": 3}},
+	"misc"		: {"settlement_effect": -1, "income" : {"type": "flat", "amount": 0}, "reactivate_chance": 0}
 },
 { 
 	"name" 		: "Overlord's Lair",
+	"descriptors"		: ["monster"],
 	"fortified"	: 2,
+	"global_alloc": {"func" : "sub_one_per_level", "args": {"levels": [1, 7], "orig_type" : "Lair"}},
 	"terrain"	: ["Forest", "Hill", "Mountain", "Desert", "Volcano", "Grim Forest"],
-	"garrison"	: {"is_army": true, "min": 7, "max": 7, "leader_chance": 1},
-	"loot"		: {"status": "Destroyed", "gold": 7, "reputation": 5, "item": "none", "prisoner": "normal"},
+	"garrison"	: {"is_army": true, "min": 6, "max": 6, "leader_chance": 1},
+	"loot"		: {"status": "Destroyed", "gold": 7, "reputation": 4, "item": "none", "prisoner": "normal"},
 	"owner"		: "Chaos",
-	"spawn"		: {"type": "zone_patrol", "chance_per_day": 0.5, "range": 4, "aggression": {"type": "flat", "amount": 4}},
+	"spawn"		: {"type": "horde", "chance_per_day": 0.4, "range": 4, "aggression": {"type": "flat", "amount": 4}},
 	"misc"		: {"settlement_effect": -1, "income" : {"type": "flat", "amount": 0}, "reactivate_chance": 0, "zone_center": "true"}
 },
 { 
 	"name" 		: "Dungeon",
+	"descriptors"		: ["monster"],
 	"fortified"	: 0,
 	"terrain"	: ["Forest", "Hill", "Mountain", "Desert", "Volcano", "Grim Forest"],
 	"garrison"	: {"is_army": false, "min": 2, "max": 4},
 	"loot"		: {"status": "Sacked", "gold": 9, "reputation": 0, "item": "normal", "prisoner": "none"},
 	"owner"		: "Chaos",
-	"misc"		: { "settlement_effect": -1, "income" : {"type": "flat", "amount": 0}, "reactivate_chance": 0.01}
+	"misc"		: { "settlement_effect": -1, "income" : {"type": "flat", "amount": 0}, "reactivate_chance": 0.005}
 },
 { 
 	"name" 		: "Deep Dungeon",
+	"descriptors"		: ["monster"],
 	"fortified"	: 0,
 	"terrain"	: ["Hill", "Mountain", "Desert", "Volcano", "Grim Forest"],
 	"garrison"	: {"is_army": false, "min": 3, "max": 5, "depth": 2},
@@ -49,6 +66,7 @@
 },
 { 
 	"name" 		: "Tomb",
+	"descriptors"		: ["undead"],
 	"fortified"	: 0,
 	"terrain"	: ["Desert", "Desert Hill", "Mountain"],
 	"garrison"	: {"is_army": false, "min": 4, "max": 6},
@@ -58,6 +76,7 @@
 },
 { 
 	"name" 		: "Megadungeon",
+	"descriptors"		: ["monster"],
 	"fortified"	: 0,
 	"terrain"	: ["Forest", "Hill", "Mountain", "Desert", "Volcano", "Grim Forest"],
 	"garrison"	: {"is_army": false, "min": 7, "max": 8, "depth": 3},
@@ -67,6 +86,7 @@
 },
 { 
 	"name" 		: "Town",
+	"descriptors"		: ["civilized"],
 	"fortified"	: 2,
 	"terrain"	: ["Plain"],
 	"garrison"	: {"is_army": true, "min": 5, "max": 6, "leader_chance": 0.5},
@@ -77,6 +97,7 @@
 },
 { 
 	"name" 		: "Necropolis",
+	"descriptors"		: ["undead"],
 	"fortified"	: 2,
 	"terrain"	: ["Desert", "Desert Hill", "Mountain"],
 	"garrison"	: {"is_army": true, "min": 5, "max": 6, "leader_chance": 1},
@@ -87,6 +108,7 @@
 },
 { 
 	"name" 		: "Fortress",
+	"descriptors"		: ["dwarf"],
 	"fortified"	: 2,
 	"terrain"	: ["Mountain"],
 	"garrison"	: {"is_army": true, "min": 4, "max": 5, "leader_chance": 1},
@@ -97,6 +119,7 @@
 },
 { 
 	"name" 		: "Glade",
+	"descriptors"		: ["elf"],
 	"fortified"	: 2,
 	"terrain"	: ["Forest"],
 	"garrison"	: {"is_army": true, "min": 4, "max": 5, "leader_chance": 1},
@@ -107,36 +130,40 @@
 },
 { 
 	"name" 		: "Gate",
+	"descriptors"		: ["abyssal"],
 	"fortified"	: 2,
 	"terrain"	: ["Mountain", "Hill", "Forest", "Volcano", "Grim Forest"],
 	"garrison"	: {"is_army": true, "min": 2, "max": 2, "leader_chance": 0},
 	"loot"		: {"status": "Destroyed", "gold": 0, "reputation": 0, "item": "none", "prisoner": "none"},
 	"owner"		: "Chaos",
 	"spawn"		: {"type": "wanderer", "chance_per_day": 0.6, "range": 4, "aggression": {"type": "flat", "amount": 3},
-					"units": ["Abyssal Raiders", "Abyssal Raiders"]},
+					"descriptors": ["Abyssal Raiders", "Abyssal Raiders"]},
 	"misc"		: {"settlement_effect": -1, "income" : {"type": "flat", "amount": 0}, "reactivate_chance": 0} 
 					
 },
 { 
 	"name" 		: "City-state",
+	"descriptors"		: ["civilized"],
 	"fortified"	: 3,
 	"terrain"	: ["Plain"],
 	"garrison"	: {"is_army": true, "min": 7, "max": 7, "leader_chance": 1},
 	"loot"		: {"status": "Active", "gold": 6, "reputation": -3, "item": "none", "prisoner": "villain"},
 	"spawn"		: {"type": "zone_patrol", "chance_per_day": 0.5, "range": 4, "aggression": {"type": "flat", "amount": 4}},
 	"owner"		: "Men",
-	"misc"		: {"settlement_effect": 3, "income" : {"type": "per_settled_hex", "amount": 5}, "reactivate_chance": 0, "zone_center": "true"}
+	"misc"		: {"settlement_effect": 3, "income" : {"type": "per_settled_hex", "amount": 4}, "reactivate_chance": 0, "zone_center": "true"}
 },
 { 
 	"name" 		: "Rogue's Den",
+	"descriptors"		: ["frontier"],
 	"fortified"	: 0,
 	"terrain"	: ["Plain", "Forest", "Hill"],
 	"owner"		: "Men",
 	"loot"		: {"status": "Active", "gold": 0, "reputation": 0, "item": "none", "prisoner": "none"},
-	"misc"		: {"haven" : true, "settlement_effect": 0, "income" : {"type": "flat", "amount": 0}, "reactivate_chance": 0}
+	"misc"		: {"haven" : true, "settlement_effect": 0, "income" : {"type": "flat", "amount": 0}, "reactivate_chance": 0.75}
 },
 { 
 	"name" 		: "Cache",
+	"descriptors"		: ["frontier"],
 	"fortified"	: 0,
 	"terrain"	: ["Forest", "Hill", "Mountain"],
 	"owner"		: "Chaos",

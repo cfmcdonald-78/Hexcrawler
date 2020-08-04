@@ -42,10 +42,12 @@ class UnitLabel(Label):
         surface.blit(unit_image, (x, y))
                 #surface.blit(unit_image, (x, y))
         miniicon_pos = 0
-        if self.curr_unit.health == unit.DEAD:
+        if not self.curr_unit.is_alive():
             surface.blit(images.dead_image, (x, y))
-        elif self.curr_unit.health == unit.WOUNDED:
-            surface.blit(images.wounded_image, (x, y))
+        elif self.curr_unit.is_wounded():
+            wound_sixteenths = (self.curr_unit.curr_wounds() * 16) / self.curr_unit.get_health()
+            for i in range(wound_sixteenths):
+                surface.blit(images.wounded_image, (x, y + 58 - (i * 4)))
  
         for overlay_image in self.overlays:
                 surface.blit(overlay_image, (x, y))

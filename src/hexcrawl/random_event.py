@@ -5,76 +5,85 @@ Created on Jul 23, 2012
 '''
 import core.event_manager as event_manager
 from core.event_manager import Event
-from mob.group import Horde, horde_types_by_name
 from gamemap.site import Site
 import mob.unit as unit, mob.trait as trait, mob.hero as hero, mob.group as group
 import gamemap.site_type as site_type, gamemap.hexgrid as hexgrid
 import fame
 import random
 from math import ceil
-from util.tools import min_in_list
 
-WEEKS_PER_HORDE_LEVEL = 4
-HORDE_CHANCE_PER_DAY = 0.08
-horde_chance = HORDE_CHANCE_PER_DAY
+
 
 FIRE_SPREAD_CHANCE = 0.1
 MIN_FIRE_DURATION = 2
 MAX_FIRE_DURATION = 4
 
-MIN_HERO_LAIR_LEVEL = 2
-MAX_HERO_LAIR_LEVEL = 6
-
-HORDE = "Horde"
-
-def generate_horde(game, curr_week):
-    global horde_chance
-    
-    # cumulative chance for horde, chance increases each time horde fails to appear, resets to 0
-    # if horde does appear
-    if random.random() > horde_chance:
-        horde_chance += HORDE_CHANCE_PER_DAY
-        return None, None
-    
-    horde_chance = 0
-    
-    # over time, hordes get nastier!
-    horde_level = (curr_week / WEEKS_PER_HORDE_LEVEL) + 1
-    candidate_horde_types = [horde_type for horde_type in horde_types_by_name.values() if horde_type.level == horde_level]
-    assert(len(candidate_horde_types) > 0)
-    
+#MIN_HERO_LAIR_LEVEL = 2
+#MAX_HERO_LAIR_LEVEL = 6
+#
+#HORDE = "Horde"
+#
+#def generate_horde(game):
+#    target_player = random.choice(game.get_actors())
+#    
+#
+#    # over time, hordes get nastier!
+#    horde_level = 0
+#    i = 0
+#    while target_player.get_fame() >= fame.HORDE_THRESHOLD[i]:
+#        i += 1
+#        horde_level += 1
+#        
+#    horde_level = min(max(horde_level, game.get_turn().week / MIN_WEEKS_PER_HORDE_LEVEL), MAX_HORDE_LEVEL)
+#    
+#    if horde_level == 0:
+#        return None, None
+#    
+#    goal_site = random.choice(game.get_map().get_sites(filter_func = lambda curr_site : curr_site.get_owner() == target_player))
+#    
+#    horde_type = random.choice([horde_type for horde_type in horde_types_by_name.values() if horde_type.level == horde_level])
+#    #assert(len(candidate_horde_types) > 0)
+#    
+#    # find all sites where hordes of given type can appear
+#    def valid_horde_site(curr_site):
+#        return (curr_site.site_type.name in horde_type.site_names and curr_site.get_hex().get_zone().is_wild())
+#    
+#    candidate_sites = game.get_map().get_sites(filter_func = valid_horde_site)
+#    
     # find site types where hordes of given level can appear
-    site_type_names = set([])
-    for candidate in candidate_horde_types:
-        site_type_names.update(set(candidate.site_names))
+#    site_type_names = set([])
+#    for candidate in candidate_horde_types:
+#        site_type_names.update(set(candidate.site_names))
             
     # find all such sites on the map
-    candidate_sites = []
-    for site_type_name in site_type_names:
-        candidate_sites += game.get_map().find_site(site_type_name, find_all = True)
-        
-    if len(candidate_sites) > 0:
-        # if there's at least one active site of the right type, generate a horde there.    
-        horde_site = random.choice(candidate_sites)
-        candidate_horde_types = [horde_type for horde_type in candidate_horde_types if horde_site.get_type().name in horde_type.site_names]
-        horde_type = random.choice(candidate_horde_types)
-    
-        # find the goal of the horde: nearest city-state on the map to its site
-        site_hex = horde_site.get_hex()
-        city_states = game.get_map().find_site(horde_type.goal_type_name, find_all = True)
-        goal_site, goal_dist = min_in_list(city_states, lambda city_state : hexgrid.get_distance(city_state.get_hex(), site_hex))
-    
-        spawn_hex = game.get_map().get_spawn_hex(site_hex)
-        if spawn_hex == None:
-            print "Alert: horde unable to generate due to all site hex neighbors being occupied"
-            return None, None
-    
-        horde = Horde(horde_type, horde_site.get_owner(), goal_site.get_hex())
-        horde.initialize(spawn_hex)
-        return "A " + horde_type.name + " appears in ", game.get_map().get_zone(site_hex.x, site_hex.y)
-    
-    # no valid sites from which to spawn
-    return None, None
+#    candidate_sites = []
+#    for site_type_name in site_type_names:
+##        candidate_sites += game.get_map().find_site(site_type_name, find_all = True)
+#        
+#    if len(candidate_sites) > 0:
+#        # generate horde at closest valid site to target
+#        horde_site = min(candidate_sites, key = lambda candidate : hexgrid.get_distance(candidate.get_hex(), 
+#                                                                                        goal_site.get_hex()))
+#     
+##        horde_type = random.choice(candidate_horde_types)
+##    
+#        site_hex = horde_site.get_hex()
+##            city_states = game.get_map().find_site(horde_type.goal_type_name, find_all = True)
+##            goal_site = min(city_states, key = lambda city_state : hexgrid.get_distance(city_state.get_hex(), site_hex))
+#            # find the goal of the horde: random site belonging to target player
+#       
+#        spawn_hex = game.get_map().get_spawn_hex(site_hex)
+#        if spawn_hex == None:
+#            print "Alert: horde unable to generate due to all site hex neighbors being occupied"
+#            return None, None
+#        
+#        horde = Horde(horde_type, horde_site.get_owner(), goal_site)
+#        horde.initialize(spawn_hex)
+#            
+#        return "A " + horde_type.name + " appears in ", game.get_map().get_zone(site_hex.x, site_hex.y)
+#    
+#    # no valid sites from which to spawn
+#    return None, None
 
 
 # TODO: make storms/flooding more likely in wilder areas
@@ -245,14 +254,14 @@ def agent_of_chaos(game):
 
 
 def grant_hero(game):
-    grantee = random.choice([player for player in game.get_players() if player.is_actor()])
+    grantee = random.choice(game.get_actors())
     
     # can only get hero if above certain fame threshold, higher the more heroes you've been granted so far
     if (grantee.num_heroes_granted() >= len(fame.HERO_GRANT_THRESHOLD) or 
         grantee.get_fame() < fame.HERO_GRANT_THRESHOLD[grantee.num_heroes_granted()]):
         return None, None
     
-    hero_sites = [curr_site for curr_site in grantee.get_sites() if curr_site.is_haven()]
+    hero_sites = [curr_site for curr_site in grantee.get_sites()]
     if len(hero_sites) == 0:
         # nowhere for hero to appear
         return None, None
@@ -269,7 +278,7 @@ def grant_hero(game):
     # signal the granting of a hero
     event_manager.queue_event(Event(event_manager.HERO_GRANTED, 
                                     [grantee, grant_site.get_name()]))
-    return "A new hero has appeared in ", game.get_map().get_zone(grant_site.get_hex().x, grant_site.get_hex().y)
+    return "A new hero has offered his services in ", game.get_map().get_zone(grant_site.get_hex().x, grant_site.get_hex().y)
 
  
 def abyssal_gate(game):
@@ -283,12 +292,12 @@ def abyssal_gate(game):
 
 
 # event tables: (event_function, first week event can occur)
-common_events = [(grant_hero, 0) , (storms, 0),  (flooding, 0),  (abyssal_gate, 29)]
+common_events = [ (grant_hero, 0) , (storms, 0), (abyssal_gate, 29), (flooding, 0)]
 uncommon_events = [ (forest_fire, 0), (agent_of_chaos, 5),  (sea_monster, 3) ]
 rare_events = [(questing_beast, 0) ]  # need more rare events!!   
 
-EVENT_CHANCE =  0.5
-UNCOMMON_THRESHOLD = 0.7
+EVENT_CHANCE =  0.7
+UNCOMMON_THRESHOLD = 0.6
 RARE_THRESHOLD = 0.95
 
 def choose_event_func(event_list, curr_week):
@@ -296,24 +305,24 @@ def choose_event_func(event_list, curr_week):
 
 def check_for_event(game):
     curr_week = game.get_turn().week
-    # first check to see if a horde is spawned. 
-    event_description, event_zone = generate_horde(game, curr_week) 
-    
+#    # first check to see if a horde is spawned. 
+#    event_description, event_zone = generate_horde(game, curr_week) 
+#    
     # if no horde, check for normal random event
-    if event_description == None:
+#    if event_description == None:
         # TODO: scale chance of event with map size to get constant chance/area
-        if random.random() > EVENT_CHANCE:
-            return
+    if random.random() > EVENT_CHANCE:
+        return
         
-        # determine type of event
-        event_type_roll = random.random()
-        if event_type_roll > RARE_THRESHOLD:
-            event_func = choose_event_func(rare_events, curr_week)
-        elif event_type_roll > UNCOMMON_THRESHOLD:
-            event_func = choose_event_func(uncommon_events, curr_week)
-        else:
-            event_func = choose_event_func(common_events, curr_week)
-        event_description, event_zone = event_func(game)
+    # determine type of event
+    event_type_roll = random.random()
+    if event_type_roll > RARE_THRESHOLD:
+        event_func = choose_event_func(rare_events, curr_week)
+    elif event_type_roll > UNCOMMON_THRESHOLD:
+        event_func = choose_event_func(uncommon_events, curr_week)
+    else:
+        event_func = choose_event_func(common_events, curr_week)
+    event_description, event_zone = event_func(game)
     
     if event_description == None:
         return   
@@ -321,12 +330,13 @@ def check_for_event(game):
     event_manager.queue_event(Event(event_manager.RANDOM_EVENT, [event_description + event_zone.get_name()]))
     
 def seed_map(hex_map):
-    # place heroes as prisoners in lairs, 1 for each level of lair
-    for i in range(MIN_HERO_LAIR_LEVEL, MAX_HERO_LAIR_LEVEL + 1):
-        lair_candidates = hex_map.find_site("Lair", level_range = (i, i), find_all = True)
-        if len(lair_candidates) == 0:
-            continue
+    pass
+   # place heroes as prisoners in lairs, 1 for each level of lair
+   # for i in range(MIN_HERO_LAIR_LEVEL, MAX_HERO_LAIR_LEVEL + 1):
+   #     lair_candidates = hex_map.find_site("Lair", level_range = (i, i), find_all = True)
+   #     if len(lair_candidates) == 0:
+   #         continue
         
-        chosen_lair = random.choice(lair_candidates)
-        chosen_lair.set_prisoner(hero.Hero(unit.random_hero_type()))
+   #     chosen_lair = random.choice(lair_candidates)
+   #     chosen_lair.set_prisoner(hero.Hero(unit.random_hero_type()))
     

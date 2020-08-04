@@ -19,5 +19,5 @@ class Options(object):
         self.music_volume = 0.5
         self.own_combat_speed = MED_COMBAT_SPEED
         self.other_combat_speed = MED_COMBAT_SPEED
-        self.player_name = "Order"
+        self.player_name = "Marcus"
         self.font = "Graverplate Bold.ttf"

@@ -4,7 +4,7 @@ Created on Jul 3, 2012
 @author: Chris
 '''
 import json, os, random
-import mob.unit as unit, hexcrawl.loot as loot, mob.item as item, mob.group as group
+import mob.unit as unit, hexcrawl.loot as loot, mob.item as item, mob.group as group, mob.horde as horde
 import gamemap.site_type as site_type, gamemap.site_upgrade as site_upgrade, gamemap.zone_type as zone_type 
 import hexcrawl.player_type as player_type
 import collections
@@ -13,14 +13,14 @@ import collections
 def load_name_maker(json_name_maker):
     return json_name_maker
 
-def gen_prisoner_candidates(unit_types, site_types, prisoner_candidates):
-    men_site_types = [curr_site_type for curr_site_type in site_types.values() if curr_site_type.owner_name == "Men"]
-    for unit_type in unit_types:
-        for men_site_type in men_site_types:
-            if men_site_type.name in unit_type.sites:
-                prisoner_candidates.append(unit_type)
-                break
-    return prisoner_candidates
+def gen_prisoner_candidates(unit_types, prisoner_descriptors, prisoner_candidates):
+
+    for prisoner_type, descriptor_set in prisoner_descriptors.iteritems():
+        prisoner_candidates[prisoner_type] = []
+        for unit_type in unit_types:
+            if unit_type.descriptors.intersection(descriptor_set):
+                prisoner_candidates[prisoner_type].append(unit_type)
+    #return candidates
 
 def load_player_type(json_player):
     name = json_player["name"]
@@ -55,10 +55,8 @@ def load_horde_type(json_horde_type):
     leader = json_horde_type['leader']
     level = json_horde_type['level']
     units = json_horde_type['units']
-    sites = json_horde_type['sites']
-    goal = json_horde_type['goal']
-    
-    return group.HordeType(name, leader, level, units, sites, goal)
+
+    return horde.HordeType(name, leader, level, units)
 
 def load_unit_type(json_unit_type):
     name = json_unit_type["name"]
@@ -70,15 +68,16 @@ def load_unit_type(json_unit_type):
     armor = json_unit_type["armor"]
     move = json_unit_type["move"]
     looting = json_unit_type["looting"]
+    health = 2 if "health" not in json_unit_type else json_unit_type["health"]
     traits = json_unit_type["traits"]
-    sites = json_unit_type["sites"]
+    descriptors = json_unit_type["descriptors"]
     
     if name in DataLoader.name_makers:
         name_maker = DataLoader.name_makers[name]
     else:
         name_maker = None
     
-    return unit.UnitType(name, name_maker, is_army, is_combatant, level, strength, armor, move, looting, traits, sites)
+    return unit.UnitType(name, descriptors, name_maker, is_army, is_combatant, level, strength, armor, move, looting, health, traits)
 
 def load_zone_type(json_zone_type):
     name = json_zone_type["name"]
@@ -93,26 +92,24 @@ def load_zone_type(json_zone_type):
     
     weights = None
     substitution = None
-    if type == "base":
-        weights = json_zone_type["weights"]
-    else:
+  
+    if type == "overlay":
         sub_info = json_zone_type["substitution"]
         substitution = zone_type.Substitution(sub_info["sub_for"],sub_info["frequency"],sub_info["function"], sub_info["params"],
                                               sub_info["terrain"])
+    else:   
+        weights = json_zone_type["weights"]
         #TerrainSub = collections.namedtuple('TerrainSub', ['new_terrain', 'function', 'params'])
     min_fraction = json_zone_type["min_fraction"]
+    max_fraction = json_zone_type["max_fraction"] if "max_fraction" in json_zone_type else 1.0
     
     zone_type.type_adjectives[name] = json_zone_type["adjectives"]
         
-    return zone_type.ZoneType(name, weights, substitution, min_fraction, site_param_list)
+    return zone_type.ZoneType(name, type, weights, substitution, min_fraction, max_fraction, site_param_list)
 
 def load_site_type(json_site_type):
     name = json_site_type["name"]
     legal_terrain = json_site_type["terrain"]
-#    terrain_names = json_site_type["terrain"]
-#    legal_terrain = []
-#    for terrain_name in terrain_names:
-#        legal_terrain.append(terrain.name_to_type[terrain_name])
         
     if "garrison" in json_site_type:
         garrison = json_site_type["garrison"]
@@ -127,19 +124,14 @@ def load_site_type(json_site_type):
         loot_effects = site_type.LootEffects(loot["status"], loot["gold"], loot["reputation"], loot["item"], loot["prisoner"])
     else:
         loot_effects = None
-#    if "patrol" in json_site_type:
-#        patrol = json_site_type["patrol"]
-#        patrol_info = site_type.Patrol(patrol["chance_per_day"], patrol["range"], patrol["aggression"])
-#    else:
-#        patrol_info = None
-#    
+
     if "spawn" in json_site_type:
         spawn = json_site_type["spawn"]
-        print spawn
-        spawn_info = site_type.Spawn(spawn["type"], spawn["chance_per_day"],  spawn["range"], spawn["aggression"], spawn.get("units", None))
+        spawn_info = site_type.Spawn(spawn["type"], spawn["chance_per_day"],  
+                                     spawn["range"], spawn["aggression"], spawn.get("units", None))
     else:
         spawn_info = None
-        
+    global_alloc = json_site_type.get("global_alloc", {})
     owner = json_site_type["owner"]
     #site_type.owner_types[owner[0]] = owner[1]
 
@@ -151,7 +143,8 @@ def load_site_type(json_site_type):
     else:
         name_maker = None
     
-    return site_type.SiteType(name, name_maker, owner, legal_terrain, garrison_info, spawn_info, loot_effects, misc_info)
+    return site_type.SiteType(name, json_site_type["descriptors"], global_alloc, name_maker, owner, legal_terrain, 
+                              garrison_info, spawn_info, loot_effects, misc_info)
 
 def load_site_upgrades(json_site_upgrade):
     prereqs = json_site_upgrade.get("requires", None)
@@ -180,7 +173,7 @@ class DataLoader(object):
                                          [site_upgrade.upgrades,site_upgrade.upgrades_by_name], ["List", "Dict"]),
 #                             DataHandler("map/site_upgrades.json", load_site_upgrades, site_upgrade.upgrades_by_name, True),
                              DataHandler("map/zone_types.json", load_zone_type, [zone_type.zone_types], ["List"]),
-                            DataHandler("units/hordes.json", load_horde_type, [group.horde_types_by_name], ["Dict"])]
+                            DataHandler("units/hordes.json", load_horde_type, [horde.horde_types_by_name], ["Dict"])]
         for data_handler in cls.data_handlers:
             json_file = open(os.path.join('data',data_handler.filename))
             print "loading " + data_handler.filename
@@ -198,6 +191,7 @@ class DataLoader(object):
                         data_handler.dests[i].append(processed_data)
             json_file.close()
     
-        gen_prisoner_candidates(unit.unit_types, site_type.site_types, loot.prisoner_candidates)
+        gen_prisoner_candidates(unit.unit_types, site_type.prisoner_descriptors, 
+                                loot.prisoner_candidates)
 
     

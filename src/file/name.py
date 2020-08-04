@@ -5,12 +5,15 @@ Created on Jan 5, 2013
 '''
 import random
 
-def gen_name(name_maker, used_names):
+def gen_name(name_maker, used_names, forced_pattern=None):
     if name_maker == None:
         return ""
     prefix = name_maker["prefix"]
     delimiter = name_maker["delimiter"]
-    pattern = random.choice(name_maker["patterns"])
+    if forced_pattern == None:
+        pattern = random.choice(name_maker["patterns"])
+    else:
+        pattern = name_maker["patterns"][forced_pattern]
     components = name_maker["components"]
         
     while True:

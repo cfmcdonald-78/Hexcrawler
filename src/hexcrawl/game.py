@@ -21,6 +21,9 @@ class Turn(object):
         self.week = week
         self.day = day
     
+    def at_week_start(self):
+        return self.day == 1
+    
     def increment(self):
         self.day += 1
         event_manager.queue_event(Event(event_manager.DAY_START, [self.week, self.day]))
@@ -45,14 +48,19 @@ class Game(object):
         map_generator = map_maker.ProceduralMapmaker(hex_width, hex_height)
 
         # keep creating maps until we find one that can be 'zoned' successfully
-        reject_count = 0
-        while True:
-            self.hex_map = map_generator.generate()
-            if self.hex_map.assign_zones():
-                break
-            reject_count += 1
-            
-        print "rejected " + str(reject_count) + " maps"
+        def make_map():
+            reject_count = 0
+            while True:
+                self.hex_map = map_generator.generate()
+                if self.hex_map.assign_zones():
+                    break
+                reject_count += 1
+        
+            print "rejected " + str(reject_count) + " maps"
+        
+        import cProfile
+        cProfile.runctx('make_map()',globals(), locals(), 'make_map.profile')
+    
         
         # set up players 
         self.players = []
@@ -75,6 +83,13 @@ class Game(object):
         # populate map with sites
         self.hex_map.populate(self.npc_table)
         
+#        clairs = self.hex_map.get_sites(filter_func = lambda curr_site : curr_site.site_type.name == "Captain's Lair" or
+#                                                        curr_site.site_type.name == "Overlord's Lair")
+#        clair_map = {i : 0 for i in range(1, 8)}
+#        for clair in clairs:
+#            clair_map[clair.level] += 1
+#        print clair_map
+        
         # find starting location
         start_zone = self.hex_map.get_start_zone()
         self.start_hex = self.hex_map.find_site("Rogue's Den", (1, 1), start_zone).get_hex()
@@ -82,22 +97,32 @@ class Game(object):
 
         starting_party = group.Group(human)
         my_hero = hero.Hero(unit.unit_types_by_name["Classic Hero"])
+        
         starting_party.add_unit(my_hero)
         starting_party.add_unit(unit.Unit(unit.unit_types_by_name["Warrior"]))
         starting_party.add_unit(unit.Unit(unit.unit_types_by_name["Bowman"]))
+        starting_party.add_unit(unit.Unit(unit.unit_types_by_name["Longbows"]))
+        starting_party.add_unit(unit.Unit(unit.unit_types_by_name["Longbows"]))
+        starting_party.add_unit(unit.Unit(unit.unit_types_by_name["Longbows"]))
+#        starting_party.add_unit(unit.Unit(unit.unit_types_by_name["Mason"]))
         self.start_hex.add_group(starting_party)
+   
+        #my_hero.equip_item(item.Item(item.type_by_name("Cloak"), base_only = True))
+#        for i in range(3):
+#            my_hero.add_item(item.random_item(random.randint(1, 6), item.NORMAL_QUALITY))
    
         # initialize settled area
         for curr_player in self.players:
             for curr_site in curr_player.get_sites():
                 if curr_site.settles():
-                    for i in range(3):
+                    for i in range(4):
                         curr_site.spread_settlement(self.hex_map)
        
         random_event.seed_map(self.hex_map)
        
         self.curr_player_index = 0
         self.turn = Turn(1, 1)
+        self.hex_map.start_day(self.turn)
         self.terminated = False
    
     def initialize(self, is_new_game):
@@ -119,6 +144,13 @@ class Game(object):
             self.advance_turn()
     
     def handle_event(self, event):
+        if event.type == event_manager.SITE_LOST:
+            losing_player = event.data['player']
+            if losing_player.is_actor() and losing_player.num_sites() == 0:
+                # an active player loses the game upon losing his/her last site
+                event_manager.queue_event( Event(event_manager.PLAYER_LOST, [losing_player, losing_player.get_name() + " has no more sites from which to champion the cause"]) )
+                self.remove_player(losing_player)
+        
         if event.type == event_manager.HERO_LOST:
             losing_player = event.data['player']
             if losing_player.is_actor() and losing_player.get_hero_count() == 0:
@@ -137,6 +169,7 @@ class Game(object):
             # if a monster player takes out a city-state, it wins the game
             elif looter.is_monster() and looted_site.get_type() == site_type.site_types["City-state"]:
                 event_manager.queue_event(Event(event_manager.PLAYER_WON, [looter, looter.get_name() + " has conquered " + looted_site.get_name()]))                         
+
 
     def __setstate__(self, d):
         self.__dict__.update(d) 
@@ -170,7 +203,7 @@ class Game(object):
         self.curr_player_index = (self.curr_player_index + 1) % len(self.players)
         if self.curr_player_index == 0:
             self.turn.increment()
-            self.hex_map.day_start_update()
+            self.hex_map.start_day(self.turn)
             random_event.check_for_event(self)
         
         self.start_turn()
@@ -183,6 +216,9 @@ class Game(object):
     
     def get_players(self):
         return self.players
+    
+    def get_actors(self):
+        return [player for player in self.players if player.is_actor()]
     
     def get_map(self):
         return self.hex_map

@@ -23,11 +23,11 @@ class UnitRenderer(component.Window):
         self.selected_unit = None
         
         def item_callback():
-            item_dialog = item_panel.ItemDialog(400, 300, "Items", self.selected_unit, self.can_sell_items, images)
+            item_dialog = item_panel.ItemDialog(325, 325, "Items", self.selected_unit, self.can_sell_items, images)
             item_dialog.show()
         
         x, y = self.rect.x + self.rect.width / 3, self.rect.y + (self.rect.height * 3)/ 4
-        width, height =  (3*self.rect.width) / 8, self.rect.height / 8
+        width, height =  (self.rect.width) / 2, self.rect.height / 8
         self.item_button = Button( Rect(x, y, width, height), "Items", item_callback)
         
         def build_callback():
@@ -70,7 +70,7 @@ class UnitRenderer(component.Window):
         if self.selected_unit == None or self.select_hex == None:
             return False
         
-        if not self.selected_unit.has_trait(trait.DIPLOMAT):
+        if not self.selected_unit.has_trait(trait.DIPLOMAT) or not self.selected_unit.get_owner():
             return False
         
         if not self.select_hex.has_site():
@@ -90,7 +90,7 @@ class UnitRenderer(component.Window):
         if self.selected_unit == None or self.select_hex == None:
             return False
         
-        if not self.selected_unit.has_trait(trait.BUILD):
+        if not self.selected_unit.has_trait(trait.BUILD) or not self.selected_unit.get_owner():
             return False
         
         # can't build too close to another site
@@ -132,7 +132,8 @@ class UnitRenderer(component.Window):
         if self.can_embassy():
             self.add_child(self.embassy_button)
             self.embassy_button.set_label("Embassy [" + 
-                                        str(misc_commands.get_embassy_cost(self.select_hex.site.get_level())) + "]")
+                                        str(misc_commands.get_embassy_cost(self.selected_unit,
+                                                                            self.select_hex.site.get_level())) + "]")
         
         x = self.rect.x + (self.rect.width / 4)
         y = self.rect.y + 4
@@ -150,9 +151,10 @@ class UnitRenderer(component.Window):
         self.add_child(new_label)
         y += label_height / 3
 
-        image_icons = [self.image_data.strength, self.image_data.armor, self.image_data.looting]
-        text_labels = [str(self.selected_unit.get_strength()), str(self.selected_unit.get_armor()), str(self.selected_unit.get_looting())]
-        label_tooltips = ["Strength (better chance to win combats)", "Armor (better chance block hits)", "Looting (more gold and better loot)"]                                                                                                     
+        image_icons = [self.image_data.strength, self.image_data.armor, self.image_data.looting, self.image_data.health]
+        text_labels = [str(self.selected_unit.get_strength()), str(self.selected_unit.get_armor()), str(self.selected_unit.get_looting()),  
+                       str(self.selected_unit.get_health() - self.selected_unit.curr_wounds()) + "/" + str(self.selected_unit.get_health())]
+        label_tooltips = ["Strength (better chance to win combats)", "Armor (better chance block hits)", "Looting (more gold and better loot)", "Health (num. wounds)"]                                                                                                     
         x = self.rect.x + self.rect.width / 6
         for i in range(len(image_icons)):
             new_label = Label(Rect(x, y, image.UI_ICON_WIDTH, image.UI_ICON_HEIGHT), 
@@ -163,9 +165,12 @@ class UnitRenderer(component.Window):
                               text_labels[i], tool_tip_text=label_tooltips[i])
             self.add_child(new_label)
             x += 10
+            if x > self.rect.x + self.rect.width - (image.UI_ICON_WIDTH + 15):
+                x = self.rect.x + self.rect.width / 6
+                y += image.UI_ICON_HEIGHT
         
-        y += image.UI_ICON_HEIGHT
-        x = self.rect.x + self.rect.width / 6
+        #y += image.UI_ICON_HEIGHT
+        x += 10 #self.rect.x + self.rect.width / 6
         #TODO: other image for flight mode
         move_icon = self.image_data.naval_move if self.selected_unit.get_move_mode() == move_mode.NAVAL else self.image_data.foot_move
         new_label = Label(Rect(x, y, image.UI_ICON_WIDTH, image.UI_ICON_HEIGHT), move_icon, image_label=True)
@@ -182,12 +187,10 @@ class UnitRenderer(component.Window):
         width = self.rect.width / 2
         height = 12
         for curr_trait in traits:
-            trait_text = curr_trait
             if curr_trait == trait.HERO:
                 continue # no need to display this, already shown in unit type
             
-            if not isinstance(traits[curr_trait], bool):
-                trait_text += " " + str(traits[curr_trait])
+            trait_text = trait.trait_str(curr_trait, traits[curr_trait])
             trait_label = Label(Rect(x, y, width, height), trait_text, tool_tip_text = trait.tool_tip_table[curr_trait])
             self.add_child(trait_label)
             

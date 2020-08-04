@@ -6,7 +6,7 @@ Created on Jul 9, 2012
 from collections import namedtuple
 import mob.unit as unit
 import file.name as name
-import math
+import math, random
 
 Garrison = namedtuple('Garrison', ['is_army', 'min', 'max', 'leader_chance', 'depth'])
 Spawn = namedtuple('Spawn', ['type', 'chance_per_day', 'range', 'aggression', 'units'])
@@ -15,10 +15,15 @@ Misc = namedtuple('Misc', ['haven', 'zone_center', 'settlement', 'income', 'reac
 
 ZONE_PATROL = "zone_patrol"
 WANDERER = "wanderer"
+HORDE = "horde"
+
+MIN_SITE_LEVEL = 1
+MAX_SITE_LEVEL = 7
 
 VILLAIN_PRISONER = "villain"
 NORMAL_PRISONER = "normal"
 NO_PRISONER = "none"
+prisoner_descriptors = {VILLAIN_PRISONER : set(["notorious"]), NORMAL_PRISONER: set(["civilized", "frontier"])}
 
 NO_ITEM = "none"
 
@@ -46,6 +51,7 @@ aggression_range_table = {"flat": compute_flat_aggression, "per_level": compute_
 # site statuses
 ACTIVE = "Active"
 SACKED = "Sacked"
+TRANQUIL = "Tranquil"
 DESTROYED = "Destroyed"
 
 # patrol types
@@ -59,12 +65,16 @@ def dict_update(update_dict, unit_type):
 
 
 class SiteType(object):
-    def __init__(self, name, name_maker, owner_name, legal_terrain, garrison_info,  spawn_info, loot_effects, misc_info):
+    def __init__(self, name, descriptors, global_alloc, name_maker, owner_name, legal_terrain, garrison_info, 
+                 spawn_info, loot_effects, misc_info):
         self.name = name
+        self.descriptors = set(descriptors)
         self.owner_name = owner_name
         
         self.name_maker = name_maker
         self.used_names = {}
+        self.global_alloc_func = global_alloc.get("func", None)
+        self.global_alloc_args = global_alloc.get("args", None)
         
         self.haven = misc_info.haven    # havens are protected from attack 
         self.zone_centered = misc_info.zone_center
@@ -79,7 +89,7 @@ class SiteType(object):
         
         self.legal_terrain = legal_terrain
         self.garrison_info = garrison_info
-        self.unit_types = [candidate for candidate in unit.unit_types if self.name in candidate.sites]
+        self.unit_types = [candidate for candidate in unit.unit_types if self.descriptors.intersection(candidate.descriptors)]
         self.army_units = {}
         self.character_units = {}
         self.leader_units = {}
@@ -90,7 +100,7 @@ class SiteType(object):
                     dict_update(self.army_units, candidate)
                 else:
                     dict_update(self.character_units, candidate)
-                if candidate.is_support():
+                if candidate.is_leader():
                     dict_update(self.leader_units, candidate)
             else:
                 dict_update(self.non_combatants, candidate)
@@ -116,5 +126,27 @@ class SiteType(object):
     
     def get_name(self):
         return self.name
+
+
+def do_global_allocation(hex_map):
+    for site_type in site_types.itervalues():
+        if site_type.global_alloc_func:
+            site_alloc_funcs[site_type.global_alloc_func](hex_map, site_type, site_type.global_alloc_args)
+
+def sub_one_per_level(hex_map, site_type, alloc_args):  
+    orig_type = site_types[alloc_args["orig_type"]]
+    level_range = alloc_args["levels"]
     
+    for i in range(max(MIN_SITE_LEVEL, level_range[0]), min(MAX_SITE_LEVEL, level_range[1]) + 1):
+        candidates = hex_map.find_site(orig_type.name, level_range = (i, i), find_all = True)
+        if len(candidates) == 0:
+            print("Alert: no substitution sites found for level " + str(i) + ", " + str(orig_type.name) + " -> " + str(site_type.name))
+            continue
+        
+        chosen_site = random.choice(candidates)
+        chosen_site.set_type(site_type)
+
+
 site_types = {}
+
+site_alloc_funcs = {"sub_one_per_level" : sub_one_per_level}

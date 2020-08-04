@@ -19,9 +19,20 @@ NORMAL_QUALITY = "normal"
 MISC_ITEM = "Misc"
 WEAPON = "Weapon"
 ARMOR = "Armor"
-item_types = [ARMOR, WEAPON, MISC_ITEM]
+MAIL = "Mail"
+SHIELD = "Shield"
+MELEE = "Melee"
+RANGED = "Ranged"
+HELD = "Held"
+POTION = "Potion"
+JEWELRY = "Jewelry"
+CLOTHING = "Clothing"
+TRANSPORT = "Transport"
 
-GOLD_VALUE_PER_LEVEL = 25
+item_types = [ARMOR, WEAPON, MISC_ITEM]
+item_subtypes = [MAIL, SHIELD, MELEE, RANGED, HELD, POTION, JEWELRY, CLOTHING, TRANSPORT]
+
+GOLD_VALUE_PER_LEVEL = {NORMAL_QUALITY: 25, ARTIFACT_QUALITY: 40}
 
 OTHER_MODIFIER_CHANCE = 0.5
 MISC_MODIFIER_CHANCE = 0.8
@@ -53,6 +64,11 @@ def merge_traits(base_traits, mod_traits):
             
     return merged_traits
 
+def type_by_name(base_item_name):
+    result = [base_item for base_item in base_items if base_item.name == base_item_name]
+    if len(result) == 1:
+        return result[0]
+
 def random_item(item_level, item_quality):
     candidates = [base_item for base_item in base_items if base_item.level == item_level and base_item.quality == item_quality]
         
@@ -66,17 +82,20 @@ class Item(object):
     classdocs
     '''
     
-    def __init__(self, base):
-        self.level = base.level
-        self.type = base.type
+    def __init__(self, base, base_only=False):
+        self.base = base
+#        self.level = base.level
+#        self.type = base.type
+#        self.subtype = base.subtype
+#        self.quality = base.quality
         # if weapon/armor, chance of additional modifying trait. if misc. item, higher chance 
         modifier = None
         modifier_chance = MISC_MODIFIER_CHANCE if base.type == MISC_ITEM else OTHER_MODIFIER_CHANCE
-        if random.random() <= modifier_chance:
+        if not base_only and random.random() <= modifier_chance:
             modifier = random.choice([mod for mod in item_modifiers if mod.level <= base.level and (base.type in mod.types or
                                                                                                     base.subtype in mod.types)])
     
-        self.name = base.name
+       # self.name = base.name
         if modifier != None:
             self.name = modifier.adjective + " " + base.name  
             self.traits = merge_traits(base.traits, modifier.traits)  
@@ -116,13 +135,14 @@ class Item(object):
         return self.name
     
     def get_level(self):
-        return self.level
+        return self.base.level
     
     def get_gold_value(self):
-        return self.level * GOLD_VALUE_PER_LEVEL
+        return self.get_level() * GOLD_VALUE_PER_LEVEL[self.base.quality]
     
     def get_type(self):
-        return self.type
+        return self.base.type
     
     def get_icon(self):
-        return self.type
+         # TODO: diff icons for diff. subtypes
+        return self.base.subtype

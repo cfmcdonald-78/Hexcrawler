@@ -12,6 +12,18 @@ if __name__ == '__main__':
 BIGNUM = sys.maxsize
 
 Loc = namedtuple('Loc', ['x', 'y'])
+
+#loc_map = {}
+#
+#class Loc(object):
+#    
+#    def __init__(self, x, y):
+#        if (x, y) in loc_map:
+#
+#  OVERRIDE NEW
+#
+
+
 Rect = namedtuple('Rect', ['x', 'y', 'width', 'height'])
 
 def breadth_first_search(start, max_cost, neighbor_func, cost_func, exclude_start=False):
@@ -42,28 +54,28 @@ def make_2D_list(width, height, init_value = None):
         for y in range(height):
             new_list[x].append(init_value)
     return new_list
-
-def min_in_list(data, min_func):
-        smallest = None
-        smallest_val = BIGNUM
-        for element in data:
-            elem_val = min_func(element)
-            if  elem_val < smallest_val:
-                smallest = element
-                smallest_val = elem_val
-        
-        return smallest, smallest_val
-
-def max_in_list(data, max_func):
-        biggest = None
-        biggest_val = -BIGNUM
-        for element in data:
-            elem_val = max_func(element)
-            if  elem_val > biggest_val:
-                biggest = element
-                biggest_val = elem_val
-        
-        return biggest, biggest_val
+#
+#def min_in_list(data, min_func):
+#        smallest = None
+#        smallest_val = BIGNUM
+#        for element in data:
+#            elem_val = min_func(element)
+#            if  elem_val < smallest_val:
+#                smallest = element
+#                smallest_val = elem_val
+#        
+#        return smallest, smallest_val
+#
+#def max_in_list(data, max_func):
+#        biggest = None
+#        biggest_val = -BIGNUM
+#        for element in data:
+#            elem_val = max_func(element)
+#            if  elem_val > biggest_val:
+#                biggest = element
+#                biggest_val = elem_val
+#        
+#        return biggest, biggest_val
 
 def linked_list_insert(item_list, new_item):
         if len(item_list) > 0:

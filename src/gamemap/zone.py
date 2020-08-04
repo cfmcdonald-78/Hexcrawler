@@ -5,7 +5,7 @@ Created on Jun 28, 2012
 '''
 import random, math
 import site_type, site, terrain, zone_type
-from util.tools import Loc, max_in_list
+from util.tools import Loc
 import hexgrid
 
 used_zone_names = {}
@@ -39,6 +39,9 @@ class Zone(object):
         self.site_count = {}
         self.traits = {}
         self.name = "None"
+        
+    def __str__(self):
+        return self.name + "(" + self.zone_type.name + ")"
     
     def assign_sites(self, hex_map, site_type, sites_to_assign, min_level, max_level, locs_available, npc_table):
    
@@ -96,11 +99,14 @@ class Zone(object):
     
     def has_trait(self, trait):
         return trait in self.traits
+    
+    def is_wild(self):
+        return self.zone_type.is_wild()
 
      
     def populate(self, hex_map, npc_table):
 #        total_size =  len(self.hex_locs) #self.bounds.width * self.bounds.height
-        
+    
         for count_site_type in site_type.site_types.values():
             self.site_count[count_site_type] = 0
         
@@ -132,7 +138,10 @@ class Zone(object):
                     hex_map.get_hex(loc.x, loc.y).original_type = new_terrain_type
                     terrain_to_locs[old_terrain_type].remove(loc)
                     terrain_to_locs[new_terrain_type].append(loc)
-                            
+    
+        self.predominant_terrain= max(terrain_to_locs.keys(), key = lambda hex_type : len(terrain_to_locs[hex_type]))
+        self.gen_name()
+                  
         # sort site types from most to least restrictive in placement before assigning sites to locations
         locs_avail_table = {}
         for site_params in self.zone_type.site_param_list:  
@@ -151,7 +160,6 @@ class Zone(object):
             num_assigned = self.assign_sites(hex_map, site_params.site_type, num_sites, 
                                         site_params.min_level, site_params.max_level, locs_avail_table[site_params.site_type], npc_table)
             if num_assigned < num_sites:
-                print "Alert: wanted " + str(num_sites) + " " + site_params.site_type.name + "s, got " + str(num_assigned)
+                print "Alert: " + self.get_name() + " wanted " + str(num_sites) + " " + site_params.site_type.name + "s, got " + str(num_assigned)
         
-        self.predominant_terrain, max_num = max_in_list(terrain_to_locs.keys(), lambda hex_type : len(terrain_to_locs[hex_type]))
-        self.gen_name()
+       

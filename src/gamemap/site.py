@@ -3,7 +3,7 @@ Created on Jun 27, 2012
 
 @author: Chris
 '''
-import mob.unit as unit, mob.group as group
+import mob.unit as unit, mob.group as group, mob.horde as horde
 import  hexcrawl.income as income
 import site_type, site_upgrade
 import random
@@ -16,6 +16,10 @@ HIRE_SIZE = 6
 SITE_BASE_SIGHT = 1
 REVOLT_STRENGTH = 3
 
+SPLIT_CHANCE = 0.1
+MERGE_CHANCE = 0.1
+MAX_GARRISON_LEVEL = 7
+
 class Site(DoublyLinkedObject):
     '''
     classdocs
@@ -23,8 +27,8 @@ class Site(DoublyLinkedObject):
     def __init__(self, hex_loc, new_site_type, level, owner, default_owner=None):
         super(Site, self).__init__()
         self.hex_loc = hex_loc
-        self.site_type = new_site_type
-        self.name = new_site_type.gen_name()
+       # self.site_type = new_site_type
+       # self.name = new_site_type.gen_name()
         self.level = level
         self.for_hire = None # units/characters available for hire in this hex
         self.builder = owner
@@ -34,45 +38,62 @@ class Site(DoublyLinkedObject):
             self.default_owner = default_owner
             
         self.owner = owner
-        self.fixed_prisoner = None
+      #  self.fixed_prisoner = None
         self.embassy_player = None
         self.upgrades = []
         self.upgrade_traits = {}
         self.next = self.previous = None  # sites are on doubly-linked circular list, pointers set in player.add_site()
         
         self.income = 0 
+        self.active_spawn = None
         owner.add_site(self)
         self.status = site_type.ACTIVE
+        #if self.site_type.loot_effects != None:
+        #    self.base_gold = self.level * self.site_type.loot_effects.gold
+        self.set_type(new_site_type)
+    
+    def initialize(self):
+        self.name = self.site_type.gen_name()
+        
         if self.site_type.loot_effects != None:
             self.base_gold = self.level * self.site_type.loot_effects.gold
-
-        self.for_hire = group.HireGroup(None)
-      
+        
         if self.site_type.garrison_info != None:
             self.garrison_size = random.randint(self.site_type.garrison_info.min, self.site_type.garrison_info.max)
             self.base_gold *= self.garrison_size
         else:
             self.garrison_size = 0
+            
+        self.for_hire = group.HireGroup(None)
         
         self.make_site_group()
         self.fill_for_hire_units()
+     
+    def set_type(self, new_site_type):
+        self.site_type = new_site_type
+        
+     
+            
+     
         
     def get_sight_range(self):
         return SITE_BASE_SIGHT + self.trait_value(site_upgrade.SIGHT)
 
-    def set_prisoner(self, prisoner_unit):
-        self.fixed_prisoner = prisoner_unit
+#    def set_prisoner(self, prisoner_unit):
+#        self.fixed_prisoner = prisoner_unit
 
-    def get_fixed_prisoner(self):
-        return self.fixed_prisoner
+#    def get_fixed_prisoner(self):
+#        return self.fixed_prisoner
     
     def set_embassy(self, new_embassy_player):
         prev_embassy_player = self.embassy_player
         diplo_income = int(unit.DIPLOMAT_FRACTION * self.income)
         if prev_embassy_player != None:
             prev_embassy_player.adjust_income(-diplo_income, income.DIPLOMAT_INCOME)
+            prev_embassy_player.adjust_embassy_count(-1)
         if new_embassy_player != None:
             new_embassy_player.adjust_income(diplo_income, income.DIPLOMAT_INCOME)
+            new_embassy_player.adjust_embassy_count(1)
 
         self.embassy_player = new_embassy_player
     
@@ -138,6 +159,8 @@ class Site(DoublyLinkedObject):
         new_owner.add_site(self)
         if conquered:
             self.empty_for_hire()
+            if self.active_spawn:
+                self.active_spawn.eliminate()
 
     def get_owner(self):
         return self.owner
@@ -153,6 +176,37 @@ class Site(DoublyLinkedObject):
             new_group.add_unit(unit.Unit(new_unit_type))
         return new_group 
     
+    def make_level_list(self, level, initial_size):
+        def valid_level(level):
+            return len(self.site_type.garrison_candidates(level)) > 0
+
+        level_list = [level for i in range(initial_size)]
+        
+        if level == 1:
+            # don't mess with level 1 sites, keep it simple and safe
+            return level_list
+        
+        # some sites will have fewer stronger units or more weaker units
+        i = 0
+        while i < len(level_list):
+            # merge 2 weak units into stronger one, if such a unit avail. for this site
+            if random.random() < MERGE_CHANCE and i < (len(level_list) - 1) and valid_level(level_list[i] + 1):
+                level_list = level_list[:i] + [level_list[i] + 1] + level_list[i+2:]
+                
+                # check for double merge possibility: a total of 4 weak units now become 1 super strong unit
+                if random.random() < MERGE_CHANCE and i < (len(level_list) - 2) and valid_level(level_list[i] + 1):
+                    level_list = level_list[:i] + [level_list[i] + 1] + level_list[i+3:]
+        
+            # split strong monster into two weaker ones.  
+            # Leave at least 1 space free for possible leader/summoned unit
+            if random.random() < SPLIT_CHANCE and len(level_list) < (group.MAX_UNITS - 1) and valid_level(level_list[i] - 1):
+                level_list = level_list[:i] + [level_list[i] - 1, level_list[i] - 1] + level_list[i+1:]
+                i += 1
+                
+            i += 1   
+        
+        return level_list
+    
     # make group used for garrison and patrols
     def make_site_group(self):
         self.group_unit_types = []
@@ -162,18 +216,21 @@ class Site(DoublyLinkedObject):
 
         garrison_info = self.site_type.garrison_info
 
-        candidates = self.site_type.garrison_candidates(self.level)
+#        candidates = self.site_type.garrison_candidates(self.level)
         
-        for i in range(self.garrison_size):
-            self.group_unit_types.append(random.choice(candidates))
+        for level in self.make_level_list(self.level, self.garrison_size):
+#            print self.site_type.name + " " + str(level)
+            self.group_unit_types.append(random.choice(self.site_type.garrison_candidates(level)))
         
         has_leader = random.random() <= garrison_info.leader_chance
         leader_candidates = self.site_type.leader_units.get(self.level, [])
         if has_leader and len(leader_candidates) > 0:
             self.group_unit_types.append(random.choice(leader_candidates))
-    
+        
         # fill in garrison  
         self.hex_loc.add_garrison(self.fill_site_group(group.Group(self.owner)))
+    
+        
     
     def refresh_garrison(self):
         if not self.is_active() or self.owner.is_actor() or self.garrison_size == 0:
@@ -345,34 +402,42 @@ class Site(DoublyLinkedObject):
     def is_hostile(self, other_player):
         return self.get_owner().is_hostile(self, other_player)
 
-    def spawn_group(self):
+    def spawn_group(self, game):
         spawn_info = self.site_type.spawn_info
-        if spawn_info == None or random.random() > spawn_info.chance_per_day:
+        if spawn_info == None or self.active_spawn or random.random() > spawn_info.chance_per_day:
             return None
     
         # compute aggression range
         aggression_range = self.site_type.aggression_range_func(self)
     
-        if spawn_info.type == site_type.ZONE_PATROL:
-            spawned = group.ZonePatrol(self, spawn_info.range, aggression_range)
-        elif spawn_info.type == site_type.WANDERER:
-            spawned = group.Wanderer(self.get_owner(), spawn_info.range, aggression_range)
+        if spawn_info.type == site_type.HORDE:
+            if not horde.horde_spawnable(self.level, game.get_turn()):
+                return None
+            spawned = horde.Horde(self, game.get_map(), game.get_actors())
         else:
-            assert (False)
+            if spawn_info.type == site_type.ZONE_PATROL:
+                spawned = group.ZonePatrol(self, spawn_info.range, aggression_range)
+            elif spawn_info.type == site_type.WANDERER:
+                spawned = group.Wanderer(self, spawn_info.range, aggression_range)
+            else:
+                assert (False)
         
-        if spawn_info.units == None:
-            # copy garrison units to form spawn group
-            self.fill_site_group(spawned)
-        else:
-            for unit_type_name in spawn_info.units:
-                spawned.add_unit(unit.Unit(unit.unit_types_by_name[unit_type_name]))
+            if spawn_info.units == None:
+                # copy garrison units to form spawn group
+                self.fill_site_group(spawned)
+            else:
+                for unit_type_name in spawn_info.units:
+                    spawned.add_unit(unit.Unit(unit.unit_types_by_name[unit_type_name]))
         
-        # give group needed attributes
-        move_trait = self.hex_loc.hex_type.required_trait
-        if move_trait != None:
-            spawned.set_trait(move_trait, True)
+        spawned.initialize(self.hex_loc)
+        if spawned.get_site(): 
+            self.active_spawn = spawned
         
         return spawned 
+    
+    def delink_spawn(self, spawned):
+        assert(spawned == self.active_spawn)
+        self.active_spawn = None
     
     def sacked(self):
         return self.status == site_type.SACKED
@@ -444,7 +509,7 @@ class Site(DoublyLinkedObject):
         if random.random() >= self.revolt_chance():
             return False
         
-        print self.get_name() + "Revolting!"
+#        print self.get_name() + "Revolting!"
         site_hex = self.get_hex()
         
         # revolt happened
@@ -468,10 +533,10 @@ class Site(DoublyLinkedObject):
 
     def start_turn(self, turn, hex_map):
     
-        if self.get_owner().is_actor():
-            print "starting turn of " + self.get_name()
+#        if self.get_owner().is_actor():
+#            print "starting turn of " + self.get_name()
         # a few special things happen at start of week
-        if turn.day == 1:
+        if turn.at_week_start():
             # check for revolt
             self.check_revolt(hex_map)
             

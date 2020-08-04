@@ -6,16 +6,21 @@ Created on Aug 11, 2012
 import mob.unit as unit, mob.trait as trait
 import hexcrawl.reputation as reputation, hexcrawl.income as income
 import mob.item as item
-from util.tools import max_in_list
+#from util.tools import max_in_list
 import core.event_manager as event_manager
 from core.event_manager import Event
+import random
 
 NUM_EQUIP_SLOTS = {item.ARMOR: 1, item.WEAPON: 1, item.MISC_ITEM: 2}
 EQUIP_SLOTS = [item.ARMOR, item.WEAPON, item.MISC_ITEM, item.MISC_ITEM]
 
 BACKPACK_SIZE = 3
-
 HERO_COST_MULTIPLIER = 5
+
+MALE = "M"
+FEMALE = "F"
+
+sexes = [MALE, FEMALE]
 
 class Hero(unit.Unit):
     
@@ -25,6 +30,10 @@ class Hero(unit.Unit):
         self.equipped_items = []
         self.owner = None
         self.curr_traits = self.traits.copy()
+        
+        sex_index = random.randrange(len(sexes))
+        self.name = hero_type.gen_name(sex_index)
+        self.sex = sexes[sex_index]
     
         self.num_equipped_items = {}
         for item_type in EQUIP_SLOTS:
@@ -53,8 +62,8 @@ class Hero(unit.Unit):
             self.owner = new_group.get_owner()
             self.owner.add_hero(self)
       
-    def wound(self):
-        super(Hero, self).wound()
+    def wound(self, num_wounds=1):
+        super(Hero, self).wound(num_wounds)
         if not self.is_alive():
             self.owner.remove_hero(self)
     
@@ -269,6 +278,8 @@ class Hero(unit.Unit):
     def can_unequip_item(self):
         return not self.backpack_full()
     
+    def get_icon_name(self):
+        return self.sex + "Hero"
     
     def unequip_item(self, old_item):
         assert(self.can_unequip_item())

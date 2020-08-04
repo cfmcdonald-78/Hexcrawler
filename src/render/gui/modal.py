@@ -71,9 +71,10 @@ class ModalDialog(component.Window):
 
 class TextDialog(ModalDialog):
     
-    def __init__(self, head_text, body_text):
+    def __init__(self, head_text, body_text, close_event = None):
         self.body_text = body_text
         self.body_font = text.lg_font
+        self.close_event = close_event
         
         text_width, text_height = text.block_size(self.body_text, self.body_font)
         win_width = int(text_width * 1.5)
@@ -83,6 +84,11 @@ class TextDialog(ModalDialog):
         
         self.body_x =  self.rect.x + (self.rect.width - text_width) / 2
         self.body_y = self.rect.y + text.vlg_font.get_height() + 16
+        
+    def close_window(self):
+        super(TextDialog, self).close_window()
+        if self.close_event != None:
+            event_manager.trigger_event(self.close_event)
         
     def render(self, surface, images):
         super(TextDialog, self).render(surface, images)
@@ -160,22 +166,20 @@ class ToolsDialog(ModalDialog):
         
          
     
-class GameOverDialog(ModalDialog):
-    
-    def __init__(self, width, height, head_text, body_text):
-        super(GameOverDialog, self).__init__(width, height, head_text)
-        self.body_text = body_text
-        self.head_text = head_text
-        
-    def close_window(self):
-        super(GameOverDialog, self).close_window()
-        event_manager.trigger_event(Event(event_manager.QUIT, [False]))
-        
-    def render(self, surface, images):
-        super(GameOverDialog, self).render(surface, images)
-    
-        images.text.draw_text(self.body_text, text.lg_font, self.rect.x + self.rect.width / 2 ,
-                                  self.rect.y + self.rect.height /2, surface)
+#class GameOverDialog(TextDialog):
+#    
+#    def __init__(self, width, height, head_text, body_text):
+#        super(GameOverDialog, self).__init__(width, height, head_text)
+#        self.body_text = body_text
+#        self.head_text = head_text
+#        
+#  
+#        
+#    def render(self, surface, images):
+#        super(GameOverDialog, self).render(surface, images)
+#    
+#        images.text.draw_text(self.body_text, text.lg_font, self.rect.x + self.rect.width / 2 ,
+#                                  self.rect.y + self.rect.height /2, surface)
 
 
     

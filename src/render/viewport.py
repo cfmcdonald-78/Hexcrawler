@@ -17,7 +17,7 @@ class Viewport:
     classdocs
     '''
 
-    def __init__(self, position_rect, map_width, map_height):
+    def __init__(self, position_rect, map_width, map_height, scale_power=0):
         # position and size of viewport within window
         self.rect = position_rect
         
@@ -31,32 +31,55 @@ class Viewport:
         self.y_offset = 0
         
         # initialize scaling values to allow zooming in/out on map
-        values = ScaledHex(image.HEX_WIDTH, image.HEX_HEIGHT)
-        self.scaled_hex_sizes = [values]
-        for div in [2, 4]:
-            self.scaled_hex_sizes.append(ScaledHex(values.hex_width/div, values.hex_height/div))
-        self.scale_power = 0
-        self.rescale(True)
-     
-    def zoom_in(self):
-        return self.rescale(True)
-    
-    def zoom_out(self):
-        return self.rescale(False)
-
-    # zoom in or out
-    def rescale(self, zoom_in):
-        prev_scale_power = self.scale_power
-        if zoom_in:
-            self.scale_power = max(0, self.scale_power - 1)
-        else:
-            self.scale_power = min(len(self.scaled_hex_sizes) - 1, self.scale_power + 1)
-        
-        self.hex_width = self.scaled_hex_sizes[self.scale_power].hex_width
-        self.hex_height = self.scaled_hex_sizes[self.scale_power].hex_height
+#        values = ScaledHex(image.HEX_WIDTH, image.HEX_HEIGHT)
+#        self.scaled_hex_sizes = [values]
+#        for div in [2, 4]:
+#            self.scaled_hex_sizes.append(ScaledHex(values.hex_width/div, values.hex_height/div))
+        self.hex_width = image.HEX_WIDTH / (2 ** scale_power)
+        self.hex_height = image.HEX_HEIGHT / (2 ** scale_power)
         self.row_height = (self.hex_height * 3 ) / 4
         self.max_x = self.hex_width * self.map_width
         self.max_y = self.row_height * self.map_height
+        self.scale_power = scale_power
+        #self.rescale(True)
+    
+    def get_scale_power(self):
+        return self.scale_power
+    
+    def get_hex_width(self):
+        return self.hex_width
+    
+    def get_hex_height(self):
+        return self.hex_height
+    
+    def get_pixel_offset(self):
+        return self.x_offset, self.y_offset
+    
+    def get_pixel_width(self):
+        return self.rect.width
+    
+    def get_pixel_height(self):
+        return self.rect.height
+     
+#    def zoom_in(self):
+#        return self.rescale(True)
+#    
+#    def zoom_out(self):
+#        return self.rescale(False)
+
+    # zoom in or out
+#    def rescale(self, zoom_in):
+#        prev_scale_power = self.scale_power
+#        if zoom_in:
+#            self.scale_power = max(0, self.scale_power - 1)
+#        else:
+#            self.scale_power = min(len(self.scaled_hex_sizes) - 1, self.scale_power + 1)
+#        
+#        self.hex_width = self.scaled_hex_sizes[self.scale_power].hex_width
+#        self.hex_height = self.scaled_hex_sizes[self.scale_power].hex_height
+#        self.row_height = (self.hex_height * 3 ) / 4
+#        self.max_x = self.hex_width * self.map_width
+#        self.max_y = self.row_height * self.map_height
     
     def select_hex(self, hex_x, hex_y):
         if hex_x < 0 or hex_x >= self.map_width or hex_y < 0 or hex_y >= self.map_height:

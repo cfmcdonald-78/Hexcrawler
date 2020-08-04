@@ -55,7 +55,7 @@ class Force(object):
                 blood_mult = 0
                 adj_units = [self.get_unit(i - 1), self.get_unit(i + 1)]
                 for adj_unit in adj_units:
-                    if adj_unit != None and adj_unit.health == unit.WOUNDED:
+                    if adj_unit != None and adj_unit.is_wounded():
                         blood_mult += 1
                 if blood_mult > 0:
                     curr_unit.set_trait(trait.BLOOD_POWER, blood_mult * curr_unit.trait_value(trait.BLOODTHIRST))
@@ -151,41 +151,39 @@ def check_20_val(value):
     return random.randint(1, 20) <= value
 
 # returns true if attack hit, false otherwise
-def check_block(force, index):
-    stalwart_defense = 0
-        
+def check_block(force, index, phase=MELEE_COMBAT):
+    attacker = force.opponent.curr_unit()   
     target = force.get_unit(index)
     if target == None or not target.is_alive():
         # not gonna be blocking!
         return None
     
     prev_unit = force.get_unit(index - 1)
-    if prev_unit != None and prev_unit.has_trait(trait.STALWART) and prev_unit.is_alive():
-        stalwart_defense = prev_unit.get_armor()
-           
-    armor = max(stalwart_defense, target.get_armor())
     
-    attacker = force.opponent.curr_unit()
+    stalwart_defense =  prev_unit.get_armor() if prev_unit and prev_unit.has_trait(trait.GUARDIAN) else 0
+    
+    armor = target.get_armor()
+    if target.has_trait(trait.HEAVY_ARMOR) and phase == RANGED_COMBAT and not attacker.has_trait(trait.SPLASH):
+        armor *= 2
+    
+    armor = max(armor, stalwart_defense)
+    
+ 
+    
     armor -= attacker.trait_value(trait.PIERCE)
   
     # restrain target, if applicable
     if attacker.has_trait(trait.RESTRAIN):
             target.set_trait(trait.RESTRAINED, attacker.trait_value(trait.RESTRAIN))
   
-    if not check_20_val(armor):
-        if target.has_trait(trait.SWARM) and target.health == unit.WOUNDED:
-            # look for other swarm unit to take wound instead of killing this one
-            found_proxy = False
-            for other_unit in force.group.units:
-                if other_unit.has_trait(trait.SWARM) and other_unit.health == unit.HEALTHY:
-                    other_unit.wound()
-                    found_proxy = True
-                    break
-            if not found_proxy:
-                target.wound()
-        else:         
-            target.wound()
-        if attacker.has_trait(trait.VAMPIRIC) and attacker.health == unit.WOUNDED:
+    if check_20_val(armor) or (attacker.is_army() and target.has_trait(trait.ELUSIVE)):
+        event_manager.queue_event(Event(event_manager.UNIT_BLOCK, [force.group, index]))
+        return True
+    else:
+        num_wounds = 1 + attacker.trait_value(trait.DEADLY_BLOW)
+        
+        target.wound(num_wounds)
+        if attacker.has_trait(trait.VAMPIRIC) and attacker.is_wounded():
             attacker.heal()
         if check_10_val(attacker.trait_value(trait.BURN)) and target.is_alive():
             target.set_trait(trait.BURNING, True)
@@ -195,9 +193,7 @@ def check_block(force, index):
         
         event_manager.queue_event(Event(event_manager.UNIT_HIT, [force.group, index]))
         return False
-    else:
-        event_manager.queue_event(Event(event_manager.UNIT_BLOCK, [force.group, index]))
-        return True
+       
 
 # returns true if target available and attack hits, false otherwise
 def ranged_attack(firers):
@@ -235,7 +231,7 @@ def ranged_attack(firers):
         firers.ranged = strength
         event_manager.queue_event(Event(event_manager.RANGED_ATTACK, [firers.group, firers.index]))
         if check_20_val(strength):
-            check_block(firers.opponent, target_index)
+            check_block(firers.opponent, target_index, RANGED_COMBAT)
             
             # if hit, check for splash
             if attacker.has_trait(trait.SPLASH):
@@ -245,7 +241,7 @@ def ranged_attack(firers):
                     # if target is viable, and this unit has a positive ranged strength against it, it takes
                     # an attack and must block or be hit
                     if splash_target != None and splash_target.is_alive() and attacker.get_ranged_strength(splash_target) > 0:
-                        check_block(firers.opponent, splash_index)
+                        check_block(firers.opponent, splash_index, RANGED_COMBAT)
             return True
         
         return False
@@ -258,10 +254,10 @@ def do_revive(target):
     target.revive()
 
 def heal_attempt(healers):
-    return heal_or_revive(healers, trait.HEAL, do_heal, lambda candidate : candidate.health == unit.WOUNDED)
+    return heal_or_revive(healers, trait.HEAL, do_heal, lambda candidate : candidate.is_wounded())
 
 def revive_attempt(healers):
-    return heal_or_revive(healers, trait.REVIVE, do_revive, lambda candidate: candidate.health == unit.DEAD)
+    return heal_or_revive(healers, trait.REVIVE, do_revive, lambda candidate: not candidate.is_alive())
 
   # returns true if at least one unit healed/revived, false otherwise
 def heal_or_revive(healers, heal_trait, success_func, target_func):
@@ -363,7 +359,7 @@ class CombatProcess(StepProcess):
         self.skip_unusable_units(self.current_force, special_trait)
         
         if self.current_force.at_end():
-            print "special func done for current force"
+#            print "special func done for current force"
             if self.current_force == self.defenders:
                 # switch to attackers and restart function
                 self.current_force = self.attackers
@@ -374,7 +370,7 @@ class CombatProcess(StepProcess):
             self.defenders.index = -1
             return True
 
-        print "Doing special func for " + special_trait + "on unit " + str(self.current_force.index)
+#        print "Doing special func for " + special_trait + "on unit " + str(self.current_force.index)
         special_func(self.current_force)
         return False
       
@@ -414,7 +410,7 @@ class CombatProcess(StepProcess):
         elif self.defenders.strength <= 0:
             attacker_hit = True
         else: 
-            print ("attacker chance: " + str(chance(self.attackers.strength - self.defenders.strength)))
+#            print ("attacker chance: " + str(chance(self.attackers.strength - self.defenders.strength)))
             attacker_hit = random.random() < chance(self.attackers.strength - self.defenders.strength)
 #        attacker_hit, defender_hit = False, False
 #        while attacker_hit == defender_hit:
@@ -434,9 +430,9 @@ class CombatProcess(StepProcess):
         return phases[self.phase_index]
     
     def finish(self):
-        print ("sending update for phase " + self.curr_phase() + " attacker index " + str(self.attackers.index) + 
-               " defender index " + str(self.defenders.index) + " attacker strength " + str(self.attackers.get_strength(self.curr_phase())) +
-               " defender strength " + str(self.defenders.get_strength(self.curr_phase())))
+#        print ("sending update for phase " + self.curr_phase() + " attacker index " + str(self.attackers.index) + 
+#               " defender index " + str(self.defenders.index) + " attacker strength " + str(self.attackers.get_strength(self.curr_phase())) +
+#               " defender strength " + str(self.defenders.get_strength(self.curr_phase())))
         event_manager.queue_event(Event(event_manager.COMBAT_UPDATE, [self.curr_phase(), self.attackers.index, self.defenders.index,
                                                                       self.attackers.get_strength(self.curr_phase()),
                                                                       self.defenders.get_strength(self.curr_phase())]))
@@ -491,8 +487,8 @@ class CombatProcess(StepProcess):
              
         if lose_group.has_trait(trait.STUBBORN):
             retreat_chance = 0.0
-        elif lose_group.all_has_trait(trait.ELUSIVE):
-            retreat_chance = 1.0
+#        elif lose_group.all_has_trait(trait.ELUSIVE):
+#            retreat_chance = 1.0
         else:
             retreat_chance = BASE_RETREAT_CHANCE
             if win_group.army_fraction() > 0.0 and lose_group.army_fraction() == 0.0:

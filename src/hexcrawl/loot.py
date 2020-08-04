@@ -10,7 +10,7 @@ import core.event_manager as event_manager
 from core.event_manager import Event
 
 
-prisoner_candidates = []
+prisoner_candidates = {}
 
 
 class Loot(object):
@@ -35,23 +35,24 @@ def compute_gold(loot_site, looters):
     return int(loot_site.base_gold * average_looting(loot_site, looters))
 
 def look_for_prisoner(loot_site, looters):
-    if loot_site.site_type.loot_effects.prisoner == site_type.NO_PRISONER:
+    prisoner_type = loot_site.site_type.loot_effects.prisoner
+    if prisoner_type == site_type.NO_PRISONER:
         return None
     
-    if loot_site.get_fixed_prisoner() != None:
-        # if prisoner pre-set (e.g. by "hero in chains" event), use that one
-        return loot_site.get_fixed_prisoner()
+#    if loot_site.get_fixed_prisoner() != None:
+#        # if prisoner pre-set (e.g. by "hero in chains" event), use that one
+#        return loot_site.get_fixed_prisoner()
     
     # chance for higher level prisoner with good looting
     bonus_level =  1 if random.random() <= ((average_looting(loot_site, looters) - 1) / float(3)) else 0
     
-    prisoner_types = [prisoner for prisoner in prisoner_candidates if (prisoner.level == (loot_site.level + bonus_level) and 
+    prisoner_types = [prisoner for prisoner in prisoner_candidates[prisoner_type] if (prisoner.level == (loot_site.level + bonus_level) and 
                                                                           (not prisoner.is_army or not loot_site.is_tight_quarters()))]
   
-    if loot_site.site_type.loot_effects.prisoner == site_type.VILLAIN_PRISONER:
-        prisoner_types = [prisoner for prisoner in prisoner_types if prisoner.traits.get(trait.REPUTATION, 0) < 0]
-    else:
-        prisoner_types = [prisoner for prisoner in prisoner_types if not (prisoner.traits.get(trait.REPUTATION, 0) < 0)]
+#    if loot_site.site_type.loot_effects.prisoner == site_type.VILLAIN_PRISONER:
+#        prisoner_types = [prisoner for prisoner in prisoner_types if prisoner.traits.get(trait.REPUTATION, 0) < 0]
+#    else:
+#        prisoner_types = [prisoner for prisoner in prisoner_types if not (prisoner.traits.get(trait.REPUTATION, 0) < 0)]
     if len(prisoner_types) == 0:
         return None
         

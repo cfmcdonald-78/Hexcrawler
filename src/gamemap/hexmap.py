@@ -2,10 +2,11 @@ from util.tools import *
 #from util.linked_list import LinkedQueue
 #from threading import Lock
 import random
-import zone, terrain, hexgrid
+import zone, terrain, hexgrid, road
+import mob.group
 import mob.unit as unit, mob.trait as trait, mob.move_mode as move_mode
 import hexcrawl.random_event as random_event
-from zone_type import zone_types, zone_sub_functions
+import zone_type, site_type
 from math import ceil, sqrt
 from site import Site
 
@@ -25,6 +26,7 @@ class Hex(object):
         self.hex_type = hex_type
         self.original_type = hex_type
         self.river = river_path
+        self.road = None
         self.height = height
         self.site = None
         self.active_group = None  # active units/characters in this hex
@@ -36,6 +38,9 @@ class Hex(object):
         self.storm_penalty = 0
         self.fire_duration = 0
         self.zone_borders = []
+
+    def __str__(self):
+        return "(" + str(self.x) + ", " + str(self.y) + ")"
 
     def is_haven(self):
         return self.has_site() and self.site.is_haven()
@@ -143,6 +148,9 @@ class Hex(object):
         assert(site == self.site)
         self.site = None
     
+    def set_road(self, road):
+        self.road = road
+    
     def has_river(self):
         return self.river != None
     
@@ -188,6 +196,17 @@ class Hex(object):
         self.garrison.set_hex(self)
         
     def add_group(self, group):
+        # BUG_FINDING_CODE
+       
+        if isinstance(group, mob.group.ZonePatrol):
+            if group.get_site().get_hex().zone != self.zone:
+                assert(False)
+#                print group
+#                print "Moved into: " + str(self.zone)
+#                print "Home zone: " + str(group.get_site().get_hex().zone)
+
+        # /BUG_FINDING_CODE
+        
 #        assert(group.num_units() > 0)
         if self.active_group != None:
             self.active_group.merge(group)
@@ -200,6 +219,10 @@ class Hex(object):
         if not terrain.is_legal_terrain(self.hex_type, group):
             return False
         
+        if isinstance(group, mob.group.ZonePatrol) and self.zone != group.get_zone():
+            # patrols can't leave their zone of origin
+            return False
+        
         if self.active_group != None and self.active_group.get_owner() != group.get_owner() and self.active_group.is_hidden():
             # 'hidden' group prevents movement, so you'll know it's there.  But alternative is to have 2 groups sharing
             # a space, which creates beaucoup problems. 
@@ -210,14 +233,14 @@ class Hex(object):
             return self.active_group.can_merge(group) 
         
         # can't enter a haven if someone else is there or ever if you aren't an actor
-        if self.is_haven():
-            if not group.get_owner().is_actor():
-                return False
-            
-            if self.active_group != None:
-                return self.active_group.can_merge(group)
-            
-            return self.garrison == None or self.garrison.get_owner() == group.get_owner()
+#        if self.is_haven():
+#            if not group.get_owner().is_actor():
+#                return False
+#            
+#            if self.active_group != None:
+#                return self.active_group.can_merge(group)
+#            
+#            return self.garrison == None or self.garrison.get_owner() == group.get_owner()
 
         return True
     
@@ -231,6 +254,10 @@ class Hex(object):
         if self.river != None and not self.river.is_flooded:
             direction = hexgrid.get_direction(self, adjacent)
             if direction == self.river.out_flow or direction in self.river.in_flows:
+                return terrain.BASE_MOVE_COST + storm_penalty
+        if self.road != None:
+            direction = hexgrid.get_direction(self, adjacent)
+            if direction in self.road.connections:
                 return terrain.BASE_MOVE_COST + storm_penalty
         
         hex_cost = adjacent.hex_type.move_cost 
@@ -267,10 +294,14 @@ class Hexmap:
 #    def initialize(self, is_new_game):
 #        event_manager.add_listener(self.handle_event, event_manager.DAY_START)
     
-    def day_start_update(self):
+    def start_day(self, turn):
 #        if event.type == event_manager.DAY_END:
         self.do_regrowth()
         self.update_disasters()
+        if turn.at_week_start():
+            # recompute road net at start of week
+            road.build_road_net(self)
+       
 #            for zone in self.zones:
 #                zone.update_storm()
     
@@ -328,7 +359,16 @@ class Hexmap:
                 if regrow_map[x][y]:
                     curr_hex = self.get_hex(x, y)
                     curr_hex.hex_type = terrain.name_to_type[curr_hex.original_type.name]
+
+    def create_zone(self, assigned_type, zone_center, zone_points, zones_by_type):
+        new_zone = zone.Zone(assigned_type, zone_center.x, zone_center.y, zone_points)
+        for loc in zone_points:
+            self.zone_map[(loc.x, loc.y)] = new_zone
             
+        zones_by_type[assigned_type.name].append(new_zone)
+            
+        self.zones.append(new_zone)
+
     # returns true if map successfully populated with zones , false if this map fell outside allowable
     # parameters
     def assign_zones(self):
@@ -337,7 +377,7 @@ class Hexmap:
         #frontier_map = make_2D_list(zones_across, zones_high)
         
         zones_by_type = {}
-        for curr_type in zone_types:
+        for curr_type in zone_type.zone_types:
             zones_by_type[curr_type.name] = []
     
         # generate voronoi diagram of zones
@@ -354,44 +394,80 @@ class Hexmap:
         # assign each point of hex map to a voronoi cell.  Determine 
         for y in range(self.height):
             for x in range(self.width):
-                closest_center, dist = min_in_list(zone_centers, 
-                                                   lambda curr_center : sqrt( (curr_center.x - x) ** 2 + (curr_center.y - y) ** 2))
+                closest_center = min(zone_centers, key = lambda curr_center : sqrt( (curr_center.x - x) ** 2 + (curr_center.y - y) ** 2))
                 zone_points[closest_center].append(Loc(x, y))
-                
         
-        # assign base zone types
-        base_zone_types = [curr_type for curr_type in zone_types if curr_type.terrain_weight != None]
-        for zone_center in zone_centers:
-            best_zone_type, highest_weight = max_in_list(base_zone_types, lambda curr_type : curr_type.compute_terrain_weight(self, zone_points[zone_center]))
-                
-            new_zone = zone.Zone(best_zone_type, zone_center.x, zone_center.y, zone_points[zone_center])
-            for loc in zone_points[zone_center]:
-                self.zone_map[(loc.x, loc.y)] = new_zone
+        print "Total zones: " + str(len(zone_centers))  
+        # assign partition zone types to any zone that has a positive terrain weight for
+        # a partition type
+        partition_zone_types = [curr_type for curr_type in zone_type.zone_types if curr_type.type == zone_type.PARTITION]
+        
+        i = 0
+        while i < len(zone_centers):
+            zone_center = zone_centers[i]
+            weight, best_type = max([(curr_type.compute_terrain_weight(self, zone_points[zone_center]), 
+                                      curr_type) for curr_type in partition_zone_types])
+            if weight > 0:
+                self.create_zone(best_type, zone_center, zone_points[zone_center], zones_by_type)
+                zone_centers.remove(zone_center)
+                print "adding partition zone centered on " + str(zone_center)
+            else:
+                i += 1
             
-            zones_by_type[best_zone_type.name].append(new_zone)
-            
-            self.zones.append(new_zone)
         
-        # compute # of zones of each type  and validate them against the minimum required of that type
-        rejected = False
-        zone_count = {}
-        for curr_type in zone_types:
-            zone_count[curr_type] = 0
-        for curr_zone in self.zones:   
-            zone_count[curr_zone.get_type() ] += 1 
-        for curr_type in zone_count:
-#            print curr_type.name + ": " + str(zone_count[curr_type])
-            type_fraction = zone_count[curr_type] / float(len(self.zones))
-            if type_fraction < curr_type.min_fraction: 
-                rejected = True
-                reject_string =  "rejected map. " + str(type_fraction) + " " + curr_type.name + ", wanted " + str(curr_type.min_fraction) + "\n"
-        
-        if rejected:
-            print reject_string
+        if len(zone_centers) < 0.5 * zones_across * zones_high:
+            print "rejected map, not enough space left for basic zones after allocating partitions"
             return False
         
+        # assign base zone types to remaining zones, in desired proportions.
+        base_zone_types = [curr_type for curr_type in zone_type.zone_types if curr_type.type == zone_type.BASE]
+        #random.shuffle(base_zone_types)
+       
+        # random initial assignments
+        FRAC_INCS = 1000
+        fractions = {}
+        for curr_type in base_zone_types:
+            fractions[curr_type] = (curr_type.min_fraction + (curr_type.max_fraction- curr_type.min_fraction) * random.randint(0, FRAC_INCS)) 
+        total_frac = sum(fractions.itervalues())
+        
+        # randomly add or remove fractional increments until sum is 1
+        while total_frac > FRAC_INCS:
+            rand_type = random.choice(base_zone_types)
+            if rand_type.min_fraction * FRAC_INCS < fractions[rand_type]:
+                fractions[rand_type] -= 1
+                total_frac -= 1
+        while total_frac < FRAC_INCS:
+            rand_type = random.choice(base_zone_types)
+            if rand_type.max_fraction * FRAC_INCS > fractions[rand_type]:
+                fractions[rand_type] += 1
+                total_frac += 1
+        
+        num_zones = {}
+        zones_to_allocate = len(zone_centers)
+        zones_left = zones_to_allocate
+        for i in range(len(base_zone_types) - 1):
+            curr_type = base_zone_types[i]
+            num_zones[curr_type] = int(round((fractions[curr_type] / float(FRAC_INCS)) * zones_to_allocate))
+            zones_left -= num_zones[curr_type]
+        num_zones[base_zone_types[-1]] = zones_left
+        
+        # allocate zones greedily by weight
+        zone_matches = [(zone_center, curr_type) for curr_type in base_zone_types for zone_center in zone_centers]
+        zone_matches.sort(key = lambda match : match[1].compute_terrain_weight(self, zone_points[match[0]]))
+        
+        allocated = 0
+        center_allocated = set([])
+        while allocated < zones_to_allocate:
+            zone_center, curr_type = zone_matches.pop()
+            print curr_type.compute_terrain_weight(self, zone_points[zone_center])
+            if num_zones[curr_type] > 0 and zone_center not in center_allocated:
+                self.create_zone(curr_type, zone_center, zone_points[zone_center], zones_by_type)
+                num_zones[curr_type] -= 1
+                center_allocated.add(zone_center)
+                allocated += 1
+            
         # do zone substitutions
-        sub_zone_types = [curr_type for curr_type in zone_types if curr_type.substitution_info != None]
+        sub_zone_types = [curr_type for curr_type in zone_type.zone_types if curr_type.substitution_info != None]
         for sub_zone_type in sub_zone_types:
                 sub_info = sub_zone_type.substitution_info
                 sub_candidates = zones_by_type[sub_info.sub_for]
@@ -399,10 +475,10 @@ class Hexmap:
                 # figure out how many zones to replace (R), sort the replacement candidates by the substitution function,
                 # and then switch the best R candidates from the previous zone type to the new one
                 num_to_sub = int( ceil(sub_info.frequency * len(sub_candidates)) )
-                sub_function = zone_sub_functions[sub_info.function]
+                sub_function = zone_type.zone_sub_functions[sub_info.function]
                 sub_candidates.sort(key = lambda candidate : sub_function(candidate, self, sub_info.params))
 #                print "top candidate at: " + str(sub_candidates[-1].bounds.x)  + "," + str(sub_candidates[-1].bounds.y)
-                for sub in range(num_to_sub):
+                for i in range(num_to_sub):
                     reassigned_zone = sub_candidates.pop()
                     reassigned_zone.change_type(sub_zone_type)
                     if sub_zone_type.name == "Borderland":
@@ -433,7 +509,7 @@ class Hexmap:
                         curr_hex.add_zone_border(neighbor)       
 
         zone_count = {}
-        for curr_type in zone_types:
+        for curr_type in zone_type.zone_types:
             zone_count[curr_type] = 0
         for curr_zone in self.zones:   
             zone_count[curr_zone.get_type() ] += 1 
@@ -445,6 +521,22 @@ class Hexmap:
     def populate(self, npc_table):
         for curr_zone in self.zones:
             curr_zone.populate(self, npc_table)
+        
+        # place global types
+        #global_site_types = [curr_type for curr_type in site_type.site_types if curr_type.is_global()]
+        #for global_site_type in [curr_type for curr_type in site_type.site_types if curr_type.is_global()]:
+        site_type.do_global_allocation(self)
+        
+        for curr_site in self.get_sites():
+            curr_site.initialize()
+         # for i in range(MIN_HERO_LAIR_LEVEL, MAX_HERO_LAIR_LEVEL + 1):
+   #     lair_candidates = hex_map.find_site("Lair", level_range = (i, i), find_all = True)
+   #     if len(lair_candidates) == 0:
+   #         continue
+        
+   #     chosen_lair = random.choice(lair_candidates)
+   #     chosen_lair.set_prisoner(hero.Hero(unit.random_hero_type()))
+        
   
     def get_start_zone(self):
         return self.start_zone
@@ -594,6 +686,7 @@ class Hexmap:
             return None
     
         site_hex.site = Site(site_hex, new_site_type, level, player_table[new_site_type.owner_name])
+        site_hex.site.initialize()
         return site_hex
     
     

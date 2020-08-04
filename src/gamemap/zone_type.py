@@ -40,11 +40,11 @@ def max_total_distance(candidate_zone, hex_map, undesirable_zone_types):
     return total_distance
 
 # maximizes distance to closest undesireable zone
-def max_proximity(candidate_zone, hex_map, undesirable_zone_types):
+def max_min_distance(candidate_zone, hex_map, undesirable_zone_types):
     candidate_x = candidate_zone.center.x
     candidate_y = candidate_zone.center.y
     
-    print "candidate zone of type " + candidate_zone.get_type().name + " at " + str(candidate_x) + "," + str(candidate_y)
+#    print "candidate zone of type " + candidate_zone.get_type().name + " at " + str(candidate_x) + "," + str(candidate_y)
     
     min_distance = BIGNUM
     for zone in hex_map.get_zones():
@@ -53,10 +53,10 @@ def max_proximity(candidate_zone, hex_map, undesirable_zone_types):
 #            x_dist = zone_x - candidate_x
 #            y_dist = zone_y - candidate_y
             dist_to_undesirable = hexgrid.get_distance(zone.center, candidate_zone.center)
-            print "undesirable zone of type " + zone.get_type().name + " at " + str(zone.center.x) + "," + str(zone.center.y) + ". distance to candidate: " + str(dist_to_undesirable)
+#            print "undesirable zone of type " + zone.get_type().name + " at " + str(zone.center.x) + "," + str(zone.center.y) + ". distance to candidate: " + str(dist_to_undesirable)
             min_distance = min(min_distance, dist_to_undesirable)
 
-    print "min distance to undesirable: " + str(min_distance)
+#    print "min distance to undesirable: " + str(min_distance)
     return min_distance
 
 # minimizes amount of given terrain types
@@ -83,7 +83,7 @@ def max_terrain(candidate_zone, hex_map, desirable_terrain_types):
     
 
 zone_sub_functions = {"min_total_distance": min_total_distance, "max_total_distance": max_total_distance,
-                      "max_proximity": max_proximity, "min_terrain": min_terrain, "max_terrain": max_terrain}
+                      "max_min_distance": max_min_distance, "min_terrain": min_terrain, "max_terrain": max_terrain}
 
 ### TERRAIN SUBSTITUTION FUNCTIONS ###
 # Used to decide how to replace one kind of terrain with another in a substitution zone
@@ -101,6 +101,10 @@ def scatter(candidate_locations, param_list):
 
 terrain_sub_functions = {"scatter": scatter}
 
+BASE = "base"
+PARTITION = "partition"
+OVERLAY = "overlay"
+
 zone_types = []
 type_adjectives = {}
 
@@ -109,14 +113,16 @@ class ZoneType(object):
     classdocs
     '''
 
-    def __init__(self, name, terrain_weight, substitution_info, min_fraction, site_param_list):
+    def __init__(self, name, type, terrain_weight, substitution_info, min_fraction, max_fraction, site_param_list):
         '''
         Constructor
         '''
         self.name = name
+        self.type = type
         self.substitution_info = substitution_info
         self.terrain_weight = terrain_weight
         self.min_fraction = min_fraction
+        self.max_fraction = max_fraction
         self.site_param_list = site_param_list
     
     def hex_weight(self, curr_hex):
@@ -127,6 +133,9 @@ class ZoneType(object):
             weight += self.terrain_weight["River"]
         
         return weight
+    
+    def is_wild(self):
+        return self.name == "Wild" or self.name == "Terrifying Wild"
     
     def compute_terrain_weight(self, hex_map, hex_locs):
         total_size = len(hex_locs) #bounds.width * bounds.height

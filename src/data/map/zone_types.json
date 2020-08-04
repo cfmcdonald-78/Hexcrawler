@@ -1,9 +1,24 @@
 [
 {
+	"name"		: "Nautical",
+	"type"		: "partition",
+	"min_fraction": 0.0,
+	"weights"	: { "Forest": -1, "Hill": -1, "Plain": -1, "Mountain": -1, "Ocean": 0.67},
+	"adjectives": ["Grey", "Blue", "Wine-dark", "Cool", "Rolling", "Foggy", "Briny", "Warm", "Bubbling", "White-capped"],
+	"sites"		: [
+		{"name": "Keep", "frequency": [2, 3], "min_level": 2, "max_level":4},
+		{"name": "Lair", "frequency": [4, 5],  "min_level": 2, "max_level":5},
+		{"name": "Dungeon", "frequency": [2, 4],  "min_level": 2, "max_level":5},
+		{"name": "Cache", "frequency": [0.7], "min_level": 2, "max_level":4},
+		{"name": "Rogue's Den", "frequency": [0.5], "min_level": 2, "max_level":3}
+		]	
+},
+{
 	"name"		: "Civilized",
 	"type"		: "base",
 	"min_fraction": 0.08,
-	"weights"	: { "River": 1, "Mountain": -1},
+	"max_fraction": 0.18,
+	"weights"	: { "River": 0.5, "Mountain": -1, "Hill": -1},
 	"adjectives": ["Calm", "Quiet", "Peaceful", "Tame", "White", "Settled", "Placid", "Cool",
 				   "Languid", "Untroubled", "Fertile", "Rolling", "Emerald", "Jade", "Green"],
 	"sites"		: [
@@ -15,23 +30,26 @@
 {
 	"name"		: "Wild",
 	"type"		: "base",
-	"min_fraction": 0.16,
-	"weights"	: { "Forest" : 1, "Hill": 1, "River": -1, "Plain": -1},
+	"min_fraction": 0.2,
+	"max_fraction": 0.5,
+	"weights"	: { "Forest" : 0.5, "Hill": 1, "Mountain": 1, "River": -1, "Plain": -1},
 	"adjectives": ["Wild", "Wicked", "Red", "Scarlet", "Crimson", "Menacing", "Murky", "Misty", "Awful", 
 	               "Spooky", "Dangerous", "Sour", "Dark", "Dank", "Trackless", "Chaotic", "Jagged",
 				   "Hard", "Bleak", "Brutal", "Cold"],
 	"sites"		: [
-		{"name": "Lair", "frequency": [4, 5], "min_level": 3, "max_level":4},
+		{"name": "Lair", "frequency": [3, 5], "min_level": 3, "max_level":4},
 		{"name": "Dungeon", "frequency": [3, 5], "min_level": 3, "max_level":4},
 		{"name": "Cache", "frequency": [0.5], "min_level": 3, "max_level":4},
-		{"name": "Glade", "frequency": [0.2], "min_level": 5, "max_level":5},
-		{"name": "Fortress", "frequency": [0.2], "min_level": 5, "max_level":5},
-		{"name": "Deep Dungeon", "frequency": [1], "min_level": 3, "max_level":4}]		
+		{"name": "Glade", "frequency": [0.15], "min_level": 5, "max_level":5},
+		{"name": "Fortress", "frequency": [0.15], "min_level": 5, "max_level":5},
+		{"name": "Deep Dungeon", "frequency": [1], "min_level": 3, "max_level":4}
+		]		
 },
 {
 	"name"		: "Frontier",
 	"type"		: "base",
 	"min_fraction": 0.2,
+	"max_fraction": 0.5,
 	"weights"	: { "Forest": 1, "Hill": 1, "Plain": -1, "Mountain": -1},
 	"adjectives": ["Rugged", "Grey", "Blue", "Purple", "Frontier", "Fringe", "Echoing",
 					"Teetering", "Precarious", "Fraught", "Battle-scarred", "Dissonant", "Troubled",
@@ -40,28 +58,15 @@
 		{"name": "Keep", "frequency": [2, 3], "min_level": 2, "max_level":2},
 		{"name": "Lair", "frequency": [4, 5], "min_level": 2, "max_level":2},
 		{"name": "Dungeon", "frequency": [3, 5], "min_level": 2, "max_level":2},
-		{"name": "Deep Dungeon", "frequency": [0.6], "min_level": 2, "max_level":3}
+		{"name": "Deep Dungeon", "frequency": [0.6], "min_level": 2, "max_level":3}	
 		]	
 },
-{
-	"name"		: "Nautical",
-	"type"		: "base",
-	"min_fraction": 0.0,
-	"weights"	: { "Forest": -1, "Hill": -1, "Plain": -1, "Mountain": -1, "Ocean": 0.5},
-	"adjectives": ["Grey", "Blue", "Wine-dark", "Cool", "Rolling", "Foggy", "Briny", "Warm", "Bubbling", "White-capped"],
-	"sites"		: [
-		{"name": "Keep", "frequency": [2, 3], "min_level": 2, "max_level":4},
-		{"name": "Lair", "frequency": [4, 5],  "min_level": 2, "max_level":5},
-		{"name": "Dungeon", "frequency": [2, 4],  "min_level": 2, "max_level":5},
-		{"name": "Cache", "frequency": [0.7], "min_level": 2, "max_level":4},
-		{"name": "Rogue's Den", "frequency": [0.5], "min_level": 2, "max_level":3}
-		]	
-},
+
 {
 	"name"		: "Imperium",
 	"type"		: "overlay",
 	"min_fraction": 0.0,
-	"substitution": {"sub_for" : "Civilized", "frequency": 0.15, "function": "min_total_distance", "params": ["Civilized"],
+	"substitution": {"sub_for" : "Civilized", "frequency": 0.2, "function": "min_total_distance", "params": ["Civilized"],
 					"terrain"  : {}},
 	"adjectives": ["Mighty", "Imperial", "Pacific", "Shining", "Blazing", "Pearl", "Diamond", 
 				   "Invincible", "Legionary", "Fortified", "Sun-lit"],
@@ -79,9 +84,8 @@
 					"terrain"  : {"Mountain" : {"new_terrain": "Volcano", "function": "scatter", "params": [0.2]},
 					              "Forest" : {"new_terrain": "Grim Forest", "function": "scatter", "params": [1.0]}}},
 	"sites"		: [
-		{"name": "Overlord's Lair", "frequency": [1], "min_level": 7, "max_level":7},
 		{"name": "Megadungeon", "frequency": [0.5],  "min_level": 7, "max_level":7},
-		{"name": "Lair", "frequency": [3, 6],  "min_level": 5, "max_level":6},
+		{"name": "Lair", "frequency": [4, 6],  "min_level": 5, "max_level":7},
 		{"name": "Dungeon", "frequency": [3, 5],  "min_level": 5, "max_level":6}
 		]
 },
@@ -104,7 +108,7 @@
 	"name"		: "Borderland",
 	"type"		: "overlay",
 	"min_fraction": 0.0,
-	"substitution": {"sub_for" : "Frontier", "frequency": 0.01, "function": "max_proximity", "params": ["Imperium", "Deep Wild"],
+	"substitution": {"sub_for" : "Frontier", "frequency": 0.01, "function": "min_total_distance", "params": ["Frontier"],
 					"terrain"  : {
 								   "Mountain" : {"new_terrain": "Hill", "function": "scatter", "params": [1.0]}
 								 }

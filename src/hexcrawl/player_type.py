@@ -3,7 +3,7 @@ Created on Jul 20, 2012
 
 @author: Chris
 '''
-STARTING_GOLD = 100
+STARTING_GOLD = 150
 import reputation, gamemap.hexgrid as hexgrid
 import random, collections
 import gamemap.mask as mask
@@ -46,6 +46,8 @@ def attack_active_enemy(active_group, hexes_in_range, player_mask):
                                                                                and player_mask.get_visibility(hex_loc.x, hex_loc.y) == mask.VISIBLE))
     return active_enemy_hex
 
+
+
 def move_to_settled(active_group, hexes_in_range, player_mask):
     curr_hex = active_group.get_hex()
     settled_hex = get_closest(curr_hex, hexes_in_range, lambda hex_loc : hex_loc.is_settled() and not hex_loc.has_occupants()
@@ -55,17 +57,24 @@ def move_to_settled(active_group, hexes_in_range, player_mask):
 def stay_in_zone(active_group, hexes_in_range, player_mask):
     group_center = active_group.get_center_hex()
     return [hex_loc for hex_loc in hexes_in_range if hex_loc.get_zone() == group_center.get_zone()]
-    
+
+def avoid_havens(active_group, hexes_in_range, player_mask):
+    return [hex_loc for hex_loc in hexes_in_range if (not hex_loc.has_site()) or (not hex_loc.site.is_haven())]
+
+def focus_on_target_player(active_group, hexes_in_range, player_mask):
+    return [hex_loc for hex_loc in hexes_in_range if (hex_loc.get_defenders() != None and 
+                                                      hex_loc.get_defenders().get_owner() == active_group.get_target_player())]
 
 def avoid_friendly_sites(active_group, hexes_in_range, player_mask):
-     return [hex_loc for hex_loc in hexes_in_range if not hex_loc.has_site() or active_group.is_hostile(hex_loc.site.get_owner())]
+    return [hex_loc for hex_loc in hexes_in_range if not hex_loc.has_site() or active_group.is_hostile(hex_loc.site.get_owner())]
 
-zone_patrol_constraints = [stay_in_zone, avoid_friendly_sites]
+zone_patrol_constraints = [stay_in_zone, avoid_friendly_sites, avoid_havens]
+horde_constraints = [focus_on_target_player, avoid_friendly_sites, avoid_havens]
 neutral_constraints = []
 chaos_constraints = []
 assassin_goals = [assassin_target]
 neutral_goals = [retake_site, attack_active_enemy, move_to_settled]
-chaos_goals = [attack_active_enemy, take_site, move_to_settled]
+chaos_goals = [attack_active_enemy, take_site]
 
 def move_active_group(active_group, dest_groups, hexes_in_range, player_mask):
     

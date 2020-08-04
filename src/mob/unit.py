@@ -15,8 +15,9 @@ class UnitType(object):
     defines characteristics of types of mobs
     '''
     
-    def __init__(self, name, name_maker, is_army, is_combatant, level, strength, armor, speed, looting, traits, sites):
+    def __init__(self, name, descriptors, name_maker, is_army, is_combatant, level, strength, armor, speed, looting, health, traits):
         self.name = name
+        self.descriptors = set(descriptors)
         self.name_maker = name_maker
         self.is_army = is_army
         self.is_combatant = is_combatant
@@ -27,7 +28,7 @@ class UnitType(object):
         self.speed = speed
         self.looting = looting
         self.traits = traits
-        self.sites = sites
+        self.health = health
         self.used_names = {}
     
     def is_support(self):
@@ -36,13 +37,20 @@ class UnitType(object):
                 return True
         return False
     
-    def gen_name(self):
-        return name.gen_name(self.name_maker, self.used_names)
+    def is_leader(self):
+        for leader_trait in trait.leader_traits:
+            if leader_trait in self.traits:
+                return True
+        return False 
+    
+    def gen_name(self, forced_pattern=None):
+        return name.gen_name(self.name_maker, self.used_names, forced_pattern)
 
 ROT_TIME = 3    # number of days until dead unit vanishes for good
-DIPLOMAT_FRACTION = 0.5 # fraction of site income / day that diplomat can extract
+DIPLOMAT_FRACTION = 0.33 # fraction of site income / day that diplomat can extract
 BURN_WOUND_CHANCE = 0.5 # chance that unit that's burning at start of its turn will be wounded
 MAX_ARMOR = 19  # ensures that armor can never reach 'auto succeed' level of 20
+
 
 ARMY_TYPE = "Army"
 UNIT_TYPE = "Unit"
@@ -59,9 +67,7 @@ def random_hero_type():
 #def hero_types():
 #    return unit_types_with_trait(trait.HERO)
 
-HEALTHY = 2
-WOUNDED = 1
-DEAD = 0
+#BASE_WOUNDS = 2
 
 BASIC_MAINT_COST = -2
 
@@ -76,7 +82,8 @@ class Unit(object):
         Constructor
         '''
 #        self.unit_type = unit_type
-        self.health = HEALTHY
+     
+        #self.health = HEALTHY
         self.moves_left = unit_type.speed
 #        self.naval_moves_left = 0
         self.traits = unit_type.traits.copy()
@@ -96,7 +103,9 @@ class Unit(object):
         for consumable in trait.consumable_traits:
             if consumable in self.traits:
                 self.consumable_refresh_values[consumable] = self.traits[consumable]
-                
+    
+        self.wounds = 0
+        self.health = unit_type.health
    
         self.group = None
         self.has_fought = False
@@ -106,6 +115,9 @@ class Unit(object):
     
     def get_type_text(self):
         return ARMY_TYPE if self.is_army() else UNIT_TYPE  
+    
+    def get_icon_name(self):
+        return self.type_name
     
     def fought(self):
         self.has_fought = True
@@ -146,7 +158,7 @@ class Unit(object):
     def get_strength(self):
         strength = self.strength
             
-        if self.health == WOUNDED:
+        if self.is_wounded():
             strength += self.trait_value(trait.RAGE)
 
         strength -= self.trait_value(trait.RESTRAINED)
@@ -175,8 +187,11 @@ class Unit(object):
     def get_looting(self):
         return self.looting
     
-    def has_trait(self, trait):
-        return trait in self.traits
+    def has_trait(self, check_trait):
+        if check_trait in trait.negating_traits:
+            if trait.negating_traits[check_trait] in self.traits:
+                return False
+        return check_trait in self.traits
     
     def consume_trait(self, trait):
         if self.traits.get(trait, 0) > 0:
@@ -225,10 +240,13 @@ class Unit(object):
     
     def set_armor_bonus(self, new_bonus):
         self.armor_bonus = new_bonus
-        
+    
+    def get_health(self):
+        return self.health
+    
     def get_armor(self):
         armor = self.armor
-        if self.health == WOUNDED:
+        if self.is_wounded():
             armor -= self.trait_value(trait.RAGE)
         return min(armor + self.armor_bonus, MAX_ARMOR)
     
@@ -238,30 +256,47 @@ class Unit(object):
     def is_combatant(self):
         return self.combatant
     
+    def curr_wounds(self):
+        return self.wounds
+    
+    def max_wounds(self):
+        return self.health + self.trait_value(trait.EXTRA_WOUND)
+    
     def is_alive(self):
-        return self.health != DEAD
+        return self.wounds < self.max_wounds()
+        #return self.health != DEAD
+    
+    def is_healthy(self):
+        return self.wounds == 0
     
     def is_wounded(self):
-        return self.health == WOUNDED
+        return self.is_alive() and self.wounds > 0
+        #return self.health == WOUNDED
     
-    def wound(self):
-        self.health -= 1
-        if self.health < DEAD:
+    def wound(self, number=1):
+        if not self.is_alive():
             raise ValueError("Wounded an already dead character.")
+        self.wounds = min(self.wounds + number, self.max_wounds())
+        #self.health -= 1
+#        if self.health < DEAD:
+#            
         
-        if self.health == DEAD:
+        if not self.is_alive(): #self.health == DEAD:
             self.set_trait(trait.ROTTING, ROT_TIME)
     
     def disband(self):
         pass
     
+    def get_owner(self):
+        return self.group.get_owner()
+    
     def heal(self):
-        assert(self.health == WOUNDED)
-        self.health = HEALTHY
+        assert(self.is_wounded())
+        self.wounds -= 1
 
     def revive(self):
-        assert(self.health == DEAD)
-        self.health = WOUNDED
+        assert(not self.is_alive())
+        self.wounds -= 1
         del self.traits[trait.ROTTING]
 
     def move(self, move_cost):
@@ -314,9 +349,9 @@ class Unit(object):
 #        self.naval_moves_left = self.trait_value(NAVAL)
         self.has_fought = False
         
-        if self.health == WOUNDED:
+        if self.is_wounded():
             if curr_hex.heals_unit():
-                self.health = HEALTHY
+                self.heal()
         if not self.is_alive() and self.has_trait(trait.REGENERATE):
             self.revive()
         

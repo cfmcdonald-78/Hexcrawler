@@ -185,7 +185,7 @@ class HexInfoRenderer(component.Window):
             if active_site.status == site_type.SACKED:
                 status_text = "Sacked"
             else:
-                status_text = "Owner: " + active_site.owner.get_name()
+                status_text = active_site.owner.get_name()
             
             images.text.draw_text(status_text, text.sm_font, x, y, surface)
 #   

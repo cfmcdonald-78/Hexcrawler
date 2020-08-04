@@ -69,6 +69,7 @@ class Player(object):
         self.color = color
         self.name = name
         self.patrol_reputation = 0
+        self.embassies = 0
         self.kill_counts = {}  # per-player count of units killed
         self.initialize()
     
@@ -117,6 +118,12 @@ class Player(object):
     
     def granted_hero(self):
         self.heroes_granted += 1
+    
+    def adjust_embassy_count(self, delta):
+        self.embassies += delta
+    
+    def embassy_count(self):
+        return self.embassies
     
     def get_mask(self):
         return self.mask
@@ -259,6 +266,7 @@ class Player(object):
         self.adjust_income(-site.get_income(), income.SITE_INCOME)
         site.owner = None
         self.get_mask().seer_removed(site.get_hex(), site.get_sight_range())
+        event_manager.queue_event(Event(event_manager.SITE_LOST, [self, site.get_name()]))
     
     def start_turn(self, turn, curr_game):
         # check for deletion, since groups/sites can be lost due to death/revolt
@@ -277,7 +285,7 @@ class Player(object):
                 i += 1
         
         # player earns income at start of week
-        if turn.day == 1:
+        if turn.at_week_start():
             self.adjust_gold(self.get_income())
 
     def add_hero(self, new_hero):
@@ -300,7 +308,7 @@ class NPCPlayer(Player):
     def __init__(self, assigned_type):
         super(NPCPlayer, self).__init__(assigned_type.name, assigned_type.base_type, assigned_type.color)
         self.human = False
-        self.site_patrols = {}
+    #    self.site_patrols = {}
         self.active_group_goal_funcs = player_type.active_group_goal_funcs[assigned_type.patrol_func_name]
         self.patrol_reputation = assigned_type.patrol_reputation
         self.hostile_to = assigned_type.hostile_to
@@ -320,15 +328,15 @@ class NPCPlayer(Player):
         return other_player.get_name() in self.hostile_to
     
     def start_turn(self, turn, curr_game):
-        print "starting turn of " + self.name
+#        print "starting turn of " + self.name
         super(NPCPlayer, self).start_turn(turn, curr_game)    
 
         thread.start_new_thread(self.ai, (curr_game, ))
                     
     def remove_group(self, elim_group):
         super(NPCPlayer, self).remove_group(elim_group)    
-        if isinstance(elim_group, group.ZonePatrol):
-            del self.site_patrols[elim_group.get_site()]
+#        if isinstance(elim_group, group.ZonePatrol):
+#            del self.site_patrols[elim_group.get_site()]
     
     def move_active_groups(self, curr_game):
        
@@ -345,6 +353,7 @@ class NPCPlayer(Player):
                 dest = player_type.move_active_group(active_group, dest_group, hexes_in_range, self.get_mask())
                
                 if dest != None:
+#                    print "Group: " + str(active_group) + "Dest: " + str(dest)
                     dest_group[dest] = active_group
                     curr_game.handle_command(movement.MoveCommand(active_group.get_hex(), dest))
             
@@ -362,19 +371,20 @@ class NPCPlayer(Player):
         
         # spawn new patrols at end of turn
         for curr_site in self.sites:  
-            # non-actors throw out patrols rather than actively taking over the map
-            if (not self.is_actor() and curr_site.is_active() and curr_site not in self.site_patrols
+            # non-actors throw out spawn groups rather than actively taking over the map
+            if (not self.is_actor() and curr_site.is_active() #and curr_site not in self.site_linked_groups
                 and curr_site.hex_loc.get_active_group() == None):
                 
                 spawn_hex = curr_game.get_map().get_spawn_hex(curr_site.hex_loc)
                 if spawn_hex != None:
-                    new_group = curr_site.spawn_group()
-                    if new_group != None:
+                    curr_site.spawn_group(curr_game)
+                    #new_group = curr_site.spawn_group(curr_game)
+   #                 if new_group != None:
 #                    new_patrol.set_reputation_value(curr_site.get_level() * self.patrol_reputation)
-                        new_group.initialize(spawn_hex)
+                    # new_group.initialize(spawn_hex)
                         
-                        if isinstance(new_group, group.ZonePatrol):
-                            # make sure each site only has one  patrol at at time
-                            self.site_patrols[curr_site] = new_group
+#                        if new_group.site_linked():
+#                            # make sure each site only has one  site-linked group at at time
+#                            self.site_patrols[curr_site] = new_group
         
         event_manager.queue_event(Event(event_manager.COMMAND_ISSUED, [EndTurnCommand(self)]))

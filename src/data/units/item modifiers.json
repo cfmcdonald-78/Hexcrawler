@@ -33,13 +33,13 @@
 	"adjective": "Knight's",
 	"types": ["Armor", "Misc", "Weapon"],
 	"level": 1,
-	"traits": {"Reputation Mod": 1}
+	"traits": {"Reputation": 1}
 },
 {
 	"adjective": "Noble",
 	"types": ["Armor", "Misc", "Weapon"],
 	"level": 1,
-	"traits": {"Reputation Mod": 2, "Looting": -1}
+	"traits": {"Reputation": 2, "Looting": -1}
 },
 {
 	"adjective": "Shielded",
@@ -75,13 +75,19 @@
 	"adjective": "Butcher's",
 	"types": ["Weapon"],
 	"level": 2,
-	"traits": {"Bloodthirst": 1, "Reputation Mod": -1}
+	"traits": {"Bloodthirst": 1, "Reputation": -1}
 },
 {
 	"adjective": "Pauper's",
 	"types": ["Misc", "Weapon"],
 	"level": 2,
-	"traits": {"Income": -25, "Reputation Mod": 5}
+	"traits": {"Income": -25, "Reputation": 5}
+},
+{
+	"adjective": "Runic",
+	"types": ["Weapon", "Clothing", "Armor"],
+	"level": 2,
+	"traits": {"Extra spell": 1}
 },
 {
 	"adjective": "Sticky",
@@ -135,13 +141,13 @@
 	"adjective": "Lord's",
 	"types": ["Armor", "Misc", "Weapon"],
 	"level": 3,
-	"traits": {"Reputation Mod": 6}
+	"traits": {"Reputation": 6}
 },
 {
 	"adjective": "Guardian",
 	"types": ["Shield"],
 	"level": 3,
-	"traits": {"Stalwart": true}
+	"traits": {"Guardian": true}
 },
 {
 	"adjective": "Phantom",
@@ -153,13 +159,19 @@
 	"adjective": "Ravaging",
 	"types": ["Melee"],
 	"level": 3,
-	"traits": {"Pillager": true, "Reputation Mod": -5}
+	"traits": {"Pillager": true, "Reputation": -5}
 },
 {
 	"adjective": "Truesight",
 	"types": ["Misc"],
 	"level": 3,
 	"traits": {"Scout": 1, "Spot": true}
+},
+{
+	"adjective": "Ox's",
+	"types": ["Clothing", "Mail"],
+	"level": 3,
+	"traits": {"Extra wound": 1}
 },
 {
 	"adjective": "Invisible",
@@ -172,7 +184,7 @@
 	"types": ["Weapon"],
 	"quality": "normal",
 	"level": 3,
-	"traits": {"Bloodthirst": 2, "Reputation Mod": -3}
+	"traits": {"Bloodthirst": 2, "Reputation": -3}
 },
 {
 	"adjective": "All-seeing",
@@ -202,13 +214,13 @@
 	"adjective": "Holy",
 	"types": ["Misc", "Weapon"],
 	"level": 4,
-	"traits": {"Life aura": 1, "Reputation Mod": 5}
+	"traits": {"Life aura": 1, "Reputation": 5}
 },
 {
 	"adjective": "Unholy",
 	"types": ["Misc", "Weapon"],
 	"level": 4,
-	"traits": {"Death aura": 4, "Reputation Mod": -5}
+	"traits": {"Death aura": 4, "Reputation": -5}
 },
 {
 	"adjective": "Murderous",
@@ -220,7 +232,7 @@
 	"adjective": "Were",
 	"types": ["Weapon"],
 	"level": 5,
-	"traits": {"Infect": "Werebeast", "Reputation Mod": -5}
+	"traits": {"Infect": "Werebeast", "Reputation": -5}
 },
 {
 	"adjective": "Healing",
@@ -234,7 +246,6 @@
 	"level": 3,
 	"traits": {"Grant strength": 2}
 },
-
 {
 	"adjective": "Vampiric",
 	"types": ["Weapon"],
@@ -245,13 +256,13 @@
 	"adjective": "Deathtouched",
 	"types": ["Misc", "Weapon"],
 	"level": 5,
-	"traits": {"Summon": "Wraith", "Reputation Mod": -5}
+	"traits": {"Summon": "Wraith", "Reputation": -5}
 },
 {
 	"adjective": "Crushing",
 	"types": ["Melee"],
 	"level": 6,
-	"traits": {"Crushing Blow": 1}
+	"traits": {"Crushing blow": 1}
 },
 {
 	"adjective": "Adamantine",
@@ -263,25 +274,25 @@
 	"adjective": "King's",
 	"types": ["Armor", "Misc", "Weapon"],
 	"level": 5,
-	"traits": {"Reputation Mod": 7}
+	"traits": {"Reputation": 7}
 },
 {
 	"adjective": "Sanguinary",
 	"types": ["Weapon"],
 	"level": 6,
-	"traits": {"Bloodthirst": 3, "Reputation Mod": -5}
+	"traits": {"Bloodthirst": 3, "Reputation": -5}
 },
 {
 	"adjective": "Empire's",
 	"types": ["Armor", "Misc", "Weapon"],
 	"level": 6,
-	"traits": {"Reputation Mod": 12}
+	"traits": {"Reputation": 12}
 },
 {
 	"adjective": "Mauling",
 	"types": ["Melee"],
 	"level": 6,
-	"traits": {"Crushing Blow": 2}
+	"traits": {"Crushing blow": 2}
 },
 {
 	"adjective": "Invincible",
@@ -294,5 +305,11 @@
 	"types": ["Misc"],
 	"level": 6,
 	"traits": {"Revive": 6}
+},
+{
+	"adjective": "Doomed",
+	"types": ["Weapon", "Armor"],
+	"level": 6,
+	"traits": {"Deadly blow": 1}
 }
 ]

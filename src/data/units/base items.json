@@ -181,7 +181,7 @@
 	"subtype": "Melee",
 	"quality": "normal",
 	"level": 6,
-	"traits": {"Strength" : 7, "Crushing Blow": 1}
+	"traits": {"Strength" : 7, "Crushing blow": 1}
 },
 {
 	"name" : "Rod",
@@ -192,15 +192,23 @@
 	"traits": {"Ranged": 13, "Army attack": true, "Long range": true, "Restrain": 4}
 },
 { 
+	"name" : "Dark Blade",
+	"type" : "Weapon",
+	"quality": "normal",
+	"level": 7,
+	"traits": {"Strength": 8, "Deadly blow": 1}
+},
+{ 
 	"name" : "Cannon",
 	"type" : "Weapon",
 	"quality": "artifact",
 	"level": 7,
-	"traits": {"Ranged": 15, "Pierce": 4, "Army attack": true, "Splash": true}
+	"traits": {"Ranged": 15, "Death blow": 1, "Pierce": 4, "Army attack": true, "Splash": true}
 },
 { 
 	"name" : "Leather",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "normal",
 	"level": 1,
 	"traits": {"Armor" : 1}
@@ -208,6 +216,7 @@
 { 
 	"name" : "Chainmail",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "normal",
 	"level": 1,
 	"traits": {"Armor" : 2, "Speed": -1}
@@ -231,6 +240,7 @@
 { 
 	"name" : "Half-plate",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "normal",
 	"level": 2,
 	"traits": {"Armor" : 2}
@@ -238,6 +248,7 @@
 { 
 	"name" : "Platemail",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "normal",
 	"level": 2,
 	"traits": {"Armor" : 3, "Speed": -1}
@@ -245,6 +256,7 @@
 { 
 	"name" : "Elven Mail",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "artifact",
 	"level": 2,
 	"traits": {"Armor" : 2, "Stealth": true}
@@ -252,6 +264,7 @@
 { 
 	"name" : "Imperial Mail",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "normal",
 	"level": 3,
 	"traits": {"Armor" : 3, "Reputation": 2}
@@ -259,6 +272,7 @@
 { 
 	"name" : "Full Plate",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "normal",
 	"level": 3,
 	"traits": {"Armor" : 4, "Speed": -1}
@@ -282,6 +296,7 @@
 { 
 	"name" : "Silver Plate",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "normal",
 	"level": 4,
 	"traits": {"Armor" : 4}
@@ -297,6 +312,7 @@
 { 
 	"name" : "Dark Mail",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "artifact",
 	"level": 4,
 	"traits": {"Armor": 5, "Pierce": 2, "Death aura": 3}
@@ -304,6 +320,7 @@
 { 
 	"name" : "Golden Plate",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "normal",
 	"level": 5,
 	"traits": {"Armor" : 5, "Speed": -2}
@@ -319,6 +336,7 @@
 {
 	"name": "Dragonscale",
 	"type": "Armor",
+	"subtype": "Mail",
 	"quality": "artifact",
 	"level": 5,
 	"traits": {"Armor": 6, "Flameproof": true}
@@ -326,6 +344,7 @@
 { 
 	"name" : "Titantium",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "normal",
 	"level": 6,
 	"traits": {"Armor" : 6, "Speed": -2}
@@ -333,6 +352,7 @@
 { 
 	"name" : "Angel Mail",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "artifact",
 	"level": 6,
 	"traits": {"Armor" : 7, "Flight": true}
@@ -340,6 +360,7 @@
 { 
 	"name" : "Bulwark",
 	"type" : "Armor",
+	"subtype": "Mail",
 	"quality": "artifact",
 	"level": 7,
 	"traits": {"Armor" : 8, "Relentless": true, "Flameproof": true, "Unchainable": true}
@@ -347,6 +368,7 @@
 {
 	"name": "Phial",
 	"type": "Misc",
+	"subtype": "Potion",
 	"quality": "normal",
 	"level": 1,
 	"traits": {"Restore": 1}
@@ -354,6 +376,7 @@
 {
 	"name": "Flask",
 	"type": "Misc",
+	"subtype": "Potion",
 	"quality": "normal",
 	"level": 3,
 	"traits": {"Restore": 2}
@@ -361,6 +384,7 @@
 {
 	"name": "Decanter",
 	"type": "Misc",
+	"subtype": "Potion",
 	"quality": "artifact",
 	"level": 5,
 	"traits": {"Restore": 4}
@@ -368,6 +392,7 @@
 { 
 	"name" : "Pendant",
 	"type" : "Misc",
+	"subtype": "Jewelry",
 	"quality": "normal",
 	"level": 1,
 	"traits": {"Reputation": 1}
@@ -375,6 +400,7 @@
 { 
 	"name" : "Gloves",
 	"type" : "Misc",
+	"subtype": "Clothing",
 	"quality": "normal",
 	"level": 1,
 	"traits": {"Looting": 1}
@@ -382,13 +408,23 @@
 { 
 	"name" : "Purse",
 	"type" : "Misc",
+	"subtype": "Jewelry",
 	"quality": "normal",
 	"level": 1,
 	"traits": {"Income": 20}
 },
+{
+	"name": "Cloak",
+	"type": "Misc",
+	"subtype": "Clothing",
+	"quality": "artifact",
+	"level": 1,
+	"traits": {"Elusive": true}
+},
 { 
 	"name" : "Shoes",
 	"type" : "Misc",
+	"subtype": "Clothing",
 	"quality": "normal",
 	"level": 1,
 	"traits": {"Speed": 2}
@@ -396,6 +432,7 @@
 { 
 	"name" : "Lens",
 	"type" : "Misc",
+	"subtype": "Jewelry",
 	"quality": "normal",
 	"level": 2,
 	"traits": {"Scout": 1}
@@ -403,6 +440,7 @@
 { 
 	"name" : "Orb",
 	"type" : "Misc",
+	"subtype": "Jewelry",
 	"quality": "artifact",
 	"level": 2,
 	"traits": {"Inspire": 1}
@@ -410,6 +448,7 @@
 { 
 	"name" : "Boots",
 	"type" : "Misc",
+	"subtype": "Clothing",
 	"quality": "normal",
 	"level": 2,
 	"traits": {"Speed": 4}
@@ -417,6 +456,7 @@
 { 
 	"name" : "Machete",
 	"type" : "Misc",
+	"subtype": "Held",
 	"quality": "normal",
 	"level": 2,
 	"traits": {"Pathfinder": 3}
@@ -424,6 +464,7 @@
 { 
 	"name" : "Rations",
 	"type" : "Misc",
+	"subtype": "Potion",
 	"quality": "normal",
 	"level": 2,
 	"traits": {"Supply": 1}
@@ -431,6 +472,7 @@
 { 
 	"name" : "Scales",
 	"type" : "Misc",
+	"subtype": "Held",
 	"quality": "artifact",
 	"level": 2,
 	"traits": {"Haggler": 4}
@@ -438,6 +480,7 @@
 { 
 	"name" : "Ship",
 	"type" : "Misc",
+	"subtype": "Transport",
 	"quality": "artifact",
 	"level": 3,
 	"traits": {"Naval": true}
@@ -445,20 +488,31 @@
 { 
 	"name" : "Ring",
 	"type" : "Misc",
+	"subtype": "Jewelry",
 	"quality": "normal",
 	"level": 3,
 	"traits": {"Blend": true}
 },
 { 
-	"name" : "Cloak",
+	"name" : "Mantle",
 	"type" : "Misc",
+	"subtype": "Clothing",
 	"quality": "normal",
 	"level": 3,
 	"traits": {"Evade": 3}
 },
 { 
+	"name" : "Tome",
+	"type" : "Misc",
+	"subtype": "Held",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Extra spell": 2}
+},
+{ 
 	"name" : "Compass",
 	"type" : "Misc",
+	"subtype": "Held",
 	"quality": "artifact",
 	"level": 3,
 	"traits": {"Mountaineer": true}
@@ -466,6 +520,7 @@
 { 
 	"name" : "Chest",
 	"type" : "Misc",
+	"subtype": "Held",
 	"quality": "normal",
 	"level": 3,
 	"traits": {"Income": 80}
@@ -473,6 +528,7 @@
 { 
 	"name" : "Map",
 	"type" : "Misc",
+	"subtype": "Held",
 	"quality": "normal",
 	"level": 4,
 	"traits": {"Pathfinder": 5}
@@ -480,6 +536,7 @@
 { 
 	"name" : "Scepter",
 	"type" : "Misc",
+	"subtype": "Jewelry",
 	"quality": "artifact",
 	"level": 4,
 	"traits": {"Inspire": 2}
@@ -487,14 +544,32 @@
 { 
 	"name" : "Gem",
 	"type" : "Misc",
+	"subtype": "Jewelry",
+	"quality": "normal",
+	"level": 4,
+	"traits": {"Reputation": 10, "Haggler": 5}
+},
+{ 
+	"name" : "Girdle",
+	"type" : "Misc",
+	"subtype": "Clothing",
 	"quality": "artifact",
 	"level": 4,
-	"traits": {"Reputation": 10, "Haggler": 6}
+	"traits": {"Extra wound": 1}
+},
+{
+	"name" : "Banner",
+	"type" : "Misc",
+	"subtype": "Held",
+	"quality": "artifact",
+	"level": 4,
+	"traits": {"White mana": true}
 },
 { 
 
 	"name" : "Cornucopia",
 	"type" : "Misc",
+	"subtype": "Held",
 	"quality": "normal",
 	"level": 4,
 	"traits": {"Supply": 4}
@@ -502,6 +577,7 @@
 { 
 	"name" : "Wings",
 	"type" : "Misc",
+	"subtype": "Transport",
 	"quality": "artifact",
 	"level": 5,
 	"traits": {"Flight": true}
@@ -509,6 +585,7 @@
 { 
 	"name" : "Goose",
 	"type" : "Misc",
+	"subtype": "Held",
 	"quality": "normal",
 	"level": 6,
 	"traits": {"Income": 200}
@@ -516,6 +593,7 @@
 { 
 	"name" : "Carpet",
 	"type" : "Misc",
+	"subtype": "Transport",
 	"quality": "normal",
 	"level": 6,
 	"traits": {"Flight": true, "Speed": 12}
@@ -523,20 +601,31 @@
 { 
 	"name" : "Crown",
 	"type" : "Misc",
+	"subtype": "Jewelry",
 	"quality": "artifact",
 	"level": 6,
 	"traits": {"Inspire": 3}
 },
+{
+	"name" : "Bloodstone",
+	"type" : "Misc",
+	"subtype": "Jewelry",
+	"quality": "artifact",
+	"level": 6,
+	"traits": {"Red mana": true}
+},
 { 
 	"name" : "Airship",
 	"type" : "Misc",
-	"quality": "artifact",
+	"subtype": "Transport",
+	"quality": "normal",
 	"level": 6,
 	"traits": {"Army flight": true}
 },
 {
 	"name" : "Stone",
 	"type" : "Misc",
+	"subtype": "Held",
 	"quality": "artifact",
 	"level": 7,
 	"traits": {"Regenerate": true, "Vampiric": true, "Revive": 5}

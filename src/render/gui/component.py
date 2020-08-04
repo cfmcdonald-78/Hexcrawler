@@ -182,7 +182,7 @@ class Component(object):
             for child in self.children:
                 child.show()
                 
-        if self.modal:
+        if self.modal and self not in Component.modal_stack:
             Component.modal_stack.append(self)
 
     def refresh_view(self):
@@ -266,22 +266,22 @@ class Component(object):
         # if mouse up happens on same component as last mouse down, send a click event
         if event.type == MOUSE_DOWN:
             Component.last_mouse_down = self
-            print "Mouse down on " + str(self)
+#            print "Mouse down on " + str(self)
         
         if event.type == MOUSE_UP:
             x, y = event.pos
             if Component.dragging == None and Component.last_mouse_down == self:
                 # mouse down then mouse up on same component => click]
                 pygame.event.post(pygame.event.Event(MOUSE_CLICK, pos = (x, y), button=event.button))
-                print "Click on " + str(self)
+#                print "Click on " + str(self)
             else:
                 if Component.dragging != None:
-                    print "Mouse dropped on " + str(self)
+#                    print "Mouse dropped on " + str(self)
                     pygame.event.post(pygame.event.Event(MOUSE_DROP, dropped=Component.last_mouse_down, pos = (x, y), button=event.button))
                 # notify other component that mouse was released
                 if Component.last_mouse_down != None:
                     Component.last_mouse_down.event_handler(event)
-                    print "Non-click mouse up on " + str(self)
+#                    print "Non-click mouse up on " + str(self)
             
             Component.last_mouse_down = None
             Component.dragging = None

@@ -57,8 +57,9 @@ class StatusRenderer(component.Window):
     def set_data(self, map_data, curr_player, curr_mask, curr_turn):
         self.map_data = map_data
         self.curr_player = curr_player
+#        self.mask_player = curr_mask.get_player()
+        self.curr_mask = curr_mask
         self.mask_player = curr_mask.get_player()
-#        self.curr_mask = curr_mask
         self.turn = curr_turn
         self.update_labels()
     
@@ -93,7 +94,7 @@ class StatusRenderer(component.Window):
             self.update_labels()
         elif event.type == event_manager.HEX_SELECTED:
             x, y = event.data['loc']
-            if self.mask_player.get_mask().get_visibility(x, y) == mask.NEVER_VISIBLE:
+            if self.curr_mask.get_visibility(x, y) == mask.NEVER_VISIBLE:
                 label_text = ""
             else:
                 hex_zone = self.map_data.get_zone(x, y)

@@ -39,7 +39,7 @@ class GameEngine(Component):
         self.images = image_mgr
       
         self.unit_renderer = unit_panel.UnitRenderer( Rect( (self.width * 4) / 5, self.height / 6, self.width / 5, self.height / 2), self.images )
-        self.map_renderer = map_render.MapRenderer()
+        self.map_renderer = map_render.MainMap()
         self.hex_info_renderer = hex_info_panel.HexInfoRenderer(Rect(0, (self.height * 2) / 3, (self.width * 4) /5, self.height / 3), self.images)
         self.status_renderer = status_panel.StatusRenderer(Rect(0, 0, self.width, 34))
         self.control_panel = control_panel.ControlRenderer(Rect((self.width * 4)/5, (self.height * 2) / 3,
@@ -55,8 +55,9 @@ class GameEngine(Component):
         self.curr_site = None
         self.paused = False
         self.quit_to_desktop = False
-
+     
     def post_load_init(self):
+        self.debug_mask_on = False
         self.active_mask = self.curr_game.get_mask()
         self.sounds.set_mask(self.active_mask)
         self.sounds.do_soundtrack(sound.BACKGROUND_MUSIC)
@@ -65,12 +66,15 @@ class GameEngine(Component):
         Component.set_top_level(self, self.width, self.height, self.width/2, self.height/3)
         self.combat_renderer = combat_panel.CombatRenderer(Rect(self.width/5, self.height/5, (3 *self.width)/5, (3 *self.height)/8), self.images)
         self.loot_renderer = loot_panel.LootRenderer(Rect(self.width/4, self.height/4, self.width/2, self.height/4))
+        
         self.popup_renderer = popup.PopupRenderer()
         self.show()
+        self.mini_renderer.hide()
         self.update_window_data()
 
     def update_window_data(self):
         self.map_renderer.set_data(self.curr_game.get_map(), self.curr_game.get_curr_player(), self.active_mask)
+        self.mini_renderer.set_data(self.curr_game.get_map(), self.active_mask)
         self.hex_info_renderer.set_data(self.curr_game.get_map(), self.curr_game.get_curr_player(), self.active_mask)
         self.status_renderer.set_data(self.curr_game.get_map(), self.curr_game.get_curr_player(), self.active_mask, self.curr_game.get_turn())
         self.combat_renderer.set_data(self.map_renderer, self.active_mask)
@@ -86,6 +90,15 @@ class GameEngine(Component):
             initial_view = viewport.Viewport(Rect(0, 34, self.width, (self.height * 2) / 3 - 34), 
                                                 self.curr_game.get_map().width, self.curr_game.get_map().height)
         self.map_renderer.set_view(initial_view)
+#        self.mini_renderer = map_render.MiniMap(Rect(0, self.height / 6, self.width / 3, self.height / 2), 
+#                                                self.curr_game.get_map().width, self.curr_game.get_map().height)
+        self.mini_renderer = map_render.MiniMap(0, (self.height * 2)/3,
+                                                self.curr_game.get_map().width, self.curr_game.get_map().height)
+        self.mini_renderer.set_main_view(initial_view)
+        self.add_child(self.mini_renderer)
+       
+#        self.mini_renderer.set_view(viewport.Viewport(Rect(0, 34, self.width /3, (self.height * 2) / 3 - 34), 
+#                                                self.curr_game.get_map().width, self.curr_game.get_map().height, scale_power = 3))
        
         start_hex = self.curr_game.get_start_hex()
         self.map_renderer.center(start_hex.x, start_hex.y) 
@@ -113,14 +126,14 @@ class GameEngine(Component):
     
     def next_group(self):
         if self.curr_group == None:
-            self.curr_group = self.curr_game.get_curr_player().get_first_group()
+            self.curr_group = self.active_mask.get_player().get_first_group()
         else:
             self.curr_group = self.curr_group.get_next()
         self.move_to_hex(self.curr_group.get_hex())
         
     def previous_group(self):
         if self.curr_group == None:
-            self.curr_group = self.curr_game.get_curr_player().get_last_group()
+            self.curr_group = self.active_mask.get_player().get_last_group()
         else:
             self.curr_group = self.curr_group.get_previous()
         self.move_to_hex(self.curr_group.get_hex())
@@ -144,6 +157,15 @@ class GameEngine(Component):
         selected_hex = self.map_renderer.view.selected_hex
         if selected_hex != None:
             self.map_renderer.center(selected_hex.x, selected_hex.y) 
+    
+    def toggle_zone_borders(self):
+        self.map_renderer.toggle_zone_borders()
+    
+    def minimap(self):
+        if self.mini_renderer.is_shown():
+            self.mini_renderer.hide()
+        else:
+            self.mini_renderer.show()
 
     def handle_game_events(self, event):
         if event.type == event_manager.MOVE_DONE:
@@ -155,15 +177,18 @@ class GameEngine(Component):
         elif event.type == event_manager.PLAYER_WON:
             self.save_on_quit = False
             if event.data['player'] == self.active_mask.get_player():
-                game_over_dialog = modal.GameOverDialog(400, 200, "Victory!", event.data['description'])
+                game_over_dialog = modal.TextDialog("Victory!", event.data['description'],
+                                                        close_event =  Event(event_manager.QUIT, [False]))
             else:
-                game_over_dialog = modal.GameOverDialog(400, 200, "You Lost!", event.data['description'])
+                game_over_dialog = modal.TextDialog("You Lost!", event.data['description'],
+                                                        close_event =  Event(event_manager.QUIT, [False]))
             
             game_over_dialog.open_window()
         elif event.type == event_manager.PLAYER_LOST:
             self.save_on_quit = False
             if event.data['player'] == self.active_mask.get_player():
-                game_over_dialog = modal.GameOverDialog(400, 200, "You Lost!", event.data['description'])
+                game_over_dialog = modal.TextDialog("You Lost!", event.data['description'], 
+                                                    close_event =  Event(event_manager.QUIT, [False]))
                 game_over_dialog.show()
                 self.paused = True
         elif event.type == event_manager.QUIT:
@@ -176,7 +201,11 @@ class GameEngine(Component):
             Component.clear_modals()
             self.running = False
         elif event.type == event_manager.TURN_END:
-            self.active_mask = self.curr_game.get_mask()
+            if self.debug_mask_on:
+                self.active_mask = self.curr_game.get_debug_mask() 
+            else:
+                self.active_mask = self.curr_game.get_mask()
+            self.curr_group = None
             self.update_window_data()
 #            self.hex_info_renderer.set_hex(self.map_renderer.view.selected_hex)
         elif event.type == event_manager.COMMAND_ISSUED:
@@ -198,7 +227,11 @@ class GameEngine(Component):
 #                self.view.zoom_out()
 #            elif (event.key == pygame.K_a):
 #                self.view.zoom_in() 
-            if (event.key == pygame.K_n):
+            if (event.key == pygame.K_m):
+                self.minimap()
+            elif (event.key == pygame.K_b):
+                self.toggle_zone_borders()
+            elif (event.key == pygame.K_n):
                 self.next_group()
             elif (event.key == pygame.K_p):
                 self.previous_group() 
@@ -207,9 +240,11 @@ class GameEngine(Component):
             elif (event.key == pygame.K_s):
                 self.next_site() 
             elif (event.key == pygame.K_g):
-                if self.active_mask == self.curr_game.get_debug_mask():
+                if self.debug_mask_on:
                     self.active_mask = self.curr_game.get_mask()
+                    self.debug_mask_on = False
                 else:
+                    self.debug_mask_on = True
                     self.active_mask = self.curr_game.get_debug_mask()
                 self.update_window_data()
             elif (event.key == pygame.K_e and self.activity_allowed):

@@ -394,7 +394,7 @@
 					"of the Wizard"]]
 },
 {
-	"name": ["Lair"],
+	"name": ["Lair", "Captain's Lair"],
 	"prefix": "",
 	"delimiter": " ",
 	"patterns": [[90, 100]],

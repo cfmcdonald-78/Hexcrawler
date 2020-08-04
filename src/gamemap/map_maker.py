@@ -37,35 +37,46 @@ class ProceduralMapmaker(object):
         self.mountain_level = 0.8
         self.hill_level = 0.5
         
-    def find_lowest_neighbor(self, loc, heightmap):
-        neighbors = hexgrid.get_neighbor_coords(loc, self.padded_width, self.padded_height)
-        
-        def min_func(location):
-            return heightmap[location.x][location.y] 
-          
-        return min_in_list(neighbors, min_func)      
+#    def find_lowest_neighbor(self, loc, heightmap):
+#        neighbors = hexgrid.get_neighbor_coords(loc, self.padded_width, self.padded_height)
+#        
+#        def min_func(location):
+#            return heightmap[location.x][location.y] 
+#          
+#        return min_in_list(neighbors, min_func)      
     
     # erode the given heightmap.  On average, each location will be eroded repeats # of times
     def erode_heightmap(self, heightmap, repeats):
+        locs = []
+        neighbors = {}
+        for x in range(self.padded_width):
+            for y in range(self.padded_height):
+                new_loc = Loc(x,y)
+                locs.append(new_loc)
+                neighbors[new_loc] = hexgrid.get_neighbor_coords(new_loc, self.padded_width, self.padded_height)
+        
         # erode results in order to create a smoother terrain - donate elevation from higher places to lower ones
         for i in range(self.padded_width * self.padded_height * repeats):
             # randomly choose a spot from which to start erosion
-            x, y = random.randint(0, self.padded_width - 1), random.randint(0, self.padded_height - 1)
+            hex_loc = random.choice(locs)
+#            x, y = random.randint(0, self.padded_width - 1), random.randint(0, self.padded_height - 1)
             
             while True:
-                lowest, lowest_elev = self.find_lowest_neighbor(Loc(x, y), heightmap)
+                lowest = min(neighbors[hex_loc], key = lambda hex_loc : heightmap[hex_loc.x][hex_loc.y])
+#                lowest, lowest_elev = self.find_lowest_neighbor(Loc(x, y), heightmap)
                 
                 # make sure eroding will leave lowest neighbor lower than we are -
                 # dirt can only slide downhill!
-                if lowest_elev + 2 * self.EROSION_UNIT >= heightmap[x][y]:
+                if heightmap[lowest.x][lowest.y] + 2 * self.EROSION_UNIT >= heightmap[hex_loc.x][hex_loc.y]:
                     break
                 
                 # if there's a lower place to erode to, donate an erosion unit to it,
-                heightmap[x][y] -= self.EROSION_UNIT
+                heightmap[hex_loc.x][hex_loc.y] -= self.EROSION_UNIT
                 heightmap[lowest.x][lowest.y] += self.EROSION_UNIT
                 # see if we can continue eroding down from place we eroded to
-                x = lowest.x
-                y = lowest.y
+                hex_loc = lowest
+#                x = lowest.x
+#                y = lowest.y
         return heightmap
     
     # use diamond square method
@@ -251,7 +262,8 @@ class ProceduralMapmaker(object):
                 # if no river started yet, move all water from this loc to lowest neighbor (in some
                 # cases the lowest neighbor will actually be up, which will have no effect, since we won't revisit
                 # that location.  
-                lowest, lowest_elev = self.find_lowest_neighbor(curr_loc, elevation)
+                lowest = min(neighbors, key = lambda hex_loc : elevation[hex_loc.x][hex_loc.y]) #
+                #self.find_lowest_neighbor(curr_loc, elevation)
                 catchment[lowest.x][lowest.y] += local_accum
         
         # lowest locations on edge of map are potential  river end points

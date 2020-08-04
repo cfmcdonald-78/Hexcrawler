@@ -12,8 +12,10 @@ Created on Jul 10, 2012
 # a player can only gain reputation by beating a group/site if his REP_GAIN_THRESHOLD[level - 1] is less than 
 # the player's current fame.  If not, this group/site is beneath him, and not worth additional rep
 REP_GAIN_THRESHOLD = [20, 60, 120, 200, 300, 420, 560]
+HORDE_THRESHOLD = [20, 60, 120, 200, 300, 420, 560]
 
 HERO_GRANT_THRESHOLD = [30, 120, 300, 600, 1000]
+
 
 DESTROYED_GROUP = 0
 LOOTED_SITE = 1

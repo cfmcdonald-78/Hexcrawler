@@ -13,13 +13,13 @@ import reputation
 import gamemap.site_upgrade as site_upgrade
 
 KEEP_COST_PER_LEVEL = 80
-EMBASSY_COST_PER_LEVEL = 20
+EMBASSY_COST_PER_LEVEL = 25
 
 def get_build_cost(site_type_name, site_level):
     return KEEP_COST_PER_LEVEL * site_level
 
-def get_embassy_cost(site_level):
-    return EMBASSY_COST_PER_LEVEL * site_level
+def get_embassy_cost(diplomat, site_level):
+    return (EMBASSY_COST_PER_LEVEL + diplomat.get_group().get_owner().embassy_count()) * site_level
 
 class BuildCommand(command.Command):
     '''
@@ -48,6 +48,7 @@ class BuildCommand(command.Command):
             player.adjust_gold(-cost)
             site_type = site_types[site_type_name]
             new_site = site.Site(build_hex, site_type, self.builder.get_level(), player, default_owner=game.npc_table[site_type.owner_name]) 
+            new_site.initialize()
 #            player.add_site(new_site)
             build_hex.site = new_site
             new_site.spread_settlement(game.get_map())
@@ -82,9 +83,10 @@ class EmbassyCommand(command.Command):
         embassy_site = embassy_hex.site
 #        site_type_name = self.builder.trait_value(unit.BUILD)
         
-        cost = get_embassy_cost(embassy_site.get_level())
+        cost = get_embassy_cost(self.diplomat, embassy_site.get_level())
         if player.get_gold() >= cost:
             player.adjust_gold(-cost)
+#            player.adjust_embassy(embassy_site)
 
             embassy_site.set_embassy(player)
 

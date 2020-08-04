@@ -3,14 +3,16 @@ Created on Jun 29, 2012
 
 @author: Chris
 '''
-import pygame, os
-import gamemap.terrain as terrain, gamemap.site_type as site_type, mob.unit as unit, gamemap.hexgrid as hexgrid, mob.item as item
+import pygame, os, random
+import gamemap.terrain as terrain, gamemap.site_type as site_type, mob.unit as unit, mob.hero as hero, gamemap.hexgrid as hexgrid, mob.item as item
 from util.tools import make_2D_list
 import core.event_manager as event_manager
 import text
 
+
 MAX_FRAME = 2
 TICKS_PER_FRAME = 10
+NUM_HASHES = 256
 
 UNIT_WIDTH = 64
 UNIT_HEIGHT = 64
@@ -41,8 +43,16 @@ class ImageManager(object):
         self.unit_images = {}
         self.unit_map_images = {}
         for unit_type in unit.unit_types:
+            if "Hero" in unit_type.name:
+                continue
+            
             self.unit_images[unit_type.name] = self.prep_image("unit", unit_type.name + ".png")
             self.unit_map_images[unit_type.name] = self.prep_image("unit", unit_type.name + ".png", (MAP_UNIT_WIDTH, MAP_UNIT_HEIGHT))
+
+        for sex in hero.sexes:
+            icon_name = sex + "Hero"
+            self.unit_images[icon_name] = self.prep_image("unit", icon_name + ".png")
+            self.unit_map_images[icon_name] = self.prep_image("unit", icon_name+ ".png", (MAP_UNIT_WIDTH, MAP_UNIT_HEIGHT))
 
         self.boat = self.prep_image("unit", "boat.png", (MAP_UNIT_WIDTH, MAP_UNIT_HEIGHT))
         
@@ -58,10 +68,23 @@ class ImageManager(object):
 #        for upgrade_name in site_upgrade.upgrades_by_name:
 #            self.upgrade_images[upgrade_name] = self.prep_image("map", upgrade_name + ".png")
 #        
+        
+        self.hash_values = [random.randint(0, 2 ** 32) for i in range(NUM_HASHES)]
         self.hex_images = {}
+        self.mini_hex_images = {}
         for terrain_type in terrain.hex_types:
-            self.hex_images[terrain_type.name] = self.prep_image("map", terrain_type.name + ".png")
+            hex_images = []
+            i = 0
+            next_img_file = terrain_type.name + str(i) + ".png"
+            while (self.image_exists("map",  next_img_file)):
+                    hex_images.append(self.prep_image("map",next_img_file))
+                    i += 1
+                    next_img_file = terrain_type.name + str(i) + ".png"
+                    
+            self.hex_images[terrain_type.name] = hex_images
+            self.mini_hex_images[terrain_type.name] = self.prep_image("map", terrain_type.name + "_mini.png")
     
+        self.road = self.prep_image("map", "road.png")
         self.river = {}    
         for angle in range(0, 4):
             self.river[angle] = self.prep_image("map", "river" + str(angle) + ".png")
@@ -98,19 +121,23 @@ class ImageManager(object):
         self.equip_slots = {}
         self.item_icons = {}
         for item_type in item.item_types:
-            self.item_icons[item_type] = self.prep_image("item", item_type + ".png")
             self.equip_slots[item_type] = self.prep_image("item", item_type + "_slot.png")
+        for item_subtype in item.item_subtypes:
+            self.item_icons[item_subtype] = self.prep_image("item", item_subtype + ".png")
+           
         self.backpack_slot = self.prep_image("item", "backpack_slot.png")
         
         self.banner = self.prep_image("ui", "banner.png")
         self.fogged_hex = self.prep_image("ui", "fogged_hex.png")
         self.invisible_hex = self.prep_image("ui", "invisible_hex.png")
+        self.mini_invisible_hex = self.prep_image("ui", "invisible_hex_mini.png")
         self.l_arrow = self.prep_image("ui", "l_arrow.png")
         self.r_arrow = self.prep_image("ui", "r_arrow.png")
         self.transfer = self.prep_image("ui", "transfer.png")
         self.disband = self.prep_image("ui", "disband.png")
         self.prev_site = self.prep_image("ui", "prev_site.png")
         self.next_site = self.prep_image("ui", "next_site.png")
+        self.minimap = self.prep_image("ui", "minimap.png")
         self.center_view = self.prep_image("ui", "center_view.png")
         self.end_turn = self.prep_image("ui", "end_turn.png")
         self.tools = self.prep_image("ui", "tools.png")
@@ -131,6 +158,7 @@ class ImageManager(object):
         self.strength = self.prep_image("ui", "strength.png")
         self.armor = self.prep_image("ui", "armor.png")
         self.looting = self.prep_image("ui", "looting.png")
+        self.health = self.prep_image("ui", "health.png")
         self.window_9patch = self.prep_9patch("ui", "window_9patch.png")
         self.region_9patch = self.prep_9patch("ui", "region_9patch.png")
         self.button_9patch = self.prep_9patch("ui", "button_9patch.png")
@@ -160,6 +188,10 @@ class ImageManager(object):
         self.frame_num = 0
         self.frame_inc = 1
         self.tick_count = 0
+#        self.hash_index = 0
+        
+    def inc_hash_index(self):
+        self.hash_index = (self.hash_index + 1) % NUM_HASHES
 
     def handle_game_events(self, event):
         if event.type == event_manager.TICK:
@@ -231,9 +263,9 @@ class ImageManager(object):
             site_pixels.replace(owner_color, PLAYER_SUB_COLOR)
             del site_pixels 
             
-            if site.get_fixed_prisoner() != None:
-                x, y = position
-                surface.blit(self.chains, (x + 8, y + 8))
+#            if site.get_fixed_prisoner() != None:
+#                x, y = position
+#                surface.blit(self.chains, (x + 8, y + 8))
             
             if site.get_embassy() != None:
                 x, y = position
@@ -278,6 +310,15 @@ class ImageManager(object):
         
         image = pygame.transform.rotate(self.zone_border, angle)  
         surface.blit(image, (pixel_x, pixel_y))
+    
+    def draw_road(self, surface, road, pixel_x, pixel_y):
+        for direction in road.connections:
+            angle = -60 * (direction - hexgrid.WEST)
+            image = pygame.transform.rotate(self.road, angle)    
+            if angle % 90 != 0:
+                surface.blit(image, (pixel_x - 12, pixel_y - 12)) 
+            else:
+                surface.blit(image, (pixel_x, pixel_y)) 
     
     def draw_river_image(self, surface, image, angle, pixel_x, pixel_y, flooded):
         if angle % 90 != 0:
@@ -346,6 +387,9 @@ class ImageManager(object):
                                                           patch_size, patch_size)).copy()
         return patch_size, nine_patch
     
+    def image_exists(self, sub_dir,  image_file_name):
+        return os.path.isfile( os.path.join('data', 'img', sub_dir, image_file_name))
+       
     def prep_image(self, sub_dir, image_file_name, rescale = None):
         try:
             # TODO: replace direct file access with packaged resources (setup.py)
@@ -362,9 +406,17 @@ class ImageManager(object):
 
     def unit_image(self, unit, on_map = False):
         if on_map:
-            return self.unit_map_images[unit.type_name]
+            return self.unit_map_images[unit.get_icon_name()]
         else:
-            return self.unit_images[unit.type_name]
+            return self.unit_images[unit.get_icon_name()]
 
-    def hex_image(self, terrain):
-        return self.hex_images[terrain.name]
+    def hex_image(self, terrain, hex_index, mini=False):
+        if mini:
+            return self.mini_hex_images[terrain.name]
+        else:
+           #            self.inc_hash_index()
+            num_images = len(self.hex_images[terrain.name])
+#            print "x: " + str(hex_x) + " y: " + str(hex_y) + "index: " + str(self.hash_index)
+            #print((self.hash_values[self.hash_index]) % num_images)
+            return self.hex_images[terrain.name][(self.hash_values[hex_index % NUM_HASHES]) % num_images]
+         
