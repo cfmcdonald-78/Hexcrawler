@@ -1,0 +1,298 @@
+[
+{
+	"adjective": "Keen",
+	"types": ["Melee"],
+	"level": 1,
+	"traits": {"Strength": 1}
+},
+{
+	"adjective": "Piercing",
+	"types": ["Weapon"],
+	"level": 1,
+	"traits": {"Pierce": 3}
+},
+{
+	"adjective": "Deft",
+	"types": ["Misc", "Weapon"],
+	"level": 1,
+	"traits": {"Looting": 1}
+},
+{
+	"adjective": "Hardened",
+	"types": ["Armor"],
+	"level": 1,
+	"traits": {"Armor": 1}
+},
+{
+	"adjective": "Swift",
+	"types": ["Misc", "Armor"],
+	"level": 1,
+	"traits": {"Speed": 2}
+},
+{
+	"adjective": "Knight's",
+	"types": ["Armor", "Misc", "Weapon"],
+	"level": 1,
+	"traits": {"Reputation Mod": 1}
+},
+{
+	"adjective": "Noble",
+	"types": ["Armor", "Misc", "Weapon"],
+	"level": 1,
+	"traits": {"Reputation Mod": 2, "Looting": -1}
+},
+{
+	"adjective": "Shielded",
+	"types": ["Misc"],
+	"level": 1,
+	"traits": {"Armor": 1}
+},
+{
+	"adjective": "Nurse's",
+	"types": ["Misc"],
+	"level": 1,
+	"traits": {"Heal": 2}
+},
+{
+	"adjective": "Guiding",
+	"types": ["Misc"],
+	"level": 1,
+	"traits": {"Pathfinder": 1}
+},
+{
+	"adjective": "Webbed",
+	"types": ["Misc"],
+	"level": 2,
+	"traits": {"Summon": "Spider"}
+},
+{
+	"adjective": "Adroit",
+	"types": ["Misc", "Weapon"],
+	"level": 2,
+	"traits": {"Looting": 2}
+},
+{
+	"adjective": "Butcher's",
+	"types": ["Weapon"],
+	"level": 2,
+	"traits": {"Bloodthirst": 1, "Reputation Mod": -1}
+},
+{
+	"adjective": "Pauper's",
+	"types": ["Misc", "Weapon"],
+	"level": 2,
+	"traits": {"Income": -25, "Reputation Mod": 5}
+},
+{
+	"adjective": "Sticky",
+	"types": ["Weapon"],
+	"level": 2,
+	"traits": {"Restrain": 1}
+},
+{
+	"adjective": "Deadly",
+	"types": ["Melee"],
+	"level": 3,
+	"traits": {"Strength": 2}
+},
+{
+	"adjective": "Curative",
+	"types": ["Misc"],
+	"level": 3,
+	"traits": {"Heal": 5}
+},
+{
+	"adjective": "Seeking",
+	"types": ["Misc"],
+	"level": 3,
+	"traits": {"Pathfinder": 3}
+},
+{
+	"adjective": "Bolstering",
+	"types": ["Misc"],
+	"level": 3,
+	"traits": {"Grant strength": 1}
+},
+{
+	"adjective": "Dissolving",
+	"types": ["Weapon"],
+	"level": 3,
+	"traits": {"Pierce": 7}
+},
+{
+	"adjective": "Protective",
+	"types": ["Armor", "Misc"],
+	"level": 3,
+	"traits": {"Evade": 3}
+},
+{
+	"adjective": "Reenforced",
+	"types": ["Armor"],
+	"level": 3,
+	"traits": {"Armor": 2}
+},
+{
+	"adjective": "Lord's",
+	"types": ["Armor", "Misc", "Weapon"],
+	"level": 3,
+	"traits": {"Reputation Mod": 6}
+},
+{
+	"adjective": "Guardian",
+	"types": ["Shield"],
+	"level": 3,
+	"traits": {"Stalwart": true}
+},
+{
+	"adjective": "Phantom",
+	"types": ["Armor",  "Misc", "Weapon"],
+	"level": 3,
+	"traits": {"Speed": 4, "Unchainable": true}
+},
+{
+	"adjective": "Ravaging",
+	"types": ["Melee"],
+	"level": 3,
+	"traits": {"Pillager": true, "Reputation Mod": -5}
+},
+{
+	"adjective": "Truesight",
+	"types": ["Misc"],
+	"level": 3,
+	"traits": {"Scout": 1, "Spot": true}
+},
+{
+	"adjective": "Invisible",
+	"types": ["Misc", "Weapon"],
+	"level": 4,
+	"traits": {"Looting": 3}
+},
+{
+	"adjective": "Wicked",
+	"types": ["Weapon"],
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Bloodthirst": 2, "Reputation Mod": -3}
+},
+{
+	"adjective": "All-seeing",
+	"types": ["Misc"],
+	"level": 4,
+	"traits": {"Scout": 2}
+},
+{
+	"adjective": "Ensnaring",
+	"types": ["Weapon"],
+	"level": 4,
+	"traits": {"Restrain": 3}
+},
+{
+	"adjective": "Wild",
+	"types": ["Misc", "Weapon"],
+	"level": 4,
+	"traits": {"Summon": "Beast"}
+},
+{
+	"adjective": "Heroic",
+	"types": ["Misc", "Weapon"],
+	"level": 4,
+	"traits": {"Army attack": true}
+},
+{
+	"adjective": "Holy",
+	"types": ["Misc", "Weapon"],
+	"level": 4,
+	"traits": {"Life aura": 1, "Reputation Mod": 5}
+},
+{
+	"adjective": "Unholy",
+	"types": ["Misc", "Weapon"],
+	"level": 4,
+	"traits": {"Death aura": 4, "Reputation Mod": -5}
+},
+{
+	"adjective": "Murderous",
+	"types": ["Melee"],
+	"level": 5,
+	"traits": {"Strength": 4}
+},
+{
+	"adjective": "Were",
+	"types": ["Weapon"],
+	"level": 5,
+	"traits": {"Infect": "Werebeast", "Reputation Mod": -5}
+},
+{
+	"adjective": "Healing",
+	"types": ["Misc"],
+	"level": 5,
+	"traits": {"Heal": 8}
+},
+{
+	"adjective": "Infusing",
+	"types": ["Misc"],
+	"level": 3,
+	"traits": {"Grant strength": 2}
+},
+
+{
+	"adjective": "Vampiric",
+	"types": ["Weapon"],
+	"level": 5,
+	"traits": {"Vampiric": true}
+},
+{
+	"adjective": "Deathtouched",
+	"types": ["Misc", "Weapon"],
+	"level": 5,
+	"traits": {"Summon": "Wraith", "Reputation Mod": -5}
+},
+{
+	"adjective": "Crushing",
+	"types": ["Melee"],
+	"level": 6,
+	"traits": {"Crushing Blow": 1}
+},
+{
+	"adjective": "Adamantine",
+	"types": ["Armor"],
+	"level": 5,
+	"traits": {"Armor": 3}
+},
+{
+	"adjective": "King's",
+	"types": ["Armor", "Misc", "Weapon"],
+	"level": 5,
+	"traits": {"Reputation Mod": 7}
+},
+{
+	"adjective": "Sanguinary",
+	"types": ["Weapon"],
+	"level": 6,
+	"traits": {"Bloodthirst": 3, "Reputation Mod": -5}
+},
+{
+	"adjective": "Empire's",
+	"types": ["Armor", "Misc", "Weapon"],
+	"level": 6,
+	"traits": {"Reputation Mod": 12}
+},
+{
+	"adjective": "Mauling",
+	"types": ["Melee"],
+	"level": 6,
+	"traits": {"Crushing Blow": 2}
+},
+{
+	"adjective": "Invincible",
+	"types": ["Armor"],
+	"level": 6,
+	"traits": {"Armor": 4}
+},
+{
+	"adjective": "Resurrection",
+	"types": ["Misc"],
+	"level": 6,
+	"traits": {"Revive": 6}
+}
+]

@@ -1,0 +1,59 @@
+[
+{
+	"name": "Goblin Band",
+	"leader": "Goblin Sachem",
+	"level": 1,
+	"units": ["Goblin Mob", "Goblin Archers"],
+	"sites": ["Overlord's Lair"],
+	"goal": "City-state"
+},
+{
+	"name": "Orc Throng",
+	"leader": "Orc Chief",
+	"level": 2,
+	"units": ["Orc Tribe", "Orc Tribe"],
+	"sites": ["Overlord's Lair"],
+	"goal": "City-state"
+},
+{
+	"name": "Troll Rampage",
+	"leader": "Troll Witch Doctor",
+	"level": 3,
+	"units": ["Troll Clutch", "Troll Clutch", "Troll Shaman"],
+	"sites": ["Overlord's Lair"],
+	"goal": "City-state"
+},
+{
+	"name": "Swarm",
+	"leader": "Hive Queen",
+	"level": 4,
+	"units": ["Hive Soldiers", "Hive Soldiers"],
+	"sites": ["Overlord's Lair"],
+	"goal": "City-state"
+},
+{
+	"name": "Death Cult",
+	"leader": "Dread Lord",
+	"level": 5,
+	"units": ["Master Necromancer"],
+	"sites": ["Overlord's Lair"],
+	"goal": "City-state"
+},
+{
+	"name": "Dragon Flight",
+	"leader": "Dragon Queen",
+	"level": 6,
+	"units": ["Flame Dragon", "Ice Dragon"],
+	"sites": ["Megadungeon"],
+	"goal": "City-state"
+},
+{
+	"name": "Abyssal Invasion",
+	"leader": "Lord of the Underworld",
+	"level": 7,
+	"units": ["Demon Lord"],
+	"sites": ["Megadungeon", "Overlord's Lair"],
+	"goal": "City-state"
+}
+]
+

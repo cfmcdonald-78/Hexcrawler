@@ -1,0 +1,544 @@
+[
+{ 
+	"name" : "Blade",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Strength" : 2}
+},
+{ 
+	"name" : "Axe",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Strength" : 1, "Pierce": 1}
+},
+{ 
+	"name" : "Spear",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Strength" : 1, "Armor": 1}
+},
+{
+	"name" : "Bow",
+	"type" : "Weapon",
+	"subtype": "Ranged",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Ranged" : 5}
+},
+{
+	"name" : "Longbow",
+	"type" : "Weapon",
+	"subtype": "Ranged",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Ranged" : 6, "Long range": true}
+},
+{
+	"name" : "Sword",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Strength" : 3}
+},
+{
+	"name" : "Battleaxe",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Strength" : 2, "Pierce": 2}
+},
+{
+	"name" : "Halberd",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Strength" : 2, "Armor": 1}
+},
+{
+	"name" : "Wand",
+	"type" : "Weapon",
+	"subtype": "Ranged",
+	"quality": "artifact",
+	"level": 2,
+	"traits": {"Ranged": 5, "Restrain": 1}
+},
+{
+	"name" : "Falchion",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Strength" : 4}
+},
+{
+	"name" : "Maul",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Strength" : 4, "Pierce": 3, "Armor": -2}
+},
+{
+	"name" : "Pike",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Strength" : 3, "Armor": 2, "Speed": -1}
+},
+{
+	"name" : "Crossbow",
+	"type" : "Weapon",
+	"subtype": "Ranged",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Ranged" : 8, "Pierce": 3}
+},
+{
+	"name" : "Scythe",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "artifact",
+	"level": 3,
+	"traits": {"Strength" : 4, "Bloodthirst": 1}
+},
+{
+	"name" : "Elfblade",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 4,
+	"traits": {"Strength" : 5, "Speed": 1}
+},
+{
+	"name" : "Dwarfaxe",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 4,
+	"traits": {"Strength" : 4, "Pierce": 3, "Engineer": 1}
+},
+{
+	"name" : "Orcspear",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 4,
+	"traits": {"Strength" : 4, "Armor": 3}
+},
+{
+	"name" : "Staff",
+	"type" : "Weapon",
+	"subtype": "Ranged",
+	"quality": "artifact",
+	"level": 4,
+	"traits": {"Ranged": 10, "Splash": true, "Burn": 2}
+},
+{
+	"name" : "Flame Blade",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 5,
+	"traits": {"Strength" : 6, "Burn": 5}
+},
+{
+	"name" : "Frost Lance",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 5,
+	"traits": {"Strength" : 6, "Restrain": 1}
+},
+{
+	"name" : "Arbalest",
+	"type" : "Weapon",
+	"subtype": "Ranged",
+	"quality": "normal",
+	"level": 5,
+	"traits": {"Ranged" : 10, "Long range": true, "Pierce": 5}
+},
+{
+	"name" : "Sun Blade",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "artifact",
+	"level": 5,
+	"traits": {"Strength": 7, "Life aura": 1, "Inspire": 1}
+},
+{
+	"name" : "Titan's Maul",
+	"type" : "Weapon",
+	"subtype": "Melee",
+	"quality": "normal",
+	"level": 6,
+	"traits": {"Strength" : 7, "Crushing Blow": 1}
+},
+{
+	"name" : "Rod",
+	"type" : "Weapon",
+	"subtype": "Ranged",
+	"quality": "artifact",
+	"level": 6,
+	"traits": {"Ranged": 13, "Army attack": true, "Long range": true, "Restrain": 4}
+},
+{ 
+	"name" : "Cannon",
+	"type" : "Weapon",
+	"quality": "artifact",
+	"level": 7,
+	"traits": {"Ranged": 15, "Pierce": 4, "Army attack": true, "Splash": true}
+},
+{ 
+	"name" : "Leather",
+	"type" : "Armor",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Armor" : 1}
+},
+{ 
+	"name" : "Chainmail",
+	"type" : "Armor",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Armor" : 2, "Speed": -1}
+},
+{ 
+	"name" : "Buckler",
+	"type" : "Armor",
+	"subtype": "Shield",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Evade" : 2}
+},
+{ 
+	"name" : "Shield",
+	"type" : "Armor",
+	"subtype": "Shield",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Evade" : 3}
+},
+{ 
+	"name" : "Half-plate",
+	"type" : "Armor",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Armor" : 2}
+},
+{ 
+	"name" : "Platemail",
+	"type" : "Armor",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Armor" : 3, "Speed": -1}
+},
+{ 
+	"name" : "Elven Mail",
+	"type" : "Armor",
+	"quality": "artifact",
+	"level": 2,
+	"traits": {"Armor" : 2, "Stealth": true}
+},
+{ 
+	"name" : "Imperial Mail",
+	"type" : "Armor",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Armor" : 3, "Reputation": 2}
+},
+{ 
+	"name" : "Full Plate",
+	"type" : "Armor",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Armor" : 4, "Speed": -1}
+},
+{ 
+	"name" : "Tower Shield",
+	"type" : "Armor",
+	"subtype": "Shield",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Evade": 3, "Armor" : 1}
+},
+{ 
+	"name" : "Sun Shield",
+	"type" : "Armor",
+	"subtype": "Shield",
+	"quality": "artifact",
+	"level": 3,
+	"traits": {"Evade": 4, "Life aura" : 2}
+},
+{ 
+	"name" : "Silver Plate",
+	"type" : "Armor",
+	"quality": "normal",
+	"level": 4,
+	"traits": {"Armor" : 4}
+},
+{ 
+	"name" : "Escutcheon",
+	"type" : "Armor",
+	"subtype": "Shield",
+	"quality": "normal",
+	"level": 4,
+	"traits": {"Evade" : 4, "Armor": 2}
+},
+{ 
+	"name" : "Dark Mail",
+	"type" : "Armor",
+	"quality": "artifact",
+	"level": 4,
+	"traits": {"Armor": 5, "Pierce": 2, "Death aura": 3}
+},
+{ 
+	"name" : "Golden Plate",
+	"type" : "Armor",
+	"quality": "normal",
+	"level": 5,
+	"traits": {"Armor" : 5, "Speed": -2}
+},
+{ 
+	"name" : "Aegis",
+	"type" : "Armor",
+	"subtype": "Shield",
+	"quality": "normal",
+	"level": 5,
+	"traits": {"Evade" : 5, "Armor": 3}
+},
+{
+	"name": "Dragonscale",
+	"type": "Armor",
+	"quality": "artifact",
+	"level": 5,
+	"traits": {"Armor": 6, "Flameproof": true}
+},
+{ 
+	"name" : "Titantium",
+	"type" : "Armor",
+	"quality": "normal",
+	"level": 6,
+	"traits": {"Armor" : 6, "Speed": -2}
+},
+{ 
+	"name" : "Angel Mail",
+	"type" : "Armor",
+	"quality": "artifact",
+	"level": 6,
+	"traits": {"Armor" : 7, "Flight": true}
+},
+{ 
+	"name" : "Bulwark",
+	"type" : "Armor",
+	"quality": "artifact",
+	"level": 7,
+	"traits": {"Armor" : 8, "Relentless": true, "Flameproof": true, "Unchainable": true}
+},
+{
+	"name": "Phial",
+	"type": "Misc",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Restore": 1}
+},
+{
+	"name": "Flask",
+	"type": "Misc",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Restore": 2}
+},
+{
+	"name": "Decanter",
+	"type": "Misc",
+	"quality": "artifact",
+	"level": 5,
+	"traits": {"Restore": 4}
+},
+{ 
+	"name" : "Pendant",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Reputation": 1}
+},
+{ 
+	"name" : "Gloves",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Looting": 1}
+},
+{ 
+	"name" : "Purse",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Income": 20}
+},
+{ 
+	"name" : "Shoes",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 1,
+	"traits": {"Speed": 2}
+},
+{ 
+	"name" : "Lens",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Scout": 1}
+},
+{ 
+	"name" : "Orb",
+	"type" : "Misc",
+	"quality": "artifact",
+	"level": 2,
+	"traits": {"Inspire": 1}
+},
+{ 
+	"name" : "Boots",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Speed": 4}
+},
+{ 
+	"name" : "Machete",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Pathfinder": 3}
+},
+{ 
+	"name" : "Rations",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 2,
+	"traits": {"Supply": 1}
+},
+{ 
+	"name" : "Scales",
+	"type" : "Misc",
+	"quality": "artifact",
+	"level": 2,
+	"traits": {"Haggler": 4}
+},
+{ 
+	"name" : "Ship",
+	"type" : "Misc",
+	"quality": "artifact",
+	"level": 3,
+	"traits": {"Naval": true}
+},
+{ 
+	"name" : "Ring",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Blend": true}
+},
+{ 
+	"name" : "Cloak",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Evade": 3}
+},
+{ 
+	"name" : "Compass",
+	"type" : "Misc",
+	"quality": "artifact",
+	"level": 3,
+	"traits": {"Mountaineer": true}
+},
+{ 
+	"name" : "Chest",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 3,
+	"traits": {"Income": 80}
+},
+{ 
+	"name" : "Map",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 4,
+	"traits": {"Pathfinder": 5}
+},
+{ 
+	"name" : "Scepter",
+	"type" : "Misc",
+	"quality": "artifact",
+	"level": 4,
+	"traits": {"Inspire": 2}
+},
+{ 
+	"name" : "Gem",
+	"type" : "Misc",
+	"quality": "artifact",
+	"level": 4,
+	"traits": {"Reputation": 10, "Haggler": 6}
+},
+{ 
+
+	"name" : "Cornucopia",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 4,
+	"traits": {"Supply": 4}
+},
+{ 
+	"name" : "Wings",
+	"type" : "Misc",
+	"quality": "artifact",
+	"level": 5,
+	"traits": {"Flight": true}
+},
+{ 
+	"name" : "Goose",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 6,
+	"traits": {"Income": 200}
+},
+{ 
+	"name" : "Carpet",
+	"type" : "Misc",
+	"quality": "normal",
+	"level": 6,
+	"traits": {"Flight": true, "Speed": 12}
+},
+{ 
+	"name" : "Crown",
+	"type" : "Misc",
+	"quality": "artifact",
+	"level": 6,
+	"traits": {"Inspire": 3}
+},
+{ 
+	"name" : "Airship",
+	"type" : "Misc",
+	"quality": "artifact",
+	"level": 6,
+	"traits": {"Army flight": true}
+},
+{
+	"name" : "Stone",
+	"type" : "Misc",
+	"quality": "artifact",
+	"level": 7,
+	"traits": {"Regenerate": true, "Vampiric": true, "Revive": 5}
+}
+]

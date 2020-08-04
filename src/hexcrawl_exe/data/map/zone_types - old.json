@@ -1,0 +1,52 @@
+[
+{
+	"name"		: "Imperium",
+	"base_prob" : 0.04,
+	"weights"	: { "Mountain" : -1, "Forest" : -1, "River": 1, "Plain": 1},
+	"sites"		: [
+		{"name": "City-state", "min_prob": 0.01, "max_prob": 0.01, "min_level": 6, "max_level":7},
+		{"name": "Town", "min_prob": 0.01, "max_prob": 0.03, "min_level": 3, "max_level":5},
+		{"name": "Keep", "min_prob": 0.02, "max_prob": 0.04, "min_level": 3, "max_level":5},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.04, "min_level": 4, "max_level":5}]		
+},
+{
+	"name"		: "Terrifying Wild",
+	"base_prob" : 0.12,
+	"weights"	: { "Mountain" : 1, "Plain": -1},
+	"sites"		: [
+		{"name": "Lair", "min_prob": 0.03, "max_prob": 0.07, "min_level": 5, "max_level":6},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.06, "min_level": 5, "max_level":6},
+		{"name": "Megadungeon", "min_prob": 0.00, "max_prob": 0.01, "min_level": 6, "max_level":7}]		
+},
+{
+	"name"		: "Civilized",
+	"base_prob" : 0.12,
+	"weights"	: { "River": 1, "Mountain": -1},
+	"sites"		: [
+		{"name": "Town", "min_prob": 0.01, "max_prob": 0.03, "min_level": 3, "max_level":5},
+		{"name": "Keep", "min_prob": 0.02, "max_prob": 0.04, "min_level": 3, "max_level":5},
+		{"name": "Lair", "min_prob": 0.02, "max_prob": 0.02, "min_level": 3, "max_level":4},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.04, "min_level": 1, "max_level":4},
+		{"name": "Rogue's Den", "min_prob": 0.00, "max_prob": 0.01, "min_level": 1, "max_level":2}]		
+},
+{
+	"name"		: "Wild",
+	"base_prob" : 0.4,
+	"weights"	: { "Forest" : 1, "Hill": 1, "River": -1, "Plain": -1},
+	"sites"		: [
+		{"name": "Lair", "min_prob": 0.04, "max_prob": 0.06, "min_level": 1, "max_level":4},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.05, "min_level": 1, "max_level":4}]		
+},
+{
+	"name"		: "Frontier",
+	"base_prob" : 0.32,
+	"weights"	: { "Forest": 1, "Hill": 1, "Ocean": -1, "Mountain": -1},
+	"sites"		: [
+		{"name": "Keep", "min_prob": 0.02, "max_prob": 0.04, "min_level": 1, "max_level":2},
+		{"name": "Rogue's Den", "min_prob": 0.01, "max_prob": 0.02, "min_level": 1, "max_level":1},
+		{"name": "Lair", "min_prob": 0.04, "max_prob": 0.06, "min_level": 1, "max_level":2},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.05, "min_level": 1, "max_level":2}
+		]	
+}
+]
+

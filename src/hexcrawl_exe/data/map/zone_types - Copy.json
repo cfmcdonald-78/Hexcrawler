@@ -1,0 +1,103 @@
+[
+{
+	"name"		: "Civilized",
+	"type"		: "base",
+	"min_fraction": 0.08,
+	"weights"	: { "River": 1, "Mountain": -1},
+	"adjectives": ["Calm", "Quiet", "Peaceful", "Tame", "White", "Settled", "Placid", "Cool",
+				   "Languid", "Untroubled", "Fertile", "Rolling", "Emerald", "Jade", "Green"],
+	"sites"		: [
+		{"name": "Town", "min_prob": 0.01, "max_prob": 0.03, "min_level": 3, "max_level":5},
+		{"name": "Keep", "min_prob": 0.02, "max_prob": 0.04, "min_level": 3, "max_level":4},
+		{"name": "Lair", "min_prob": 0.02, "max_prob": 0.02, "min_level": 3, "max_level":4},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.04, "min_level": 1, "max_level":4},
+		{"name": "Rogue's Den", "min_prob": 0.00, "max_prob": 0.01, "min_level": 1, "max_level":2}]		
+},
+{
+	"name"		: "Wild",
+	"type"		: "base",
+	"min_fraction": 0.16,
+	"weights"	: { "Forest" : 1, "Hill": 1, "River": -1, "Plain": -1},
+	"adjectives": ["Wild", "Wicked", "Red", "Scarlet", "Crimson", "Menacing", "Murky", "Misty", "Awful", 
+	               "Spooky", "Dangerous", "Sour", "Dark", "Dank", "Trackless", "Chaotic", "Jagged",
+				   "Hard", "Bleak", "Brutal", "Cold"],
+	"sites"		: [
+		{"name": "Lair", "min_prob": 0.04, "max_prob": 0.06, "min_level": 3, "max_level":4},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.05, "min_level": 3, "max_level":4}]		
+},
+{
+	"name"		: "Frontier",
+	"type"		: "base",
+	"min_fraction": 0.2,
+	"weights"	: { "Forest": 1, "Hill": 1, "Plain": -1, "Mountain": -1},
+	"adjectives": ["Rugged", "Grey", "Blue", "Purple", "Frontier", "Fringe", "Echoing",
+					"Teetering", "Precarious", "Fraught", "Battle-scarred", "Dissonant", "Troubled",
+				   "Winding", "Ragged", "Prickly", "Rocky", "Stony"],
+	"sites"		: [
+		{"name": "Keep", "min_prob": 0.02, "max_prob": 0.04, "min_level": 2, "max_level":2},
+		{"name": "Rogue's Den", "min_prob": 0.01, "max_prob": 0.01, "min_level": 1, "max_level":2},
+		{"name": "Lair", "min_prob": 0.04, "max_prob": 0.06, "min_level": 2, "max_level":2},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.05, "min_level": 2, "max_level":2}
+		]	
+},
+{
+	"name"		: "Nautical",
+	"type"		: "base",
+	"min_fraction": 0.0,
+	"weights"	: { "Ocean": 1, "Forest": -1, "Hill": -1, "Mountain": -1, "Plain": -1},
+	"adjectives": ["Wind-tossed", "Slate-grey", "Wine-dark", "Turbulent", "Turquoise", "Jade", "Emerald", 
+				   "Rocky", "Sandy", "Foggy", "Briny", "Tidal"],
+	"sites"		: [
+		{"name": "Keep", "min_prob": 0.02, "max_prob": 0.04, "min_level": 2, "max_level":3},
+		{"name": "Rogue's Den", "min_prob": 0.01, "max_prob": 0.02, "min_level": 1, "max_level":2},
+		{"name": "Lair", "min_prob": 0.04, "max_prob": 0.06, "min_level": 2, "max_level":3},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.05, "min_level": 2, "max_level":3}
+		]	
+},
+{
+	"name"		: "Imperium",
+	"type"		: "overlay",
+	"min_fraction": 0.0,
+	"substitution": {"sub_for" : "Civilized", "frequency": 0.2, "function": "min_total_distance", "params": ["Civilized"],
+					"terrain"  : {}},
+	"adjectives": ["Mighty", "Imperial", "Pacified", "Shining", "Blazing", "Pearl", "Diamond", 
+				   "Invincible", "Legionary", "Fortified", "Sun-lit"],
+	"sites"		: [
+		{"name": "City-state", "min_prob": 0.01, "max_prob": 0.01, "min_level": 7, "max_level":7},
+		{"name": "Town", "min_prob": 0.01, "max_prob": 0.03, "min_level": 3, "max_level":5},
+		{"name": "Keep", "min_prob": 0.02, "max_prob": 0.04, "min_level": 3, "max_level":5},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.04, "min_level": 4, "max_level":5}]		
+},
+{
+	"name"		: "Terrifying Wild",
+	"type"		: "overlay",
+	"min_fraction": 0.0,
+	"adjectives": ["Terrifying", "Horrible", "Black", "Onyx", "Inky", "Stygian", "Putrid",
+				   "Abyssal", "Starless", "Foul", "Mad", "Raging", "Horrifying", "Torturous", "Icy"],
+	"substitution": {"sub_for" : "Wild", "frequency": 0.2, "function": "max_total_distance", "params": ["Civilized"],
+					"terrain"  : {"Mountain" : {"new_terrain": "Volcano", "function": "scatter", "params": [0.2]},
+					              "Forest" : {"new_terrain": "Grim Forest", "function": "scatter", "params": [1.0]}}},
+	"sites"		: [
+		{"name": "Lair", "min_prob": 0.03, "max_prob": 0.06, "min_level": 5, "max_level":6},
+		{"name": "Dungeon", "min_prob": 0.02, "max_prob": 0.06, "min_level": 5, "max_level":6},
+		{"name": "Megadungeon", "min_prob": 0.00, "max_prob": 0.01, "min_level": 7, "max_level":7},
+		{"name": "Overlord's Lair", "min_prob": 0.01, "max_prob": 0.01, "min_level": 7, "max_level":7}]
+},
+{
+	"name"		: "Start Zone",
+	"type"		: "overlay",
+	"min_fraction": 0.0,
+	"substitution": {"sub_for" : "Frontier", "frequency": 0.01, "function": "max_proximity", "params": ["Imperium", "Terrifying Wild"],
+					"terrain"  : {}},
+	"adjectives": ["Rugged", "Grey", "Blue", "Purple", "Frontier", "Fringe", "Echoing",
+					"Teetering", "Precarious", "Fraught", "Battle-scarred", "Dissonant", "Troubled",
+				   "Winding", "Ragged", "Prickly", "Rocky", "Stony"],
+	"sites"		: [
+		{"name": "Keep", "min_prob": 0.02, "max_prob": 0.04, "min_level": 1, "max_level":1},
+		{"name": "Rogue's Den", "min_prob": 0.02, "max_prob": 0.02, "min_level": 1, "max_level":1},
+		{"name": "Lair", "min_prob": 0.03, "max_prob": 0.05, "min_level": 1, "max_level":1},
+		{"name": "Dungeon", "min_prob": 0.03, "max_prob": 0.05, "min_level": 1, "max_level":1}
+		]	
+}
+]
+

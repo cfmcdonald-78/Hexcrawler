@@ -1,0 +1,52 @@
+[
+{ 
+	"name": "Chaos",
+	"base_type": "Monster",
+	"patrol_ai": "monster_patrol",
+	"patrol_reputation": 1,
+	"hostile_to": ["Men", "Dwarves", "Elves"],
+	"actor_hostility_func": "always",
+	"actor_hostility_table": [],
+	"color": [200, 0, 0]
+},
+{ 
+	"name": "Men",
+	"base_type": "Neutral",
+	"patrol_ai": "neutral_patrol",
+	"patrol_reputation": 0,
+	"hostile_to": ["Chaos", "The Dead"],
+	"actor_hostility_func" : "reputation",
+	"actor_hostility_table": [0, 4, 12, 24, 40, 60, 84, 112],
+	"color": [[70, 70, 70], [200, 200, 200]]
+},
+{ 
+	"name": "The Dead",
+	"base_type": "Neutral",
+	"patrol_ai": "neutral_patrol",
+	"patrol_reputation": 1,
+	"hostile_to": ["Men"],
+	"actor_hostility_func" : "death",
+	"actor_hostility_table": [0, 4, 12, 24, 40, 60, 84, 112],
+	"color": [[100, 0, 65], [200, 0, 130]]
+},
+{ 
+	"name": "Dwarves",
+	"base_type": "Neutral",
+	"patrol_ai": "neutral_patrol",
+	"patrol_reputation": 0,
+	"hostile_to": ["Chaos", "Elves"],
+	"actor_hostility_func": "cash",
+	"actor_hostility_table": [100, 200, 300, 400, 500, 600, 700, 800],
+	"color": [[100, 0, 24], [225, 0, 54]]
+},
+{ 
+	"name": "Elves",
+	"base_type": "Neutral",
+	"patrol_ai": "neutral_patrol",
+	"patrol_reputation": 0,
+	"hostile_to": ["Chaos", "Dwarves"],
+	"actor_hostility_func" : "wildness",
+	"actor_hostility_table": [14, 12, 10, 8, 6, 4, 2, 0],
+	"color": [[0, 100, 24], [0, 255, 54]]
+}
+]

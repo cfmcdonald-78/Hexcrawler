@@ -1,0 +1,33 @@
+[
+{
+	"type": "Surface Expedition",
+	"description": "A dwarven expedition reaches the surface in ",
+	"rarity": "Rare",
+	"result": [{"site": "Dwarf Fortress", "terrain": "Mountain"}]
+},
+{
+	"type": "Legation",
+	"description": "An elven legation sets up camp in ",
+	"rarity": "Rare",
+	"result": [{"type": "site", "name": "Elf Camp", "terrain": "Forest"}]
+},
+{
+	"type": "Agent of Chaos",
+	"description": "An agent of chaos begins its hunt in ",
+	"rarity": "Uncommon",
+	"result": [{"type": "group", "units": ["Agent of Chaos"], "ai": "assassin", "terrain": "Settled Plain"}]
+},
+{
+	"type": "Flooding",
+	"description": "The waters rise in ",
+	"rarity": "Common",
+	"result": [{"type": "move_cost", "adjustment": 1, "terrain": ["River"], "duration": 7}]
+},
+{
+	"type": "Barbarian Invasion",
+	"description": "A barbarian invasion begins in ",
+	"rarity": "Uncommon",
+	"result": [{"type": "group", "units": ["Barbarian Chief", "terrain": ["Plain"], "duration": 21}] # How do I handle payoff?  Need some
+	way of scripting attack with pop-up demanding payout #
+}
+]

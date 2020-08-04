@@ -1,0 +1,84 @@
+[
+{
+"name": "Curtain Wall",
+"site_types": ["Keep", "Town", "City-state"],
+"min_level": 1,
+"cost": {"amount": 40, "type": "per_level"},
+"effect": {"Armor": 2, "Revolt strength": -1},
+"description": "Increase armor of garrison by 2,\nDecreases revolt chance"
+},
+{
+"name": "Redoubts",
+"site_types": ["Keep", "Town", "City-state"],
+"min_level": 3,
+"cost": {"amount": 60, "type": "per_level"},
+"requires": ["Curtain Wall"],
+"effect": {"Armor": 2, "Revolt strength": -1},
+"description": "Increase armor of garrison by 2,\nDecreases revolt chance"
+},
+{
+"name": "Moat",
+"site_types": ["Keep", "Town", "City-state"],
+"min_level": 2,
+"cost": {"amount": 60, "type": "per_level"},
+"requires": ["Curtain Wall"],
+"effect": {"Impede": 2},
+"description": "Increase move cost of failed attacks by 2"
+},
+{
+"name": "Watchtower",
+"site_types": ["Keep"],
+"min_level": 3,
+"cost": {"amount": 60, "type": "flat"},
+"effect": {"Sight": 2, "Truesight": true},
+"description": "Increase visibility and spot hidden units"
+},
+{
+"name": "War Engines",
+"site_types": ["Town", "City-state", "Overlord's Lair"],
+"min_level": 3,
+"cost": {"amount": 150, "type": "flat"},
+"effect": {"Map attack": true},
+"description": "Make a pre-combat strike on\na random unit attacking this site"
+},
+{
+"name": "Recruiting Hall",
+"site_types": ["Keep", "Town", "City-state"],
+"min_level": 1,
+"cost": {"amount": 60, "type": "per_level"},
+"effect": {"Recruit": 1},
+"description": "Increase rate of apperance of units\n for hire by 1/week"
+},
+{
+"name": "Trading Post",
+"site_types": ["Keep"],
+"min_level": 1,
+"cost": {"amount": 30, "type": "per_level"},
+"effect": {"Income bonus": 2},
+"description": "Increase income of site by 20%"
+},
+{
+"name": "Marketplace",
+"site_types": ["Town", "City-state"],
+"min_level": 1,
+"cost": {"amount": 40, "type": "per_level"},
+"effect": {"Income bonus": 3},
+"description": "Increase income of site by 30%"
+},
+{
+"name": "Crop Rotation",
+"site_types": ["Town", "City-state"],
+"min_level": 4,
+"cost": {"amount": 60, "type": "per_level"},
+"effect": {"Settle": 1},
+"description": "Increase settle range of site by 1"
+},
+{
+"name": "Vault",
+"site_types": [],
+"min_level": 3,
+"cost": {"amount": 100, "type": "flat"},
+"effect": {"Item": 3},
+"description": "Store up to 3 items"
+}
+]
