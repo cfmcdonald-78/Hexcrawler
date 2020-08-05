@@ -1,5 +1,24 @@
-I created this game in 2012 to try out procedural generation of terrain, rivers, road nets, etc. 
+I created this game in 2012-2013 using Python 2.7 and Pygame to try out procedural generation of terrain, rivers, road nets, monster lairs, etc. The (very bad) art and sound effects are my own.
 
-As a game, it's not much fun, but it does create some interesting worlds. The most interesting files are:
+Unfortunately it was more fun to build than it is to play :-) 
+
+The most interesting files are:
 * src/gamemap/hexmap.py
 * src/gamemap/road.py
+
+Among other things you can:
+* Recruit new units and heroes at settlements
+* Conquer settlements
+* Defeat lairs full of monsters
+* Find treasures and equip them onto your heroes
+* Enter ever more dangerous territories in search of more dangerous monsters and more powerful units and treasures
+
+## Screenshots
+Main menu:
+![Main menu](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/images/mainmenu.png)
+
+Recruiting units:
+![Recruiting units](https://octodex.github.com/images/recruiting.png)
+
+Fighting enemies:
+![Fighting enemies](https://octodex.github.com/images/combat.png)
