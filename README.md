@@ -9,7 +9,7 @@ The most interesting files are:
 
 Among other things you can:
 * Recruit new units and heroes at settlements
-* Conquer settlements
+* Conquer settlements, or befriend them with diplomats
 * Defeat lairs full of monsters
 * Find treasures and equip them onto your heroes
 * Enter ever more dangerous territories in search of more dangerous monsters and more powerful units and treasures
@@ -23,3 +23,6 @@ Recruiting units:
 
 Fighting enemies:
 ![Fighting enemies](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/images/combat.png)
+
+Minimap up with the full map revealed (the current viewport is shown as a white rectangle):
+![Minimap](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/images/minimap.png)
