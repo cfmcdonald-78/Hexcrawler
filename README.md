@@ -3,8 +3,9 @@ I created this game in 2012-2013 using Python 2.7 and Pygame to try out procedur
 Unfortunately it was more fun to build than it is to play :-) 
 
 The most interesting files are:
-* [src/gamemap/hexmap.py](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/gamemap/hexmap.py)
-* [src/gamemap/road.py](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/gamemap/road.py)
+* [src/gamemap/hexmap.py](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/gamemap/hexmap.py) (Code for handling all the different states of a map location)
+* [src/gamemap/map_maker.py](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/gamemap/map_maker.py) (Code for generating the map before the start of the game).
+* [src/gamemap/road.py](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/gamemap/road.py) (Code for generating a road net between settlements)
 
 Among other things you can:
 * Recruit new units and heroes at settlements
