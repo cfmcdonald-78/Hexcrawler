@@ -15,10 +15,10 @@ Among other things you can:
 
 ## Screenshots
 Main menu:
-![Main menu](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/images/mainmenu.png)
+![Main menu](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/images/mainmenu.png)
 
 Recruiting units:
-![Recruiting units](https://octodex.github.com/images/recruiting.png)
+![Recruiting units](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/images/recruiting.png)
 
 Fighting enemies:
-![Fighting enemies](https://octodex.github.com/images/combat.png)
+![Fighting enemies](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/images/combat.png)
