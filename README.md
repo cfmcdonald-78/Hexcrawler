@@ -15,9 +15,6 @@ Among other things you can:
 * Enter ever more dangerous territories in search of more dangerous monsters and more powerful units and treasures
 
 ## Screenshots
-Main menu:
-![Main menu](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/images/mainmenu.png)
-
 Recruiting units:
 ![Recruiting units](https://github.com/cfmcdonald-78/Hexcrawler/blob/master/src/images/recruiting.png)
 
